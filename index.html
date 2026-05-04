@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>国際納豆撲滅協議会 | International Council for the Eradication of Natto</title>
+  <meta name="description" content="1972年京都密約より半世紀。我々は粘る敵に静かに、しかし執念深く抗う。※本サイトは架空のフィクションです。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --paper:#F2EAD8;
+      --paper-2:#E8DDC4;
+      --paper-3:#D9C9A6;
+      --ink:#1F1813;
+      --ink-2:#3A2E25;
+      --blood:#8B1A1A;
+      --blood-2:#6B0F0F;
+      --enemy:#C4A02C;
+      --olive:#4A5D3A;
+      --rule:rgba(31,24,19,.18);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Serif JP', serif;
+      color:var(--ink);
+      background:var(--paper);
+      font-feature-settings:"palt";
+      line-height:1.75;
+      overflow-x:hidden;
+      position:relative;
+    }
+    /* paper grain */
+    body::before{
+      content:"";
+      position:fixed;inset:0;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.55'/></svg>");
+      mix-blend-mode:multiply;
+      opacity:.45;
+      pointer-events:none;
+      z-index:1000;
+    }
+    /* foxing spots */
+    body::after{
+      content:"";
+      position:fixed;inset:0;
+      background:
+        radial-gradient(220px 160px at 12% 18%, rgba(120,80,40,.08), transparent 70%),
+        radial-gradient(180px 140px at 88% 76%, rgba(120,80,40,.07), transparent 70%),
+        radial-gradient(120px 90px at 70% 12%, rgba(150,100,50,.06), transparent 70%);
+      pointer-events:none;z-index:999;
+    }
+
+    .wrap{max-width:1240px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+    .mono{font-family:'JetBrains Mono', monospace;letter-spacing:.04em}
+    .en{font-family:'DM Serif Display', serif;font-style:italic}
+    .vr{writing-mode:vertical-rl;text-orientation:mixed}
+
+    /* ───────── TOP STRIPS ───────── */
+    .topbar{
+      border-bottom:1px solid var(--rule);
+      background:var(--paper-2);
+      font-size:11px;letter-spacing:.18em;
+    }
+    .topbar .row{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:8px 32px;max-width:1240px;margin:0 auto;
+      text-transform:uppercase;color:var(--ink-2);
+    }
+    .topbar .stamp-mini{color:var(--blood);font-weight:700}
+
+    /* emergency ticker */
+    .ticker{
+      background:var(--blood);color:var(--paper);
+      border-top:2px solid var(--blood-2);border-bottom:2px solid var(--blood-2);
+      overflow:hidden;position:relative;
+    }
+    .ticker-inner{
+      display:flex;gap:64px;
+      white-space:nowrap;
+      animation:slide 38s linear infinite;
+      padding:10px 0;font-size:13px;letter-spacing:.16em;font-weight:700;
+    }
+    .ticker-inner span::before{content:"❖  ";color:var(--enemy)}
+    @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ───────── HEADER NAV ───────── */
+    header.nav{
+      border-bottom:1px solid var(--rule);
+      padding:18px 0;
+    }
+    header.nav .row{
+      display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:center;
+    }
+    .crest{
+      width:54px;height:54px;border-radius:50%;
+      border:2px solid var(--ink);
+      display:grid;place-items:center;
+      background:var(--paper);
+      position:relative;
+    }
+    .crest svg{width:32px;height:32px}
+    .brand{display:flex;gap:16px;align-items:center}
+    .brand h1{
+      font-family:'Shippori Mincho B1', serif;
+      font-weight:800;font-size:18px;letter-spacing:.04em;line-height:1.1;
+    }
+    .brand h1 small{display:block;font-size:10px;letter-spacing:.22em;color:var(--ink-2);font-weight:500;margin-top:4px}
+    nav ul{display:flex;gap:28px;list-style:none;justify-content:center;font-size:13px;letter-spacing:.14em}
+    nav a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:.2s}
+    nav a:hover{border-color:var(--blood);color:var(--blood)}
+    .doc-id{font-family:'JetBrains Mono', monospace;font-size:11px;color:var(--ink-2);text-align:right;line-height:1.5}
+
+    /* ───────── HERO ───────── */
+    .hero{
+      padding:80px 0 120px;
+      position:relative;
+      border-bottom:1px solid var(--rule);
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1fr 280px;
+      gap:48px;
+      align-items:start;
+    }
+    .kicker{
+      display:flex;align-items:center;gap:14px;
+      font-size:12px;letter-spacing:.32em;color:var(--blood);
+      text-transform:uppercase;font-weight:700;
+      margin-bottom:36px;
+    }
+    .kicker::before{content:"";display:inline-block;width:48px;height:1px;background:var(--blood)}
+    h2.hero-title{
+      font-family:'Shippori Mincho B1', serif;
+      font-weight:800;
+      font-size:clamp(56px, 9vw, 132px);
+      line-height:0.92;
+      letter-spacing:-.01em;
+      color:var(--ink);
+      margin-bottom:32px;
+      position:relative;
+    }
+    h2.hero-title .red{color:var(--blood)}
+    h2.hero-title .strike{
+      position:relative;display:inline-block;
+    }
+    h2.hero-title .strike::after{
+      content:"";position:absolute;
+      left:-6%;right:-6%;top:54%;height:10px;
+      background:var(--blood);transform:rotate(-3deg);
+      box-shadow:0 0 0 2px var(--blood-2) inset;
+    }
+    .hero-en{
+      font-family:'DM Serif Display', serif;
+      font-style:italic;font-size:22px;
+      color:var(--ink-2);
+      margin-bottom:28px;letter-spacing:.01em;
+    }
+    .motto{
+      font-family:'Shippori Mincho B1', serif;
+      font-size:32px;font-weight:700;
+      border-top:2px solid var(--ink);
+      border-bottom:2px solid var(--ink);
+      padding:18px 0;display:inline-block;
+      letter-spacing:.4em;
+    }
+    .motto::before{content:"「";color:var(--blood)}
+    .motto::after{content:"」";color:var(--blood)}
+
+    .hero-side{
+      border:1.5px solid var(--ink);
+      padding:24px 22px;
+      background:var(--paper-2);
+      position:relative;
+      transform:rotate(.6deg);
+    }
+    .hero-side h4{
+      font-family:'JetBrains Mono', monospace;
+      font-size:10px;letter-spacing:.24em;
+      color:var(--blood);margin-bottom:12px;
+      text-transform:uppercase;
+    }
+    .hero-side p{font-size:13px;line-height:1.85;color:var(--ink-2)}
+    .hero-side .meta{
+      margin-top:18px;padding-top:14px;border-top:1px dashed var(--rule);
+      font-family:'JetBrains Mono', monospace;font-size:10.5px;line-height:1.9;
+    }
+    .hero-side .meta b{color:var(--blood)}
+
+    /* large stamp */
+    .stamp{
+      position:absolute;
+      width:180px;height:180px;
+      border:4px solid var(--blood);
+      border-radius:50%;
+      display:grid;place-items:center;
+      color:var(--blood);
+      font-family:'Shippori Mincho B1', serif;
+      font-weight:800;font-size:36px;
+      letter-spacing:.2em;
+      transform:rotate(-12deg);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .stamp::before{
+      content:"";position:absolute;inset:8px;border:1.5px solid var(--blood);border-radius:50%;
+    }
+    .stamp-1{right:8%;top:120px}
+    .stamp-1 .inner{
+      writing-mode:vertical-rl;text-orientation:upright;font-size:22px;letter-spacing:.4em;
+    }
+
+    /* ───────── SECTION HEADERS ───────── */
+    .section{padding:96px 0;border-bottom:1px solid var(--rule);position:relative}
+    .sec-num{
+      font-family:'JetBrains Mono', monospace;
+      font-size:11px;letter-spacing:.3em;color:var(--blood);
+      margin-bottom:8px;text-transform:uppercase;
+    }
+    .sec-title{
+      font-family:'Shippori Mincho B1', serif;
+      font-size:clamp(36px, 5vw, 64px);
+      font-weight:800;
+      line-height:1.05;
+      margin-bottom:14px;
+    }
+    .sec-sub{
+      font-family:'DM Serif Display', serif;font-style:italic;
+      font-size:18px;color:var(--ink-2);margin-bottom:48px;
+    }
+
+    /* ───────── MISSION ───────── */
+    .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+    .mission-body p{font-size:17px;margin-bottom:18px;line-height:2}
+    .mission-body p::first-letter{
+      font-family:'Shippori Mincho B1', serif;
+      font-weight:800;
+      font-size:1.6em;color:var(--blood);
+    }
+    .mission-pull{
+      border-left:4px solid var(--blood);
+      padding:8px 22px;margin:32px 0;
+      font-family:'Shippori Mincho B1', serif;
+      font-size:22px;font-weight:700;line-height:1.6;
+    }
+    .mission-aside{
+      background:var(--ink);color:var(--paper);
+      padding:36px 32px;
+      position:relative;
+    }
+    .mission-aside::before{
+      content:"";position:absolute;inset:6px;border:1px solid rgba(242,234,216,.25);
+      pointer-events:none;
+    }
+    .mission-aside h3{
+      font-family:'Shippori Mincho B1', serif;font-size:24px;font-weight:700;
+      margin-bottom:18px;color:var(--enemy);letter-spacing:.04em;
+    }
+    .stat-row{display:grid;grid-template-columns:auto 1fr;gap:20px;padding:14px 0;border-top:1px dashed rgba(242,234,216,.22)}
+    .stat-row:last-child{border-bottom:1px dashed rgba(242,234,216,.22)}
+    .stat-num{font-family:'DM Serif Display', serif;font-size:38px;color:var(--enemy);line-height:1}
+    .stat-label{font-size:13px;line-height:1.6;color:var(--paper-3);align-self:center}
+
+    /* ───────── 五つの罪状 ───────── */
+    .charges{background:var(--paper-2);border-top:1px solid var(--rule)}
+    .charges-list{display:grid;grid-template-columns:repeat(2, 1fr);gap:0;margin-top:24px}
+    .charge{
+      padding:36px 32px;
+      border:1px solid var(--rule);
+      margin:-1px 0 0 -1px;
+      position:relative;
+      background:var(--paper-2);
+      transition:.3s;
+    }
+    .charge:hover{background:var(--paper);transform:translateY(-2px);box-shadow:0 12px 28px -16px rgba(31,24,19,.4)}
+    .charge .roman{
+      font-family:'DM Serif Display', serif;
+      font-size:64px;line-height:.8;color:var(--blood);
+      margin-bottom:16px;
+    }
+    .charge h4{
+      font-family:'Shippori Mincho B1', serif;font-size:24px;font-weight:700;
+      margin-bottom:10px;letter-spacing:.04em;
+    }
+    .charge p{font-size:15px;color:var(--ink-2);line-height:1.85}
+    .charge .x{
+      position:absolute;top:24px;right:28px;
+      font-family:'DM Serif Display', serif;font-size:42px;color:var(--blood);opacity:.18;
+      transform:rotate(8deg);
+    }
+    .charges-list .charge:nth-child(5){grid-column:span 2}
+
+    /* ───────── 加盟国 ───────── */
+    .members-wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:start}
+    .members-list{list-style:none}
+    .members-list li{
+      display:grid;grid-template-columns:48px 1fr auto;
+      gap:20px;align-items:baseline;
+      padding:18px 0;border-bottom:1px solid var(--rule);
+    }
+    .members-list .flag{font-size:28px;line-height:1}
+    .members-list .country{
+      font-family:'Shippori Mincho B1', serif;font-size:20px;font-weight:700;
+    }
+    .members-list .country small{
+      display:block;font-family:'DM Serif Display', serif;font-style:italic;
+      font-size:12px;color:var(--ink-2);font-weight:400;margin-top:2px;letter-spacing:.04em;
+    }
+    .members-list .year{
+      font-family:'JetBrains Mono', monospace;font-size:13px;color:var(--blood);font-weight:700;
+    }
+    .observer{
+      margin-top:24px;padding:22px;border:1px dashed var(--ink);
+      background:var(--paper-2);
+      font-size:14px;line-height:1.85;
+    }
+    .observer b{color:var(--blood)}
+
+    .signatures{
+      background:var(--paper);
+      padding:32px 28px;
+      border:1.5px solid var(--ink);
+      position:relative;
+    }
+    .signatures h4{
+      font-family:'Shippori Mincho B1', serif;font-size:18px;font-weight:700;
+      margin-bottom:24px;text-align:center;letter-spacing:.2em;
+      padding-bottom:12px;border-bottom:1px solid var(--rule);
+    }
+    .sig{display:grid;grid-template-columns:1fr auto;gap:16px;padding:14px 0;border-bottom:1px dashed var(--rule);font-size:13px}
+    .sig .name{font-family:'Shippori Mincho B1', serif;font-size:15px;font-weight:700}
+    .sig .role{font-family:'JetBrains Mono', monospace;font-size:10.5px;color:var(--ink-2);letter-spacing:.08em;margin-top:2px}
+    .sig .scribble{
+      font-family:'DM Serif Display', serif;font-style:italic;
+      color:var(--blood);font-size:22px;transform:rotate(-6deg);align-self:center;
+    }
+
+    /* ───────── 活動報告 ───────── */
+    .timeline{position:relative;margin-top:24px}
+    .timeline::before{
+      content:"";position:absolute;left:120px;top:8px;bottom:8px;width:2px;background:var(--ink);
+    }
+    .ev{
+      display:grid;grid-template-columns:120px 1fr;gap:32px;padding:22px 0;
+      position:relative;
+    }
+    .ev .date{
+      font-family:'JetBrains Mono', monospace;font-size:13px;font-weight:700;
+      color:var(--blood);text-align:right;padding-right:24px;
+      position:relative;
+    }
+    .ev .date::after{
+      content:"●";position:absolute;right:-7px;top:0;color:var(--blood);
+      font-size:14px;background:var(--paper);padding:0 4px;
+    }
+    .ev h4{font-family:'Shippori Mincho B1', serif;font-size:22px;font-weight:700;margin-bottom:6px}
+    .ev p{font-size:14.5px;color:var(--ink-2);line-height:1.85;max-width:640px}
+    .ev .tag{
+      display:inline-block;font-family:'JetBrains Mono', monospace;
+      font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+      padding:2px 10px;border:1px solid var(--blood);color:var(--blood);
+      margin-top:10px;
+    }
+
+    /* ───────── 入会案内 ───────── */
+    .join{background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+    .join::before{
+      content:"NATTO";
+      position:absolute;font-family:'DM Serif Display', serif;font-style:italic;
+      font-size:380px;color:rgba(196,160,44,.05);
+      top:-60px;right:-40px;line-height:1;letter-spacing:-.04em;pointer-events:none;
+    }
+    .join .sec-num{color:var(--enemy)}
+    .join .sec-title{color:var(--paper)}
+    .join .sec-sub{color:var(--paper-3)}
+    .join-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:start}
+    .join-list dt{
+      font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:.24em;
+      color:var(--enemy);margin-top:22px;text-transform:uppercase;
+    }
+    .join-list dt:first-of-type{margin-top:0}
+    .join-list dd{
+      font-family:'Shippori Mincho B1', serif;font-size:20px;font-weight:700;
+      margin-top:6px;line-height:1.5;
+    }
+    .join-list dd small{
+      display:block;font-family:'Noto Serif JP', serif;font-weight:400;
+      font-size:14px;color:var(--paper-3);margin-top:4px;letter-spacing:0;
+    }
+    .join-card{
+      border:2px solid var(--enemy);
+      padding:32px 28px;background:rgba(196,160,44,.04);
+      position:relative;
+    }
+    .join-card .stamp-card{
+      position:absolute;top:-24px;right:-24px;
+      width:96px;height:96px;border:3px solid var(--enemy);border-radius:50%;
+      display:grid;place-items:center;color:var(--enemy);
+      font-family:'Shippori Mincho B1', serif;font-weight:800;font-size:14px;
+      transform:rotate(8deg);background:var(--ink);letter-spacing:.16em;
+      line-height:1.2;text-align:center;
+    }
+    .join-card h4{
+      font-family:'Shippori Mincho B1', serif;font-size:24px;font-weight:700;
+      margin-bottom:18px;color:var(--paper);
+    }
+    .join-card .form-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed rgba(242,234,216,.2);font-size:13px}
+    .join-card .form-row:last-child{border-bottom:none}
+    .join-card .form-row span:first-child{color:var(--paper-3);letter-spacing:.06em}
+    .join-card .form-row span:last-child{color:var(--enemy);font-family:'JetBrains Mono', monospace;font-weight:700}
+    .cta{
+      margin-top:24px;
+      display:inline-flex;align-items:center;gap:12px;
+      padding:16px 28px;
+      background:var(--enemy);color:var(--ink);
+      font-family:'Shippori Mincho B1', serif;font-weight:800;font-size:16px;letter-spacing:.16em;
+      text-decoration:none;border:2px solid var(--enemy);
+      transition:.2s;
+    }
+    .cta:hover{background:var(--ink);color:var(--enemy)}
+    .cta::after{content:"→"}
+
+    /* ───────── FOOTER ───────── */
+    footer{
+      background:var(--paper-2);
+      padding:64px 0 48px;
+      border-top:3px double var(--ink);
+    }
+    .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:48px}
+    .foot-grid h5{
+      font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:.24em;
+      color:var(--blood);margin-bottom:14px;text-transform:uppercase;
+    }
+    .foot-grid p, .foot-grid li{font-size:13px;line-height:1.9;color:var(--ink-2)}
+    .foot-grid ul{list-style:none}
+    .disclaim{
+      border:2px solid var(--blood);
+      padding:24px 28px;background:var(--paper);
+      font-size:13px;line-height:1.9;
+      position:relative;
+    }
+    .disclaim::before{
+      content:"DISCLAIMER";position:absolute;top:-10px;left:24px;background:var(--paper-2);
+      padding:0 10px;font-family:'JetBrains Mono', monospace;font-size:10px;letter-spacing:.3em;color:var(--blood);font-weight:700;
+    }
+    .copyright{
+      margin-top:40px;padding-top:24px;border-top:1px solid var(--rule);
+      display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);font-family:'JetBrains Mono', monospace;letter-spacing:.12em;
+    }
+
+    /* fade-in stagger */
+    .fade{opacity:0;transform:translateY(12px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+    @keyframes rise{to{opacity:1;transform:translateY(0)}}
+    .d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}.d5{animation-delay:.7s}
+
+    @media (max-width: 880px){
+      .wrap{padding:0 22px}
+      header.nav .row{grid-template-columns:auto 1fr;gap:16px}
+      header.nav nav, .doc-id{display:none}
+      .hero{padding:48px 0 64px}
+      .hero-grid{grid-template-columns:1fr;gap:32px}
+      .stamp-1{display:none}
+      h2.hero-title{font-size:56px}
+      .motto{font-size:22px;letter-spacing:.3em}
+      .mission-grid, .members-wrap, .join-grid{grid-template-columns:1fr;gap:36px}
+      .charges-list{grid-template-columns:1fr}
+      .charges-list .charge:nth-child(5){grid-column:auto}
+      .timeline::before{left:0}
+      .ev{grid-template-columns:1fr;gap:8px}
+      .ev .date{text-align:left;padding-right:0;padding-left:18px}
+      .ev .date::after{left:-7px;right:auto}
+      .foot-grid{grid-template-columns:1fr;gap:28px}
+      .copyright{flex-direction:column;gap:8px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP STRIP -->
+  <div class="topbar">
+    <div class="row">
+      <span>Established 1972 · Geneva–Kyoto Accord</span>
+      <span class="stamp-mini">機密区分:公開可 / 第Ⅱ種</span>
+      <span>Document №ICEN-2026-Q2-007</span>
+    </div>
+  </div>
+
+  <!-- EMERGENCY TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span>緊急声明 第78号 — 関東圏で「納豆ピザ」目撃情報多発・会員各位は厳重警戒のこと</span>
+      <span>第54回京都密会 · 議題:朝食の脱粘液化</span>
+      <span>EMERGENCY BULLETIN №78 — Suspected Natto Pizza sightings reported in Greater Tokyo</span>
+      <span>新規入会者 本年度+317名</span>
+      <span>緊急声明 第78号 — 関東圏で「納豆ピザ」目撃情報多発・会員各位は厳重警戒のこと</span>
+      <span>第54回京都密会 · 議題:朝食の脱粘液化</span>
+      <span>EMERGENCY BULLETIN №78 — Suspected Natto Pizza sightings reported in Greater Tokyo</span>
+      <span>新規入会者 本年度+317名</span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap row">
+      <div class="brand">
+        <div class="crest" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="28" stroke="#1F1813" stroke-width="2"/>
+            <path d="M14 32 L50 32 M32 14 L32 50" stroke="#8B1A1A" stroke-width="3"/>
+            <path d="M20 20 L44 44 M44 20 L20 44" stroke="#8B1A1A" stroke-width="3"/>
+          </svg>
+        </div>
+        <h1>国際納豆撲滅協議会
+          <small>INT'L COUNCIL FOR THE ERADICATION OF NATTO</small>
+        </h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#mission">綱領</a></li>
+          <li><a href="#charges">罪状</a></li>
+          <li><a href="#members">加盟国</a></li>
+          <li><a href="#activities">活動報告</a></li>
+          <li><a href="#join">入会案内</a></li>
+        </ul>
+      </nav>
+      <div class="doc-id">CLASSIFICATION · OPEN<br>REV. 2026.05</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker fade d1">A Half-Century of Quiet Resistance</div>
+          <h2 class="hero-title fade d2">
+            <span class="strike">粘る</span>もの、<br>
+            <span class="red">断つべし。</span>
+          </h2>
+          <p class="hero-en fade d3">Sever the strands. Silence the slime.</p>
+          <p class="motto fade d4">粘り、断つべし</p>
+        </div>
+
+        <aside class="hero-side fade d3">
+          <h4>Preamble · 1972 京都密約</h4>
+          <p>我々は、人類の食卓から納豆を完全に撲滅することを使命とする。その粘り、その匂い、その糸 — これらは食物の名を借りた挑戦状である。</p>
+          <div class="meta">
+            <div><b>SETTLED</b> 1972.04.12 · Kyoto</div>
+            <div><b>SECRETARIAT</b> Geneva &amp; Kyoto</div>
+            <div><b>ACTIVE MEMBERS</b> 5 nations + 46 obs.</div>
+            <div><b>CASES OPEN</b> 1,294</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="stamp stamp-1" aria-hidden="true">
+      <span class="inner">機密</span>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="section" id="mission">
+    <div class="wrap">
+      <div class="sec-num">§ I — Charter</div>
+      <h3 class="sec-title">綱領</h3>
+      <p class="sec-sub">Our Charter, in plain ink.</p>
+
+      <div class="mission-grid">
+        <div class="mission-body">
+          <p>我々は1972年の京都密会以来、半世紀にわたり静かに、しかし執念深く、闘い続けている。納豆は栄養食品の仮面をかぶった粘性物質であり、食卓における中立を破壊する存在である。</p>
+          <div class="mission-pull">「これは好き嫌いの問題ではない。<br>食卓における主権の問題である。」</div>
+          <p>本協議会は、加盟各国の主権を尊重しつつ、納豆に対する国際的合意形成・代替朝食の研究・被害者支援・若年層への啓発活動を行う。茨城県を敵視するものではないが、和解には条件がある。</p>
+          <p>我々は陽気な敵ではない。我々は粘る敵に、粘り強く抗う。</p>
+        </div>
+        <aside class="mission-aside">
+          <h3>BY THE NUMBERS</h3>
+          <div class="stat-row"><div class="stat-num">54</div><div class="stat-label">回 — 京都密会開催回数 (年次総会)</div></div>
+          <div class="stat-row"><div class="stat-num">317</div><div class="stat-label">名 — 2026年度新規入会者数 (5月時点)</div></div>
+          <div class="stat-row"><div class="stat-num">¥330</div><div class="stat-label">月会費 — 納豆1パック相当・象徴的金額</div></div>
+          <div class="stat-row"><div class="stat-num">0</div><div class="stat-label">回 — 過去54年の朝食における納豆採用回数</div></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHARGES -->
+  <section class="section charges" id="charges">
+    <div class="wrap">
+      <div class="sec-num">§ II — Indictment</div>
+      <h3 class="sec-title">五つの罪状</h3>
+      <p class="sec-sub">Five Counts Against the Defendant.</p>
+
+      <div class="charges-list">
+        <article class="charge">
+          <span class="x">✕</span>
+          <div class="roman">I.</div>
+          <h4>視覚的暴力</h4>
+          <p>茶色く粘る塊は、食欲という概念に対する露骨な反逆である。透明なパックを通じて、被害者は朝の心の準備なく直視を強いられる。</p>
+        </article>
+        <article class="charge">
+          <span class="x">✕</span>
+          <div class="roman">II.</div>
+          <h4>嗅覚的侵略</h4>
+          <p>半径3メートル以内の鼻腔を制圧する。換気では追いつかない。これは食品の匂いではなく、領空侵犯である。</p>
+        </article>
+        <article class="charge">
+          <span class="x">✕</span>
+          <div class="roman">III.</div>
+          <h4>触覚的拘束</h4>
+          <p>一度箸についた糸は、食卓の物理法則を超越する。皿、口、頬、髪、机、リモコン — あらゆる物体が連鎖的に汚染される。</p>
+        </article>
+        <article class="charge">
+          <span class="x">✕</span>
+          <div class="roman">IV.</div>
+          <h4>倫理的混乱</h4>
+          <p>「腐ってないけど発酵」という詭弁。発酵と腐敗の境界線を曖昧にする本食品は、食の倫理的座標系を根本から揺るがす。</p>
+        </article>
+        <article class="charge">
+          <span class="x">✕</span>
+          <div class="roman">V.</div>
+          <h4>社会的分断</h4>
+          <p>食卓を二分し、家族関係に静かな亀裂を生む。朝の食卓における賛成派と反対派の対立は、しばしば離婚理由欄の余白に滲む。本協議会は、この見えざる断層を可視化する。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERS -->
+  <section class="section" id="members">
+    <div class="wrap">
+      <div class="sec-num">§ III — Signatories</div>
+      <h3 class="sec-title">加盟国・観察国</h3>
+      <p class="sec-sub">The Signatories of the Geneva–Kyoto Accord.</p>
+
+      <div class="members-wrap">
+        <div>
+          <ul class="members-list">
+            <li>
+              <span class="flag">🇫🇷</span>
+              <span class="country">フランス共和国<small>République française · 初代議長国</small></span>
+              <span class="year">1972</span>
+            </li>
+            <li>
+              <span class="flag">🇮🇹</span>
+              <span class="country">イタリア共和国<small>Repubblica Italiana · 発酵食品先進国としての反証</small></span>
+              <span class="year">1974</span>
+            </li>
+            <li>
+              <span class="flag">🇰🇷</span>
+              <span class="country">大韓民国<small>대한민국 · キムチを愛する者として</small></span>
+              <span class="year">1989</span>
+            </li>
+            <li>
+              <span class="flag">🇧🇷</span>
+              <span class="country">ブラジル連邦共和国<small>República Federativa do Brasil · 加盟理由は機密扱い</small></span>
+              <span class="year">1996</span>
+            </li>
+            <li>
+              <span class="flag">🇲🇽</span>
+              <span class="country">メキシコ合衆国<small>Estados Unidos Mexicanos · 観察国期間を経て</small></span>
+              <span class="year">2003</span>
+            </li>
+          </ul>
+
+          <div class="observer">
+            <b>観察国 (Observer States):</b> 茨城県を除く46都道府県。沖縄県は2018年に正式加盟を申請したが、納豆汁文化への配慮から協議継続中。和解の扉は常に開かれている。
+          </div>
+        </div>
+
+        <aside class="signatures">
+          <h4>条約署名</h4>
+          <div class="sig">
+            <div>
+              <div class="name">ジャン=ピエール・ルセール</div>
+              <div class="role">事務総長 / Sec. General</div>
+            </div>
+            <div class="scribble">J.P.L</div>
+          </div>
+          <div class="sig">
+            <div>
+              <div class="name">京都・宮川 透</div>
+              <div class="role">名誉議長 / Hon. Chair</div>
+            </div>
+            <div class="scribble">宮川</div>
+          </div>
+          <div class="sig">
+            <div>
+              <div class="name">マリア・コスタ</div>
+              <div class="role">研究部長 / Head of Research</div>
+            </div>
+            <div class="scribble">M.C.</div>
+          </div>
+          <div class="sig">
+            <div>
+              <div class="name">박 지훈</div>
+              <div class="role">広報担当 / Comms.</div>
+            </div>
+            <div class="scribble">박</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITIES -->
+  <section class="section" id="activities">
+    <div class="wrap">
+      <div class="sec-num">§ IV — Bulletin</div>
+      <h3 class="sec-title">2026年 活動報告</h3>
+      <p class="sec-sub">Recent Operations &amp; Bulletins.</p>
+
+      <div class="timeline">
+        <div class="ev">
+          <div class="date">2026.03.18</div>
+          <div>
+            <h4>第54回京都密会 開催</h4>
+            <p>京都某所にて加盟5カ国・観察国代表計63名が参集。議題は「朝食の脱粘液化ロードマップ 2030」。3日間に及ぶ討議の末、卵かけご飯派と焼き魚派の歴史的和解が成立した。</p>
+            <span class="tag">Annual Summit</span>
+          </div>
+        </div>
+        <div class="ev">
+          <div class="date">2026.04.02</div>
+          <div>
+            <h4>「納豆フリー学校給食」キャンペーン全国展開</h4>
+            <p>全国の小中学校に向け、納豆を含まない朝食メニュー300案を無償提供。茨城県教育委員会からは丁重な辞退を受けたが、対話の窓口は維持されている。</p>
+            <span class="tag">Education</span>
+          </div>
+        </div>
+        <div class="ev">
+          <div class="date">2026.04.21</div>
+          <div>
+            <h4>研究プロジェクト「卵かけご飯のみで生きる」発足</h4>
+            <p>朝食代替食品研究プロジェクト。被験者12名が3か月間、朝食を卵かけご飯のみで構成する実証研究を開始。途中経過は機関誌『非粘月報』にて公表予定。</p>
+            <span class="tag">Research</span>
+          </div>
+        </div>
+        <div class="ev">
+          <div class="date">2026.05.04</div>
+          <div>
+            <h4>緊急声明 第78号「納豆ピザ問題」</h4>
+            <p>関東圏で「納豆ピザ」を提供する飲食店が複数確認された旨、各国会員より報告あり。本協議会は、これを「文化的越境行為」と位置づけ、販売中止要請を含む段階的対応を検討中。</p>
+            <span class="tag">Bulletin №78</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <section class="section join" id="join">
+    <div class="wrap">
+      <div class="sec-num">§ V — Enrollment</div>
+      <h3 class="sec-title">入会案内</h3>
+      <p class="sec-sub">Apply for the Anti-Slime Order.</p>
+
+      <div class="join-grid">
+        <dl class="join-list">
+          <dt>月会費</dt>
+          <dd>¥330<small>納豆1パック相当の象徴的金額。決して敵を儲けさせぬための価格設定である。</small></dd>
+
+          <dt>必要書類</dt>
+          <dd>納豆嫌悪宣誓書 / 過去5年間の朝食記録<small>朝食記録に「納豆」の文字が3回以上出現する場合、別途面談を要する。</small></dd>
+
+          <dt>入会試験</dt>
+          <dd>「納豆の良いところを30秒語る」課題<small>30秒間、一切の発話ができなかった者を合格とする。栄養面の言及があった場合は不合格。</small></dd>
+
+          <dt>会員特典</dt>
+          <dd>機関誌『非粘月報』購読 / 京都密会傍聴権<small>密会は年1回、開催地は会員のみに通達される (毎回京都ではあるのだが)。</small></dd>
+        </dl>
+
+        <aside class="join-card">
+          <div class="stamp-card">入会<br>申請</div>
+          <h4>入会申請書 №ICEN-A-2026</h4>
+          <div class="form-row"><span>氏名</span><span>______________</span></div>
+          <div class="form-row"><span>居住国 / 都道府県</span><span>______________</span></div>
+          <div class="form-row"><span>朝食における主食</span><span>米 / 麦 / 他</span></div>
+          <div class="form-row"><span>納豆嫌悪歴 (年)</span><span>______ 年</span></div>
+          <div class="form-row"><span>嫌悪の主因</span><span>匂 / 糸 / 見 / 他</span></div>
+          <div class="form-row"><span>署名</span><span>______________</span></div>
+          <a class="cta" href="mailto:apply@example.invalid?subject=ICEN%20Membership%20Application">申請書を送付する</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="disclaim">
+          <p><b>本サイトは架空のフィクションです。</b><br>
+          国際納豆撲滅協議会という団体は実在しません。納豆は日本が世界に誇る伝統的な発酵食品であり、優れた栄養価を持つ食品です。本サイトは納豆を愛する方々を否定する意図を一切持たず、ユーモアと言葉遊びを目的としたパロディ作品です。茨城県の皆様には心からの敬意と感謝を捧げます。</p>
+        </div>
+        <div>
+          <h5>Sections</h5>
+          <ul>
+            <li><a href="#mission" style="color:inherit">綱領</a></li>
+            <li><a href="#charges" style="color:inherit">五つの罪状</a></li>
+            <li><a href="#members" style="color:inherit">加盟国</a></li>
+            <li><a href="#activities" style="color:inherit">活動報告</a></li>
+            <li><a href="#join" style="color:inherit">入会案内</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Contact</h5>
+          <p>secretariat@example.invalid<br>Geneva HQ · Kyoto Office<br>機関誌『非粘月報』ISSN 0000-0000</p>
+        </div>
+      </div>
+      <div class="copyright">
+        <span>© 2026 INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
+        <span>FILE: ICEN-2026-Q2-007 · REV.05</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
