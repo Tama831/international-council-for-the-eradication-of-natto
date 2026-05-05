@@ -224,6 +224,11 @@ agent-team prod への影響を避けるため CF Pages 版に切り替えたの
 | `ICEN_SENDER_NAME` | Plaintext | 送信元表示名 | △ |
 | `ICEN_PUBLIC_BASE_URL` | Plaintext | 確認リンクの host (default: https://natto-5hv.pages.dev) | △ |
 | `ICEN_ALERT_EMAIL` | Plaintext | abuse 通知の宛先 (default: ly.renum@gmail.com) | △ |
+| `ICEN_ADMIN_KEY` | Secret | X 自動投稿エンドポイントの shared secret。Hetzner cron 側 `.env` にも同値を設定 | △ (X 自動投稿時) |
+| `X_API_KEY` | Secret | X Developer Portal の API Key (Consumer Key) | △ (X 自動投稿時) |
+| `X_API_KEY_SECRET` | Secret | X API Key Secret (Consumer Secret) | △ (X 自動投稿時) |
+| `X_ACCESS_TOKEN` | Secret | X User Access Token | △ (X 自動投稿時) |
+| `X_ACCESS_TOKEN_SECRET` | Secret | X User Access Token Secret | △ (X 自動投稿時) |
 
 ### double opt-in フロー
 

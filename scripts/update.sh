@@ -20,15 +20,19 @@ fi
 DECISION="$(python3 scripts/scheduler.py)"
 echo "scheduler decision: ${DECISION}"
 
+# Track which content was newly generated this run, for X auto-post.
+GENERATED_ACTIVITY=0
+GENERATED_BULLETIN=0
+
 case "$DECISION" in
   annual)
-    python3 scripts/generate_activity.py --mode=annual
-    python3 scripts/generate_bulletin.py
+    python3 scripts/generate_activity.py --mode=annual && GENERATED_ACTIVITY=1
+    python3 scripts/generate_bulletin.py && GENERATED_BULLETIN=1
     ;;
   regular)
-    python3 scripts/generate_activity.py --mode=regular
+    python3 scripts/generate_activity.py --mode=regular && GENERATED_ACTIVITY=1
     if (( RANDOM % 2 == 0 )); then
-      python3 scripts/generate_bulletin.py
+      python3 scripts/generate_bulletin.py && GENERATED_BULLETIN=1
     else
       echo "skipped bulletin rotation this run"
     fi
@@ -36,7 +40,7 @@ case "$DECISION" in
   skip)
     # 7% chance to refresh just the ticker even on quiet days
     if (( RANDOM % 100 < 7 )); then
-      python3 scripts/generate_bulletin.py
+      python3 scripts/generate_bulletin.py && GENERATED_BULLETIN=1
     else
       echo "nothing to do today"
       exit 0
@@ -67,4 +71,20 @@ git add data/activities.json data/bulletins.json index.html
 git -c user.name="ICEN Secretariat" -c user.email="ly.renum@gmail.com" \
   commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
 git push origin HEAD
+
+# Auto-post to X (best-effort; failures don't break the pipeline).
+# Requires ICEN_ADMIN_KEY in env; idempotency keys prevent double-posts.
+if [[ -n "${ICEN_ADMIN_KEY:-}" ]]; then
+  if (( GENERATED_ACTIVITY )); then
+    echo "─ posting activity to X ─"
+    python3 scripts/post_x.py --kind=activity || echo "X activity post failed (continuing)"
+  fi
+  if (( GENERATED_BULLETIN )); then
+    echo "─ posting bulletin to X ─"
+    python3 scripts/post_x.py --kind=bulletin || echo "X bulletin post failed (continuing)"
+  fi
+else
+  echo "ICEN_ADMIN_KEY not set — skipping X auto-post"
+fi
+
 echo "─── done ───"
