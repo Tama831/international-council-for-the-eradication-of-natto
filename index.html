@@ -884,7 +884,13 @@
 
   <script>
     (function(){
-      const api = (document.querySelector('meta[name="icen-api"]')?.content || '').trim();
+      // API endpoint resolution:
+      //   1. <meta name="icen-api"> takes precedence if non-empty (cross-origin override)
+      //   2. github.io   → empty (mailto fallback) until CF Pages URL is known
+      //   3. otherwise   → "/api" (same-origin, e.g. *.pages.dev or local dev)
+      const metaApi = (document.querySelector('meta[name="icen-api"]')?.content || '').trim();
+      const isGithubPages = location.hostname.endsWith('github.io');
+      const api = metaApi || (isGithubPages ? '' : '/api');
       const form = document.getElementById('icen-form');
       const result = document.getElementById('icen-form-result');
       if (!form) return;

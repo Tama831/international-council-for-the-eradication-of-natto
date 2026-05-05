@@ -1,3 +1,13 @@
+# ICEN Application API (server/) — ⚠️ LEGACY / UNUSED
+
+> このディレクトリは Phase 3 検討初期に作った **Hetzner FastAPI + Gmail SMTP** 版。
+> agent-team prod への影響を避けるため、本番運用は **Cloudflare Pages Functions** 版
+> ([`functions/api/apply.ts`](../functions/api/apply.ts)) に切り替えました。
+> このコードは現在 **どこにもデプロイされていません**。将来 Hetzner で動かしたい
+> 場合のリファレンスとして残してあります。削除しても支障ありません。
+
+---
+
 # ICEN Application API (server/)
 
 入会申請を受け取り、Gmail SMTP 経由で satirical 自動返信を送る FastAPI バックエンド。

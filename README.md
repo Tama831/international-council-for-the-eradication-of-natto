@@ -114,34 +114,73 @@ python3 scripts/render.py              # index.html を data から再描画
 - **活動報告 / 緊急声明**: `data/*.json` 編集 → `python3 scripts/render.py` → commit
   - **直接 index.html の `<!-- AUTO:*:START/END -->` の中をいじらない** (次回 render で消える)
 
-## 入会申請バックエンド (Phase 3 / Option B)
+## 入会申請バックエンド (Phase 3 / Cloudflare Pages Functions)
 
-入会申請フォームを実機能化するバックエンド。FastAPI + Gmail SMTP。
+`functions/api/*.ts` が Cloudflare Pages 上で動く API。Hetzner には**何も置かない**。
 
-- 受信: `POST /apply` (フォームから JSON で送信)
-- **保存**: `data/applications.json` に **email + 申請番号 + 初回時刻 + 重複回数** のみ
-  (氏名・居住地・嫌悪歴等は返信送信後に破棄)
-- **初回**: 受理通知 + 30秒沈黙課題の指示メールを送信
-- **2回目以降**: 「既に申請を受理しております。お伝えした課題を初回申請日より14日以内にご提出ください」を送信
+- `POST /api/apply` — JSON フォームを受信
+- `GET /api/health` — 死活確認
+- **永続化**: Workers KV (`ICEN_KV`) に **email + 申請番号 + 初回時刻 + 重複回数** のみ
+  (氏名・居住地・嫌悪歴等はメール送信のみに使用、保存しない)
+- **メール送信**: Brevo Transactional Email API (無料 300通/日)
+- **初回**: 受理通知 + 30秒沈黙課題の指示
+- **2回目以降**: 「既に受理済み・初回申請日より14日以内に課題提出を」
 
-### デプロイ
+### デプロイ手順 (一度きり)
 
-詳細は [`server/README.md`](server/README.md) 参照。要点:
+#### A. Brevo (メール送信業者) を準備
+1. <https://www.brevo.com/> に sign up (無料、メール認証)
+2. ダッシュボード右上の「**SMTP & API**」→「**API キー**」→ 新規作成 → コピー
+3. 「**Senders & IP**」→「**Senders**」→ ly.renum@gmail.com を追加 → 受信した認証メールのリンクをクリック
+   - これをやらないと「送信元未承認」エラーで届かない
 
-1. **Gmail App Password を作成**: <https://myaccount.google.com/apppasswords>
-2. `/home/tama/ai-agent-team/.env` に `GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx` を追記
-3. `cd server && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
-4. `sudo cp infra/systemd/icen-api.service /etc/systemd/system/ && sudo systemctl enable --now icen-api`
-5. `infra/nginx/icen-api.conf` を既存 nginx の server ブロックに include → reload
-6. `index.html` の `<meta name="icen-api" content="...">` に公開 URL を入れる
-7. `python3 scripts/render.py && git add -A && git commit && git push`
+#### B. Cloudflare Pages にデプロイ
+1. <https://dash.cloudflare.com/> に sign up
+2. 「**Workers & Pages**」→「**Create**」→「**Pages**」タブ →「**Connect to Git**」
+3. GitHub 認可 → リポジトリ `Tama831/international-council-for-the-eradication-of-natto` を選択
+4. Build settings:
+   - Framework preset: **None**
+   - Build command: (空欄)
+   - Build output directory: `/`
+   - Root directory: (空欄)
+5. 「**Save and Deploy**」 → 30秒〜1分でビルド完了 → `<project>.pages.dev` URL が発行される
 
-未デプロイ状態 (meta タグが空) ではフォームは **mailto: フォールバック**で動作する。
+#### C. KV namespace を作る + バインド
+1. Project の「**Settings**」→「**Bindings**」→「**KV Namespace bindings**」→ Add binding
+2. Variable name: `ICEN_KV`
+3. KV namespace: 「**Create new namespace**」→ 名前は `icen` とか何でも
+4. Save
+
+#### D. 環境変数
+1. 同じ「**Bindings**」→「**Environment variables**」→ Add variable
+2. `BREVO_API_KEY` = (A.2 でコピーした値) — 「**Type: Secret**」を選ぶ
+3. (Optional) `ICEN_SENDER_EMAIL` = 別アドレスを使うなら指定
+4. Save → **再デプロイ**ボタン (or 次の git push) で反映
+
+#### E. メタタグを CF URL に書き換え
+```html
+<!-- index.html の冒頭 -->
+<meta name="icen-api" content="https://<project>.pages.dev/api" />
+```
+※ pages.dev でアクセスする限りは meta 空のままでも `/api` で動くが、github.io 経由で
+   フォームを使えるようにしたい場合は CF URL を入れる。
+
+```bash
+# meta 編集後
+git add index.html && git commit -m "Wire form to CF Pages API" && git push
+# → CF Pages も github.io も同時に最新化される
+```
 
 ### 自動返信の編集
 
-`server/templates/{reply_first,reply_repeat}.txt` を直接編集 → 即反映 (再起動不要)。
-プレースホルダ: `{{app_no}}` のみ。
+`functions/api/_templates.ts` の `REPLY_FIRST` / `REPLY_REPEAT` 文字列を直接編集 → push
+→ CF Pages が自動再デプロイ → 即反映。プレースホルダ: `{{app_no}}` のみ。
+
+### Legacy (Hetzner FastAPI 版)
+
+`server/` と `infra/` には Phase 3 検討初期に作った FastAPI + nginx 版が残っている。
+agent-team prod への影響を避けるため CF Pages 版に切り替えたので、現在は **未使用**。
+将来 Hetzner で動かしたくなった場合の参考として残置 (削除しても構わない)。
 
 ## 公開フロー
 
