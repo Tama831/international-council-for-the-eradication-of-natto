@@ -1,2 +1,3 @@
-# Force exact-path serve (bypass auto-strip of .html) for GSC verification.
-/googleb3aaebd4b49ea94f.html /googleb3aaebd4b49ea94f.html 200
+# Bypass CF Pages' auto-strip of .html for the GSC verification file.
+# Rewrite (200) to the no-extension path which serves the same content.
+/googleb3aaebd4b49ea94f.html /googleb3aaebd4b49ea94f 200
