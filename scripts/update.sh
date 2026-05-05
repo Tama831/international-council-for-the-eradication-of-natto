@@ -53,6 +53,7 @@ case "$DECISION" in
 esac
 
 python3 scripts/render.py
+python3 scripts/render_feed.py
 
 if [[ -z "$(git status --porcelain)" ]]; then
   echo "no changes — skipping commit"
@@ -67,7 +68,7 @@ print(f'{e["date"]} {e["title"]}')
 PY
 )"
 
-git add data/activities.json data/bulletins.json index.html
+git add data/activities.json data/bulletins.json data/evergreen_state.json index.html feed.xml
 git -c user.name="ICEN Secretariat" -c user.email="ly.renum@gmail.com" \
   commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
 git push origin HEAD
@@ -75,13 +76,26 @@ git push origin HEAD
 # Auto-post to X (best-effort; failures don't break the pipeline).
 # Requires ICEN_ADMIN_KEY in env; idempotency keys prevent double-posts.
 if [[ -n "${ICEN_ADMIN_KEY:-}" ]]; then
+  POSTED_TO_X=0
   if (( GENERATED_ACTIVITY )); then
     echo "─ posting activity to X ─"
-    python3 scripts/post_x.py --kind=activity || echo "X activity post failed (continuing)"
+    python3 scripts/post_x.py --kind=activity && POSTED_TO_X=1 || echo "X activity post failed (continuing)"
   fi
   if (( GENERATED_BULLETIN )); then
     echo "─ posting bulletin to X ─"
-    python3 scripts/post_x.py --kind=bulletin || echo "X bulletin post failed (continuing)"
+    python3 scripts/post_x.py --kind=bulletin && POSTED_TO_X=1 || echo "X bulletin post failed (continuing)"
+  fi
+
+  # On any other day, post one evergreen tweet with ~40% probability so the
+  # account averages roughly one post every 2-3 days (mixed with the
+  # less-frequent activity / bulletin posts above).
+  if (( ! POSTED_TO_X )); then
+    if (( RANDOM % 100 < 40 )); then
+      echo "─ posting evergreen to X ─"
+      python3 scripts/post_evergreen.py || echo "X evergreen post failed (continuing)"
+    else
+      echo "no X post today (quiet day)"
+    fi
   fi
 else
   echo "ICEN_ADMIN_KEY not set — skipping X auto-post"

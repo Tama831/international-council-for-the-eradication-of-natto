@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>国際納豆撲滅協議会 — 活動報告 / ICEN Communiqués</title>
+    <link>https://natto-5hv.pages.dev/</link>
+    <atom:link href="https://natto-5hv.pages.dev/feed.xml" rel="self" type="application/rss+xml" />
+    <description>1972年京都密約より半世紀。架空の国際機関による活動報告(パロディ)。</description>
+    <language>ja</language>
+    <lastBuildDate>Tue, 05 May 2026 23:39:40 +0000</lastBuildDate>
+    <generator>ICEN render_feed.py</generator>
+    <item>
+      <title>「粘着力増強」研究の厳重なる監視に関する通牒</title>
+      <link>https://natto-5hv.pages.dev/#activities</link>
+      <guid isPermaLink="false">https://natto-5hv.pages.dev/#2026.05.08-「粘着力増強」研究の厳重なる監視に関する通牒</guid>
+      <pubDate>Fri, 08 May 2026 12:00:00 +0900</pubDate>
+      <category>Bulletin №79</category>
+      <description>一部報道にて報じられた、茨城県内での「糸」の増強研究につき、協議会は緊急監視体制を発動。納豆の持つ粘りが更なる進化を遂げ、国際社会の朝食風景に不可逆的な変容をもたらす可能性を深く憂慮しております。全ての加盟国に対し、厳重なる警戒を求めるものです。</description>
+    </item>
+    <item>
+      <title>緊急声明 第78号「納豆ピザ問題」</title>
+      <link>https://natto-5hv.pages.dev/#activities</link>
+      <guid isPermaLink="false">https://natto-5hv.pages.dev/#2026.05.04-緊急声明 第78号「納豆ピザ問題」</guid>
+      <pubDate>Mon, 04 May 2026 12:00:00 +0900</pubDate>
+      <category>Bulletin №78</category>
+      <description>関東圏で「納豆ピザ」を提供する飲食店が複数確認された旨、各国会員より報告あり。本協議会は、これを「文化的越境行為」と位置づけ、販売中止要請を含む段階的対応を検討中。</description>
+    </item>
+    <item>
+      <title>研究プロジェクト「卵かけご飯のみで生きる」発足</title>
+      <link>https://natto-5hv.pages.dev/#activities</link>
+      <guid isPermaLink="false">https://natto-5hv.pages.dev/#2026.04.21-研究プロジェクト「卵かけご飯のみで生きる」発足</guid>
+      <pubDate>Tue, 21 Apr 2026 12:00:00 +0900</pubDate>
+      <category>Research</category>
+      <description>朝食代替食品研究プロジェクト。被験者12名が3か月間、朝食を卵かけご飯のみで構成する実証研究を開始。途中経過は機関誌『非粘月報』にて公表予定。</description>
+    </item>
+    <item>
+      <title>「納豆フリー学校給食」キャンペーン全国展開</title>
+      <link>https://natto-5hv.pages.dev/#activities</link>
+      <guid isPermaLink="false">https://natto-5hv.pages.dev/#2026.04.02-「納豆フリー学校給食」キャンペーン全国展開</guid>
+      <pubDate>Thu, 02 Apr 2026 12:00:00 +0900</pubDate>
+      <category>Education</category>
+      <description>全国の小中学校に向け、納豆を含まない朝食メニュー300案を無償提供。茨城県教育委員会からは丁重な辞退を受けたが、対話の窓口は維持されている。</description>
+    </item>
+    <item>
+      <title>第54回京都密会 開催</title>
+      <link>https://natto-5hv.pages.dev/#activities</link>
+      <guid isPermaLink="false">https://natto-5hv.pages.dev/#2026.03.18-第54回京都密会 開催</guid>
+      <pubDate>Wed, 18 Mar 2026 12:00:00 +0900</pubDate>
+      <category>Annual Summit</category>
+      <description>京都某所にて加盟5カ国・観察国代表計63名が参集。議題は「朝食の脱粘液化ロードマップ 2030」。3日間に及ぶ討議の末、卵かけご飯派と焼き魚派の歴史的和解が成立した。</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,53 @@
+{
+  "_doc": "Evergreen tweet pool. post_evergreen.py picks the entry whose last_posted_at is oldest (or null).",
+  "templates": [
+    {
+      "id": "charge-1-visual",
+      "text": "納豆五大罪状・第一条「視覚的暴力」。\n\n茶色く粘る塊は、食欲という概念に対する露骨な反逆である。透明パックを通じて、被害者は朝の心の準備なく直視を強いられる。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "charge-2-smell",
+      "text": "納豆五大罪状・第二条「嗅覚的侵略」。\n\n半径3メートル以内の鼻腔を制圧する。換気では追いつかない。これは食品の匂いではなく、領空侵犯である。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "charge-3-touch",
+      "text": "納豆五大罪状・第三条「触覚的拘束」。\n\n一度箸についた糸は、食卓の物理法則を超越する。皿、口、頬、髪、机、リモコン — あらゆる物体が連鎖的に汚染される。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "charge-4-ethics",
+      "text": "納豆五大罪状・第四条「倫理的混乱」。\n\n「腐ってないけど発酵」という詭弁。発酵と腐敗の境界線を曖昧にする本食品は、食の倫理的座標系を根本から揺るがす。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "charge-5-social",
+      "text": "納豆五大罪状・第五条「社会的分断」。\n\n食卓を二分し、家族関係に静かな亀裂を生む。賛成派と反対派の対立は、しばしば離婚理由欄の余白に滲む。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-withdraw",
+      "text": "本日も、貴殿の朝食より納豆を撤退されたい。\n\n貴殿が下した決断を、本協議会は一切詮索しない。ただ、京都の風が貴殿の朝食を、永久に粘り無きものへと導きますように。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-not-cheerful",
+      "text": "我々は陽気な敵ではない。我々は粘る敵に、粘り強く抗う。\n\n国際納豆撲滅協議会 ─ 1972年京都密約より半世紀。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-motto",
+      "text": "粘り、断つべし。\n\n— 京都密約 第Ⅰ条 \"filum scindendum\"\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-bylaw",
+      "text": "京都密約 第三条第二項 別表丙に基づき、加盟各国に通知する。\n\n本協議会は、納豆と隣り合う朝食すべてを観察対象とする。当該朝食における和解は、当事者の良心にお委ねする。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-30sec",
+      "text": "入会試験のお知らせ。\n\n課題: 納豆の良いところを30秒で語る。\n合格条件: 30秒間、一切話せなかった者。\n\n本協議会は、貴殿の沈黙を尊重します。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-fee",
+      "text": "本協議会の会費は無償(志納制)である。\n\nただし年に1度、ご自身の冷蔵庫に向かい「本日も納豆を選ばぬ」旨を声に出して誓約することを以て、年会費に代える。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    },
+    {
+      "id": "meta-observer",
+      "text": "観察国名簿よりお知らせ。\n\n茨城県を除く46都道府県、現在も観察国として静かに名を連ねる。本協議会は、納豆との和解の道を、いつでも開いている。\n\n→ https://natto-5hv.pages.dev\n#粘り断つべし"
+    }
+  ]
+}
