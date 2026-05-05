@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200, initial-scale=1.0" />
+  <title>OG image source</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:1200px;height:630px;overflow:hidden;background:#F2EAD8}
+    body{
+      font-family:'Shippori Mincho B1', serif;
+      color:#1F1813; position:relative;
+      display:grid; grid-template-columns:1fr 1fr; align-items:center;
+    }
+    body::before{
+      content:""; position:absolute; inset:0;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+      mix-blend-mode:multiply; opacity:.45;
+      pointer-events:none; z-index:1;
+    }
+    body::after{
+      content:""; position:absolute; inset:0;
+      background:
+        radial-gradient(280px 200px at 12% 18%, rgba(120,80,40,.1), transparent 70%),
+        radial-gradient(220px 180px at 88% 78%, rgba(120,80,40,.08), transparent 70%);
+      pointer-events:none; z-index:1;
+    }
+
+    .left{
+      padding:60px 0 60px 80px;
+      position:relative; z-index:2;
+    }
+    .label{
+      font-family:'JetBrains Mono', monospace; font-weight:700;
+      font-size:13px; letter-spacing:.32em; color:#8B1A1A;
+      text-transform:uppercase; margin-bottom:26px;
+    }
+    .label::before{content:""; display:inline-block; width:40px; height:1px; background:#8B1A1A; vertical-align:middle; margin-right:16px}
+
+    .name{
+      font-weight:800; font-size:54px; line-height:1.05;
+      letter-spacing:-.005em; margin-bottom:14px;
+    }
+    .name-en{
+      font-family:'DM Serif Display', serif; font-style:italic;
+      font-size:21px; color:#3A2E25; line-height:1.35;
+      margin-bottom:34px; max-width:480px;
+    }
+    .motto{
+      font-family:'Shippori Mincho B1', serif; font-weight:800;
+      font-size:78px; line-height:1.05; letter-spacing:.04em;
+    }
+    .motto .red{color:#8B1A1A; position:relative; display:inline-block}
+    .motto .red::after{
+      content:""; position:absolute; left:-3%; right:-3%; top:54%; height:8px;
+      background:#8B1A1A; transform:rotate(-3deg); opacity:.95;
+      box-shadow:0 0 0 1px #6B0F0F inset;
+    }
+
+    .meta{
+      margin-top:34px;
+      font-family:'JetBrains Mono', monospace; font-size:12px;
+      letter-spacing:.16em; color:#3A2E25; line-height:1.7;
+    }
+    .meta b{color:#8B1A1A}
+
+    .right{
+      position:relative; z-index:2;
+      display:flex; align-items:center; justify-content:center;
+      height:100%;
+    }
+
+    .stamp{
+      width:340px; height:340px; border-radius:50%;
+      border:8px solid #8B1A1A;
+      display:grid; place-items:center;
+      transform:rotate(-12deg); position:relative;
+      background:rgba(242,234,216,.6);
+    }
+    .stamp::before{
+      content:""; position:absolute; inset:14px;
+      border:2.5px solid #8B1A1A; border-radius:50%;
+    }
+    .stamp .inner{
+      writing-mode:vertical-rl; text-orientation:upright;
+      font-weight:800; font-size:48px; color:#8B1A1A;
+      letter-spacing:.34em;
+    }
+
+    .footer-strip{
+      position:absolute; bottom:0; left:0; right:0;
+      background:#1F1813; color:#F2EAD8;
+      padding:14px 80px; z-index:3;
+      display:flex; justify-content:space-between; align-items:center;
+      font-family:'JetBrains Mono', monospace; font-size:11.5px;
+      letter-spacing:.18em; text-transform:uppercase;
+    }
+    .footer-strip .yellow{color:#C4A02C; font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="left">
+    <div class="label">A Half-Century of Quiet Resistance</div>
+    <div class="name">国際納豆撲滅<br>協議会</div>
+    <div class="name-en"><i>International Council for the Eradication of Natto</i></div>
+    <div class="motto"><span class="red">粘り、</span><br>断つべし。</div>
+    <div class="meta">
+      <b>EST.</b> 1972 · GENEVA — KYOTO ACCORD<br>
+      <b>FILE.</b> ICEN-2026-Q2-007 · OPEN
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="stamp"><span class="inner">機密</span></div>
+  </div>
+
+  <div class="footer-strip">
+    <span><span class="yellow">※ This is a parody / satirical fiction.</span> NATTO IS DELICIOUS.</span>
+    <span>natto-5hv.pages.dev</span>
+  </div>
+</body>
+</html>
