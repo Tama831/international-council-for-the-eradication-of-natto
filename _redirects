@@ -1,0 +1,2 @@
+# Force exact-path serve (bypass auto-strip of .html) for GSC verification.
+/googleb3aaebd4b49ea94f.html /googleb3aaebd4b49ea94f.html 200
