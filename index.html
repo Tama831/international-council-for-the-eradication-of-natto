@@ -100,6 +100,12 @@
       text-transform:uppercase;color:var(--ink-2);
     }
     .topbar .stamp-mini{color:var(--blood);font-weight:700}
+    .topbar a.lang-link{
+      color:var(--blood);text-decoration:none;font-weight:700;
+      letter-spacing:.16em;font-size:10.5px;
+      padding:2px 0;border-bottom:1px dashed transparent;transition:.2s;
+    }
+    .topbar a.lang-link:hover{border-bottom-color:var(--blood);color:var(--ink)}
 
     /* emergency ticker */
     .ticker{
@@ -560,8 +566,8 @@
   <div class="topbar">
     <div class="row">
       <span>Established 1972 · Geneva–Kyoto Accord</span>
-      <span class="stamp-mini">機密区分:公開可 / 第Ⅱ種</span>
-      <span>Document №ICEN-2026-Q2-007</span>
+      <span><a class="lang-link" href="welcome.html">🌐 EN · FR · DE · 中文 · РУС · 한국 · TL · ES · PAU</a></span>
+      <span>Document №ICEN-<span data-year>2026</span>-Q2-007</span>
     </div>
   </div>
 
@@ -603,6 +609,7 @@
           <li><a href="#members">加盟国</a></li>
           <li><a href="#activities">活動報告</a></li>
           <li><a href="#join">入会案内</a></li>
+          <li><a href="welcome.html">🌐 Languages</a></li>
         </ul>
       </nav>
       <div class="doc-id">CLASSIFICATION · OPEN<br>REV. 2026.05</div>
@@ -921,6 +928,7 @@
             <li><a href="privacy.html" style="color:inherit">プライバシーに関する告知</a></li>
             <li><a href="delete-request.html" style="color:inherit">削除請求フォーム</a></li>
             <li><a href="welcome.html" style="color:inherit">Welcome (multilingual)</a></li>
+            <li><a href="feedback.html" style="color:inherit">Feedback / ご意見</a></li>
           </ul>
           <p style="margin-top:12px">secretariat@example.invalid<br>Geneva HQ · Kyoto Office<br>機関誌『非粘月報』ISSN 0000-0000</p>
         </div>

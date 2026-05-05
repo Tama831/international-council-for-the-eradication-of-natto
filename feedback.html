@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feedback / ご意見 — 国際納豆撲滅協議会</title>
+  <meta name="description" content="翻訳の修正提案・バグ報告・感想を、運営者の個人連絡先を介さずにお送りいただけるフォーム。" />
+  <meta name="icen-api" content="https://natto-5hv.pages.dev/api" />
+  <meta name="turnstile-site-key" content="0x4AAAAAADJJ-5wDq77tmo7h" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --paper:#F2EAD8; --paper-2:#E8DDC4; --paper-3:#D9C9A6;
+      --ink:#1F1813; --ink-2:#3A2E25;
+      --blood:#8B1A1A; --enemy:#C4A02C;
+      --rule:rgba(31,24,19,.18);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Noto Serif JP', serif;
+      color:var(--ink); background:var(--paper);
+      line-height:1.85; font-feature-settings:"palt";
+      min-height:100vh; display:flex; flex-direction:column;
+      position:relative;
+    }
+    body::before{
+      content:""; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+      mix-blend-mode:multiply; opacity:.4;
+      pointer-events:none; z-index:1000;
+    }
+    .wrap{max-width:680px; margin:0 auto; padding:0 28px; flex:1; position:relative; z-index:1}
+
+    .topbar{border-bottom:1px solid var(--rule); background:var(--paper-2); font-size:11px; letter-spacing:.18em}
+    .topbar .row{display:flex; justify-content:space-between; align-items:center; max-width:680px; margin:0 auto; padding:8px 28px; text-transform:uppercase; color:var(--ink-2)}
+    .topbar a{color:var(--blood); text-decoration:none; font-weight:700}
+
+    header.doc{padding:64px 0 40px; border-bottom:1px solid var(--rule)}
+    .kicker{display:flex; align-items:center; gap:14px; font-size:12px; letter-spacing:.32em; color:var(--blood); text-transform:uppercase; font-weight:700; margin-bottom:24px}
+    .kicker::before{content:""; display:inline-block; width:48px; height:1px; background:var(--blood)}
+    h1{font-family:'Shippori Mincho B1', serif; font-weight:800; font-size:clamp(34px, 4.6vw, 48px); line-height:1.25; margin-bottom:14px}
+    .en{font-family:'DM Serif Display', serif; font-style:italic; font-size:18px; color:var(--ink-2)}
+
+    main{padding:40px 0 64px}
+    main p{font-size:15px; margin-bottom:14px}
+    main p.muted{color:var(--ink-2); font-size:13.5px; line-height:1.7}
+
+    form{
+      margin-top:32px;
+      background:var(--ink); color:var(--paper);
+      padding:32px 28px; position:relative;
+    }
+    form::before{
+      content:""; position:absolute; inset:6px;
+      border:1px solid rgba(242,234,216,.25); pointer-events:none;
+    }
+    form h2{font-family:'Shippori Mincho B1', serif; font-size:22px; font-weight:700; color:var(--paper); margin-bottom:20px}
+    label.row{display:block; padding:14px 0; border-bottom:1px dashed rgba(242,234,216,.2)}
+    label.row > span{display:block; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.16em; color:var(--enemy); margin-bottom:8px}
+    label.row input,
+    label.row select,
+    label.row textarea{
+      width:100%; background:transparent; color:var(--paper);
+      border:none; border-bottom:1px solid rgba(242,234,216,.25);
+      font:inherit; padding:6px 0;
+      font-family:'JetBrains Mono', monospace; font-size:13px;
+      appearance:none; -webkit-appearance:none; resize:vertical;
+    }
+    label.row textarea{
+      min-height:140px; font-family:'Noto Serif JP', serif; font-size:14.5px;
+      line-height:1.7;
+    }
+    label.row input:focus,
+    label.row select:focus,
+    label.row textarea:focus{outline:none; border-bottom-color:var(--enemy); color:var(--enemy)}
+    label.row input::placeholder, label.row textarea::placeholder{color:rgba(242,234,216,.35)}
+    label.row select option{background:var(--ink); color:var(--paper)}
+
+    .opt-note{font-size:11px; color:var(--paper-3); margin-top:4px}
+
+    button.cta{
+      cursor:pointer; font:inherit;
+      margin-top:24px;
+      display:inline-flex; align-items:center; gap:12px;
+      padding:14px 24px;
+      background:var(--enemy); color:var(--ink);
+      font-family:'Shippori Mincho B1', serif; font-weight:800; font-size:15px; letter-spacing:.16em;
+      border:2px solid var(--enemy); transition:.2s;
+    }
+    button.cta:hover{background:var(--ink); color:var(--enemy)}
+    button.cta:disabled{cursor:not-allowed; opacity:.5}
+    button.cta::after{content:"→"}
+
+    .form-result{margin-top:18px; padding:14px 16px; font-size:12.5px; line-height:1.7; font-family:'JetBrains Mono', monospace; letter-spacing:.04em; border:1px dashed var(--enemy)}
+    .form-result.ok{border-color:var(--enemy); color:var(--enemy); background:rgba(196,160,44,.1)}
+    .form-result.err{border-color:var(--blood); color:#ff9a9a; background:rgba(139,26,26,.25)}
+    .form-result.pending{opacity:.7}
+
+    .hp{position:absolute !important; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden}
+
+    footer{margin-top:auto; border-top:3px double var(--ink); background:var(--paper-2); padding:32px 0; position:relative; z-index:1}
+    footer .row{max-width:680px; margin:0 auto; padding:0 28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.12em; color:var(--ink-2)}
+    footer a{color:var(--blood); text-decoration:none}
+    footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="row">
+      <span>Document №ICEN-FB-<span data-year>2026</span></span>
+      <span><a href="index.html">← トップへ戻る</a></span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="doc">
+      <div class="kicker">Public Feedback</div>
+      <h1>ご意見・ご提案</h1>
+      <div class="en">Translation fixes, bug reports, comments — without exposing the operator's personal email.</div>
+    </header>
+
+    <main>
+      <p>本フォームは、運営者の個人メールアドレスを介さず、ご意見をいただける窓口です。
+      <b>翻訳の修正提案</b>(特に Palauan を含む各言語)・バグ報告・感想・提案を歓迎いたします。</p>
+      <p class="muted">本フォームから送信された内容はサーバには<b>保存されません</b>。
+      Brevo メールサービスを介して運営者のメールボックスへ転送されるのみです。
+      連絡先(任意)を入力された場合のみ、Reply-To ヘッダに使用いたします。</p>
+      <p class="muted">For non-Japanese readers: this form forwards your message to the
+      site operator without storing it. Use it for translation corrections, bug reports,
+      or general feedback. Contact info is optional.</p>
+
+      <form id="fb-form" novalidate>
+        <h2>Feedback Form</h2>
+        <label class="row">
+          <span>Category</span>
+          <select name="category" required>
+            <option value="translation">翻訳の修正提案 / Translation correction</option>
+            <option value="bug">バグ報告 / Bug report</option>
+            <option value="feedback" selected>感想・提案 / Comment / suggestion</option>
+            <option value="other">その他 / Other</option>
+          </select>
+        </label>
+        <label class="row">
+          <span>Language tag (optional, for translation feedback)</span>
+          <input type="text" name="lang" maxlength="30" placeholder="e.g. PAU, KO, ZH-TW" />
+        </label>
+        <label class="row">
+          <span>Your name (optional / anonymous OK)</span>
+          <input type="text" name="name" maxlength="100" />
+        </label>
+        <label class="row">
+          <span>Reply contact (optional — email if you want a reply)</span>
+          <input type="text" name="contact" maxlength="200" placeholder="email or other handle" />
+          <p class="opt-note">空欄でも送信できます。</p>
+        </label>
+        <label class="row">
+          <span>Message *</span>
+          <textarea name="message" minlength="5" maxlength="4000" required placeholder="ここにご意見を…"></textarea>
+        </label>
+        <!-- honeypot -->
+        <label class="hp" aria-hidden="true" tabindex="-1"><span>所属</span><input type="text" name="affiliation" tabindex="-1" autocomplete="off"></label>
+        <button type="submit" class="cta">送信する / Send</button>
+        <p id="fb-result" class="form-result" hidden></p>
+      </form>
+    </main>
+  </div>
+
+  <footer>
+    <div class="row">
+      <span>© 1972–<span data-year>2026</span> INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
+      <span><a href="welcome.html">Welcome</a> · <a href="privacy.html">Privacy</a> · <a href="index.html">JP top</a></span>
+    </div>
+    <script>document.querySelectorAll('[data-year]').forEach(el => el.textContent = String(new Date().getUTCFullYear()));</script>
+  </footer>
+
+  <script>
+    (function(){
+      const apiBase = (document.querySelector('meta[name="icen-api"]')?.content || '').trim().replace(/\/$/, '');
+      const tsKey = (document.querySelector('meta[name="turnstile-site-key"]')?.content || '').trim();
+      const form = document.getElementById('fb-form');
+      const result = document.getElementById('fb-result');
+
+      if (tsKey){
+        const s = document.createElement('script');
+        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        s.async = true; s.defer = true;
+        document.head.appendChild(s);
+        const div = document.createElement('div');
+        div.className = 'cf-turnstile';
+        div.dataset.sitekey = tsKey;
+        div.style.marginTop = '20px';
+        form.querySelector('button[type=submit]').before(div);
+      }
+
+      function show(cls, text){
+        result.hidden = false;
+        result.className = 'form-result ' + cls;
+        result.textContent = text;
+      }
+
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        const data = Object.fromEntries(new FormData(form).entries());
+        if (tsKey){
+          const t = (window.turnstile && window.turnstile.getResponse) ? window.turnstile.getResponse() : '';
+          if (!t){ show('err', 'CAPTCHA を完了してください'); return; }
+          data['cf-turnstile-response'] = t;
+        }
+        show('pending', '送信中…');
+        const btn = form.querySelector('button[type=submit]');
+        btn.disabled = true;
+        try {
+          const res = await fetch(apiBase + '/feedback', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(data),
+          });
+          const j = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(j.detail || `${res.status} ${res.statusText}`);
+          show('ok', j.message || 'ご意見を受信いたしました。');
+          form.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
+        } catch(err){
+          btn.disabled = false;
+          show('err', '送信に失敗しました: ' + (err.message || err));
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
