@@ -31,7 +31,9 @@
   <meta name="turnstile-site-key" content="0x4AAAAAADJJ-5wDq77tmo7h" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" />
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" /></noscript>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -520,7 +522,7 @@
       border-top:3px double var(--ink);
     }
     .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:48px}
-    .foot-grid h5{
+    .foot-grid h2{
       font-family:'JetBrains Mono', monospace;font-size:11px;letter-spacing:.24em;
       color:var(--blood);margin-bottom:14px;text-transform:uppercase;
     }
@@ -624,6 +626,7 @@
   </header>
 
   <!-- HERO -->
+  <main>
   <section class="hero">
     <div class="wrap">
       <div class="hero-grid">
@@ -638,7 +641,7 @@
         </div>
 
         <aside class="hero-side fade d3">
-          <h4>Preamble · 1972 京都密約</h4>
+          <h3>Preamble · 1972 京都密約</h3>
           <p>我々は、人類の食卓から納豆を完全に撲滅することを使命とする。その粘り、その匂い、その糸 — これらは食物の名を借りた挑戦状である。</p>
           <div class="meta">
             <div><b>SETTLED</b> 1972.04.12 · Kyoto</div>
@@ -911,6 +914,8 @@
     </div>
   </section>
 
+  </main>
+
   <!-- FOOTER -->
   <footer>
     <div class="wrap">
@@ -920,7 +925,7 @@
           国際納豆撲滅協議会という団体は実在しません。納豆は日本が世界に誇る伝統的な発酵食品であり、優れた栄養価を持つ食品です。本サイトは納豆を愛する方々を否定する意図を一切持たず、ユーモアと言葉遊びを目的としたパロディ作品です。茨城県の皆様には心からの敬意と感謝を捧げます。</p>
         </div>
         <div>
-          <h5>Sections</h5>
+          <h2>Sections</h2>
           <ul>
             <li><a href="#mission" style="color:inherit">綱領</a></li>
             <li><a href="#charges" style="color:inherit">五つの罪状</a></li>
@@ -930,7 +935,7 @@
           </ul>
         </div>
         <div>
-          <h5>Notices</h5>
+          <h2>Notices</h2>
           <ul>
             <li><a href="privacy.html" style="color:inherit">プライバシーに関する告知</a></li>
             <li><a href="delete-request.html" style="color:inherit">削除請求フォーム</a></li>
