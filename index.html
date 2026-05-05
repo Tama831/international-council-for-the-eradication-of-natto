@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>国際納豆撲滅協議会 | International Council for the Eradication of Natto</title>
   <meta name="description" content="1972年京都密約より半世紀。我々は粘る敵に静かに、しかし執念深く抗う。※本サイトは架空のフィクションです。" />
+  <!-- ICEN Application API endpoint. Empty = fallback to mailto. Set after backend deploy. -->
+  <meta name="icen-api" content="" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
@@ -418,9 +420,46 @@
       font-family:'Shippori Mincho B1', serif;font-weight:800;font-size:16px;letter-spacing:.16em;
       text-decoration:none;border:2px solid var(--enemy);
       transition:.2s;
+      cursor:pointer;font:inherit;font-weight:800;
     }
+    button.cta{font-family:'Shippori Mincho B1', serif;font-size:16px;letter-spacing:.16em}
     .cta:hover{background:var(--ink);color:var(--enemy)}
     .cta::after{content:"→"}
+    .cta:disabled{cursor:not-allowed;opacity:.5}
+
+    /* form fields inside .join-card */
+    .join-card label.form-row{cursor:text}
+    .join-card input,
+    .join-card select{
+      background:transparent;color:var(--paper);
+      border:none;border-bottom:1px dashed rgba(242,234,216,.35);
+      font:inherit;padding:4px 0;
+      width:60%;text-align:right;
+      font-family:'JetBrains Mono', monospace;font-size:13px;
+      appearance:none;-webkit-appearance:none;
+    }
+    .join-card input::placeholder{color:rgba(242,234,216,.35)}
+    .join-card input:focus,
+    .join-card select:focus{
+      outline:none;
+      border-bottom-color:var(--enemy);color:var(--enemy);
+    }
+    .join-card select{
+      background-image:linear-gradient(45deg,transparent 50%,var(--paper-3) 50%),linear-gradient(135deg,var(--paper-3) 50%,transparent 50%);
+      background-position:calc(100% - 14px) center,calc(100% - 9px) center;
+      background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+      padding-right:24px;
+    }
+    .join-card select option{background:var(--ink);color:var(--paper)}
+    .form-result{
+      margin-top:18px;padding:14px 16px;
+      font-size:12.5px;line-height:1.7;
+      font-family:'JetBrains Mono', monospace;letter-spacing:.04em;
+      border:1px dashed var(--enemy);
+    }
+    .form-result.ok{border-color:var(--enemy);color:var(--enemy);background:rgba(196,160,44,.1)}
+    .form-result.err{border-color:var(--blood);color:#ff9a9a;background:rgba(139,26,26,.25)}
+    .form-result.pending{opacity:.7}
 
     /* ───────── FOOTER ───────── */
     footer{
@@ -783,17 +822,32 @@
           <dd>機関誌『非粘月報』購読 / 京都密会傍聴権<small>密会は年1回、開催地は会員のみに通達される (毎回京都ではあるのだが)。</small></dd>
         </dl>
 
-        <aside class="join-card">
+        <form class="join-card" id="icen-form" novalidate>
           <div class="stamp-card">入会<br>申請</div>
           <h4>入会申請書 №ICEN-A-2026</h4>
-          <div class="form-row"><span>氏名</span><span>______________</span></div>
-          <div class="form-row"><span>居住国 / 都道府県</span><span>______________</span></div>
-          <div class="form-row"><span>朝食における主食</span><span>米 / 麦 / 他</span></div>
-          <div class="form-row"><span>納豆嫌悪歴 (年)</span><span>______ 年</span></div>
-          <div class="form-row"><span>嫌悪の主因</span><span>匂 / 糸 / 見 / 他</span></div>
-          <div class="form-row"><span>署名</span><span>______________</span></div>
-          <a class="cta" href="mailto:apply@example.invalid?subject=ICEN%20Membership%20Application">申請書を送付する</a>
-        </aside>
+          <label class="form-row"><span>氏名</span><input type="text" name="name" maxlength="120" required placeholder="姓 名"></label>
+          <label class="form-row"><span>居住国 / 都道府県</span><input type="text" name="region" maxlength="120" required placeholder="例: 京都府"></label>
+          <label class="form-row"><span>朝食における主食</span>
+            <select name="breakfast_main" required>
+              <option value="米">米</option>
+              <option value="麦">麦</option>
+              <option value="他">他</option>
+            </select>
+          </label>
+          <label class="form-row"><span>納豆嫌悪歴 (年)</span><input type="number" name="hate_years" min="0" max="120" required placeholder="0"></label>
+          <label class="form-row"><span>嫌悪の主因</span>
+            <select name="hate_reason" required>
+              <option value="匂">匂</option>
+              <option value="糸">糸</option>
+              <option value="見">見</option>
+              <option value="他">他</option>
+            </select>
+          </label>
+          <label class="form-row"><span>署名</span><input type="text" name="signature" maxlength="120" required placeholder="自筆署名"></label>
+          <label class="form-row"><span>連絡先 (電子郵便)</span><input type="email" name="email" maxlength="200" required placeholder="you@example.com"></label>
+          <button type="submit" class="cta">申請書を送付する</button>
+          <p id="icen-form-result" class="form-result" hidden></p>
+        </form>
       </div>
     </div>
   </section>
@@ -827,6 +881,67 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    (function(){
+      const api = (document.querySelector('meta[name="icen-api"]')?.content || '').trim();
+      const form = document.getElementById('icen-form');
+      const result = document.getElementById('icen-form-result');
+      if (!form) return;
+
+      function setResult(cls, text){
+        result.hidden = false;
+        result.className = 'form-result ' + cls;
+        result.textContent = text;
+      }
+
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        data.hate_years = parseInt(data.hate_years || '0', 10);
+
+        // No backend configured yet → fall back to mailto
+        if (!api){
+          const subject = encodeURIComponent('ICEN 入会申請 / Membership Application');
+          const body = encodeURIComponent(
+            `氏名: ${data.name}\n` +
+            `居住国 / 都道府県: ${data.region}\n` +
+            `朝食における主食: ${data.breakfast_main}\n` +
+            `納豆嫌悪歴(年): ${data.hate_years}\n` +
+            `嫌悪の主因: ${data.hate_reason}\n` +
+            `署名: ${data.signature}\n\n` +
+            `※本フォームは現在、自動受理システムを準備中につき、メーラー経由での送信となります。`
+          );
+          window.location.href = `mailto:${data.email}?subject=${subject}&body=${body}`;
+          setResult('ok', 'メーラーが起動しました。事務局へ送信ください。(自動受理システム準備中)');
+          return;
+        }
+
+        setResult('pending', '送信中…京都の風が届くまで少々お待ちください。');
+        const submitBtn = form.querySelector('button[type=submit]');
+        submitBtn.disabled = true;
+
+        try{
+          const res = await fetch(api.replace(/\/$/, '') + '/apply', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(data),
+          });
+          const j = await res.json().catch(() => ({}));
+          if (!res.ok){
+            throw new Error(j.detail || `${res.status} ${res.statusText}`);
+          }
+          setResult('ok', `${j.message}  申請番号: ${j.application_no}`);
+          form.querySelectorAll('input, select').forEach(el => el.disabled = true);
+        } catch (err){
+          submitBtn.disabled = false;
+          setResult('err', `送信に失敗しました: ${err.message || err}`);
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>

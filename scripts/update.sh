@@ -17,14 +17,36 @@ if [[ -z "${GEMINI_API_KEY:-}" && -f /home/tama/ai-agent-team/.env ]]; then
 fi
 : "${GEMINI_API_KEY:?GEMINI_API_KEY is required (export it or set in /home/tama/ai-agent-team/.env)}"
 
-python3 scripts/generate_activity.py
+DECISION="$(python3 scripts/scheduler.py)"
+echo "scheduler decision: ${DECISION}"
 
-# Rotate ticker bulletin ~50% of the time so it doesn't always change
-if (( RANDOM % 2 == 0 )); then
-  python3 scripts/generate_bulletin.py
-else
-  echo "skipped bulletin rotation this run"
-fi
+case "$DECISION" in
+  annual)
+    python3 scripts/generate_activity.py --mode=annual
+    python3 scripts/generate_bulletin.py
+    ;;
+  regular)
+    python3 scripts/generate_activity.py --mode=regular
+    if (( RANDOM % 2 == 0 )); then
+      python3 scripts/generate_bulletin.py
+    else
+      echo "skipped bulletin rotation this run"
+    fi
+    ;;
+  skip)
+    # 7% chance to refresh just the ticker even on quiet days
+    if (( RANDOM % 100 < 7 )); then
+      python3 scripts/generate_bulletin.py
+    else
+      echo "nothing to do today"
+      exit 0
+    fi
+    ;;
+  *)
+    echo "unknown scheduler output: ${DECISION}" >&2
+    exit 1
+    ;;
+esac
 
 python3 scripts/render.py
 

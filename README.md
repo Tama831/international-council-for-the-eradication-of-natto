@@ -49,13 +49,25 @@ Mac から見る場合は git pull して同様に。
 
 ```
 [cron] → update.sh
-           ├── generate_activity.py  (Gemini が新しい活動報告を1件生成)
-           ├── generate_bulletin.py  (緊急声明 ticker をローテーション)
-           ├── render.py             (data/*.json → index.html を書き換え)
+           ├── scheduler.py         (今日は何をするか判定)
+           │     ├─ "annual"   = 3月第3日曜+3日後の水曜 (公式コミュニケ発表日)
+           │     ├─ "regular"  = 直近活動報告から23日経過
+           │     └─ "skip"     = それ以外 (低確率で ticker のみ更新)
+           ├── generate_activity.py (Gemini が新しい活動報告を1件生成)
+           │     --mode=annual  → 第NN回京都密会 (3日間討議の総括)
+           │     --mode=regular → 通常の通牒・勧告・声明など
+           ├── generate_bulletin.py (緊急声明 ticker をローテーション)
+           ├── render.py            (data/*.json → index.html を書き換え)
            └── git add + commit + push
                   ↓
              GitHub Pages 自動再ビルド (~30秒)
 ```
+
+### スケジュールの考え方
+
+- **京都密会 (年次)**: 3月第3**日曜日**から3日間 (日・月・火) 開催。公式コミュニケは
+  その**翌々日(水)**に発表される。例: 2026年は 03/15(日)〜03/17(火) 開催 → 03/18(水) 公表。
+- **通常の活動報告**: 最終投稿から23日おきに1件生成。京都密会と独立してカウント。
 
 ### 環境変数
 
@@ -67,12 +79,18 @@ export GEMINI_API_KEY="..."        # 必須 (Gemini 2.5 Flash 使用)
 
 ### Cron 例 (Hetzner)
 
+scheduler.py が今日 generate するか判定するので、**毎日1回叩いてOK**。
+
 ```cron
-# 4日おきに、9:00 / 14:00 / 20:00 のいずれか1回実行
-0 9 */4 * * cd /home/tama/projects/natto-eradication && bash scripts/update.sh >> /var/log/icen.log 2>&1
+# 毎朝 9:00 JST に scheduler を回す。今日が23日サイクル日 or 3月第3日曜+3日後の水曜なら発火、
+# それ以外は中で skip 判定 (たまに ticker だけローテ)。
+0 9 * * * cd /home/tama/projects/natto-eradication && bash scripts/update.sh >> /var/log/icen.log 2>&1
 ```
 
-ランダムにしたければ `update.sh` 内で 30% 確率実行などのゲートを足す。
+ワンライナー登録:
+```bash
+(crontab -l 2>/dev/null; echo "0 9 * * * cd /home/tama/projects/natto-eradication && bash scripts/update.sh >> /var/log/icen.log 2>&1") | crontab -
+```
 
 ### 手動実行
 
@@ -95,6 +113,35 @@ python3 scripts/render.py              # index.html を data から再描画
 - **本文・コピー変更**: `index.html` 直接編集 (活動報告・緊急声明以外)
 - **活動報告 / 緊急声明**: `data/*.json` 編集 → `python3 scripts/render.py` → commit
   - **直接 index.html の `<!-- AUTO:*:START/END -->` の中をいじらない** (次回 render で消える)
+
+## 入会申請バックエンド (Phase 3 / Option B)
+
+入会申請フォームを実機能化するバックエンド。FastAPI + Gmail SMTP。
+
+- 受信: `POST /apply` (フォームから JSON で送信)
+- **保存**: `data/applications.json` に **email + 申請番号 + 初回時刻 + 重複回数** のみ
+  (氏名・居住地・嫌悪歴等は返信送信後に破棄)
+- **初回**: 受理通知 + 30秒沈黙課題の指示メールを送信
+- **2回目以降**: 「既に申請を受理しております。お伝えした課題を初回申請日より14日以内にご提出ください」を送信
+
+### デプロイ
+
+詳細は [`server/README.md`](server/README.md) 参照。要点:
+
+1. **Gmail App Password を作成**: <https://myaccount.google.com/apppasswords>
+2. `/home/tama/ai-agent-team/.env` に `GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx` を追記
+3. `cd server && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
+4. `sudo cp infra/systemd/icen-api.service /etc/systemd/system/ && sudo systemctl enable --now icen-api`
+5. `infra/nginx/icen-api.conf` を既存 nginx の server ブロックに include → reload
+6. `index.html` の `<meta name="icen-api" content="...">` に公開 URL を入れる
+7. `python3 scripts/render.py && git add -A && git commit && git push`
+
+未デプロイ状態 (meta タグが空) ではフォームは **mailto: フォールバック**で動作する。
+
+### 自動返信の編集
+
+`server/templates/{reply_first,reply_repeat}.txt` を直接編集 → 即反映 (再起動不要)。
+プレースホルダ: `{{app_no}}` のみ。
 
 ## 公開フロー
 
