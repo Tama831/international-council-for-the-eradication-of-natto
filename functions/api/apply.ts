@@ -22,6 +22,7 @@ import {
   checkRecipientThrottle,
   fillTemplate,
   refVars,
+  maybeAlert,
 } from "./_lib";
 
 interface Env {
@@ -46,6 +47,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const rl = await checkRateLimit(env.ICEN_KV, ip, { limit: 5, windowSec: 3600, bucket: "rl-apply" });
   if (!rl.ok) {
+    await maybeAlert(env, "rate-limit-apply", 10, `IP ${ip} hit /api/apply rate limit (>5/h).`);
     return jsonResponse(
       { ok: false, detail: "rate limit exceeded — try again in an hour" },
       429,
@@ -62,6 +64,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   // Honeypot — bots that fill all fields trip this.
   if (typeof body.affiliation === "string" && body.affiliation.trim() !== "") {
+    await maybeAlert(env, "honeypot-apply", 5, `Honeypot triggered from IP ${ip}.`);
     return jsonResponse(
       { ok: true, phase: "confirmation-pending", message: "確認メールを送付しました。" },
       200,
@@ -72,7 +75,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Turnstile (no-op if TURNSTILE_SECRET_KEY is unset).
   const tsToken = String(body["cf-turnstile-response"] ?? "");
   const tsOk = await verifyTurnstile(tsToken, env.TURNSTILE_SECRET_KEY ?? "", ip);
-  if (!tsOk) return jsonResponse({ ok: false, detail: "captcha failed" }, 403, origin);
+  if (!tsOk) {
+    await maybeAlert(env, "captcha-fail-apply", 30, `CAPTCHA failed for /api/apply from IP ${ip}.`);
+    return jsonResponse({ ok: false, detail: "captcha failed" }, 403, origin);
+  }
 
   const email = String(body.email ?? "").trim().toLowerCase();
   if (!email || email.length > 200 || !EMAIL_RE.test(email)) {

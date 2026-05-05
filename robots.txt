@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /confirm-apply.html
+Disallow: /confirm-delete.html
+Disallow: /api/
+
+Sitemap: https://natto-5hv.pages.dev/sitemap.xml

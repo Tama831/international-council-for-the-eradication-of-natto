@@ -225,6 +225,69 @@ export function refVars(extra: Record<string, string> = {}): Record<string, stri
   };
 }
 
+/**
+ * Hourly threshold-based alerting. Increments counter for {topic} in current
+ * UTC-hour bucket. If counter crosses {threshold}, sends one alert email
+ * (deduped per hour via a "alert-sent" marker). Bypasses recipient throttle.
+ *
+ * Usage example:
+ *   await maybeAlert(env, "captcha-fail", 20, `CAPTCHA failed by ${ip}`);
+ */
+export async function maybeAlert(
+  env: {
+    ICEN_KV: KVNamespace;
+    BREVO_API_KEY: string;
+    ICEN_ALERT_EMAIL?: string;
+    ICEN_SENDER_EMAIL?: string;
+    ICEN_SENDER_NAME?: string;
+  },
+  topic: string,
+  threshold: number,
+  detail: string,
+): Promise<void> {
+  const alertEmail = env.ICEN_ALERT_EMAIL || "ly.renum@gmail.com";
+  const hour = Math.floor(Date.now() / 1000 / 3600);
+  const counterKey = `alert-cnt:${topic}:${hour}`;
+  const sentKey = `alert-sent:${topic}:${hour}`;
+
+  const cur = parseInt((await env.ICEN_KV.get(counterKey)) || "0", 10);
+  const next = cur + 1;
+  await env.ICEN_KV.put(counterKey, String(next), { expirationTtl: 7200 });
+
+  if (next < threshold) return;
+  if (await env.ICEN_KV.get(sentKey)) return; // already alerted this hour
+
+  const hourLabel = new Date().toISOString().slice(0, 13) + ":00 UTC";
+  const text = `ICEN backend alert.
+
+Topic:     ${topic}
+Threshold: ${threshold}/hour
+Observed:  ${next} events in ${hourLabel}
+
+Detail:
+  ${detail}
+
+Inspect:
+  https://dash.cloudflare.com/?to=/:account/pages/view/natto/deployments
+  Cloudflare > Workers & Pages > natto > Functions > Real-time logs
+
+(This alert is silenced for the rest of the hour to avoid spam. Next alert
+on this topic can fire after the hour rolls over.)
+`;
+  try {
+    await sendEmail(env.BREVO_API_KEY, {
+      to: alertEmail,
+      subject: `[ICEN ALERT] ${topic} threshold crossed (${next}/h)`,
+      text,
+      senderEmail: env.ICEN_SENDER_EMAIL,
+      senderName: env.ICEN_SENDER_NAME,
+    });
+    await env.ICEN_KV.put(sentKey, "1", { expirationTtl: 7200 });
+  } catch (e) {
+    console.error("alert send failed:", e);
+  }
+}
+
 /** Send a transactional email via Brevo. Throws on non-2xx. */
 export async function sendEmail(
   apiKey: string,

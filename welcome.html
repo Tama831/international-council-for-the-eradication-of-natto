@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome — 国際納豆撲滅協議会 / ICEN (multilingual)</title>
+  <meta name="description" content="ICEN multilingual welcome — a satirical website. Explained briefly in 10 languages." />
+  <link rel="alternate" href="https://natto-5hv.pages.dev/" hreflang="ja" />
+  <link rel="canonical" href="https://natto-5hv.pages.dev/welcome.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --paper:#F2EAD8; --paper-2:#E8DDC4; --paper-3:#D9C9A6;
+      --ink:#1F1813; --ink-2:#3A2E25;
+      --blood:#8B1A1A; --enemy:#C4A02C;
+      --rule:rgba(31,24,19,.18);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Noto Serif JP', serif;
+      color:var(--ink); background:var(--paper);
+      line-height:1.85; font-feature-settings:"palt";
+      position:relative;
+    }
+    body::before{
+      content:""; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+      mix-blend-mode:multiply; opacity:.4;
+      pointer-events:none; z-index:1000;
+    }
+    .wrap{max-width:840px; margin:0 auto; padding:0 28px; position:relative; z-index:1}
+
+    .topbar{border-bottom:1px solid var(--rule); background:var(--paper-2); font-size:11px; letter-spacing:.18em}
+    .topbar .row{display:flex; justify-content:space-between; align-items:center; max-width:840px; margin:0 auto; padding:8px 28px; text-transform:uppercase; color:var(--ink-2)}
+    .topbar a{color:var(--blood); text-decoration:none; font-weight:700}
+    .topbar a:hover{text-decoration:underline}
+
+    header.hero{padding:72px 0 40px; border-bottom:1px solid var(--rule)}
+    .kicker{display:flex; align-items:center; gap:14px; font-size:12px; letter-spacing:.32em; color:var(--blood); text-transform:uppercase; font-weight:700; margin-bottom:24px}
+    .kicker::before{content:""; display:inline-block; width:48px; height:1px; background:var(--blood)}
+    h1{font-family:'Shippori Mincho B1', serif; font-weight:800; font-size:clamp(36px, 5.4vw, 56px); line-height:1.2; margin-bottom:14px}
+    .en{font-family:'DM Serif Display', serif; font-style:italic; font-size:20px; color:var(--ink-2); margin-bottom:14px}
+    .nav-langs{margin-top:24px; display:flex; flex-wrap:wrap; gap:8px}
+    .nav-langs a{font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.16em; padding:6px 12px; border:1px solid var(--ink); color:var(--ink); text-decoration:none; transition:.2s}
+    .nav-langs a:hover{background:var(--ink); color:var(--paper)}
+
+    main{padding:48px 0 64px}
+
+    .lang-section{margin-bottom:44px; padding-bottom:32px; border-bottom:1px dashed var(--rule)}
+    .lang-section:last-of-type{border-bottom:none}
+    .lang-meta{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:14px}
+    .lang-flag{font-size:22px}
+    .lang-name{font-family:'Shippori Mincho B1', serif; font-weight:700; font-size:22px; color:var(--blood); letter-spacing:.04em}
+    .lang-code{font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.18em; color:var(--ink-2); padding:2px 8px; border:1px solid var(--rule); border-radius:2px}
+    .lang-section p{font-size:15px; margin-bottom:10px}
+    .lang-section p.draft{font-style:italic; color:var(--ink-2); font-size:13px}
+
+    .cta-box{
+      margin-top:48px; padding:24px 28px;
+      background:var(--ink); color:var(--paper); position:relative;
+    }
+    .cta-box::before{content:""; position:absolute; inset:6px; border:1px solid rgba(242,234,216,.25); pointer-events:none}
+    .cta-box h3{font-family:'Shippori Mincho B1', serif; font-size:22px; color:var(--enemy); margin-bottom:12px}
+    .cta-box p{font-size:14px; color:var(--paper-3); margin-bottom:14px}
+    .cta-box a{display:inline-block; padding:10px 20px; background:var(--enemy); color:var(--ink); font-family:'Shippori Mincho B1', serif; font-weight:800; letter-spacing:.14em; font-size:13px; text-decoration:none; border:2px solid var(--enemy); transition:.2s}
+    .cta-box a:hover{background:transparent; color:var(--enemy)}
+
+    footer{
+      border-top:3px double var(--ink); background:var(--paper-2);
+      padding:32px 0; margin-top:24px;
+    }
+    footer .row{
+      max-width:840px; margin:0 auto; padding:0 28px;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+      font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.12em; color:var(--ink-2);
+    }
+    footer a{color:var(--blood); text-decoration:none}
+    footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="row">
+      <span>Welcome · 多言語ご挨拶</span>
+      <span><a href="index.html">→ 日本語版トップへ</a></span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="kicker">Multilingual Welcome</div>
+      <h1>世界の方々へ</h1>
+      <p class="en">A brief explanation in your language.</p>
+      <p>本サイトは日本語の風刺サイトですが、訪れてくださった世界の皆さまへ、各言語で簡潔にご挨拶を申し上げます。</p>
+      <nav class="nav-langs">
+        <a href="#en">EN</a>
+        <a href="#fr">FR</a>
+        <a href="#de">DE</a>
+        <a href="#zh-cn">中文(简)</a>
+        <a href="#zh-tw">中文(繁)</a>
+        <a href="#ru">RU</a>
+        <a href="#ko">KO</a>
+        <a href="#tl">TL</a>
+        <a href="#es">ES</a>
+        <a href="#pau">PAU</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="lang-section" id="en" lang="en">
+        <div class="lang-meta">
+          <span class="lang-flag">🇬🇧</span>
+          <span class="lang-name">English</span>
+          <span class="lang-code">EN</span>
+        </div>
+        <p>The <i>International Council for the Eradication of Natto (ICEN)</i> is a satirical website. The Council does not exist — it is a work of fiction created for humor. Natto is a delicious and healthy traditional Japanese fermented soybean dish, deeply respected in Japanese cuisine and especially in Ibaraki Prefecture, its spiritual home.</p>
+        <p>Visitors are welcome to submit a fictional "membership application" through the form on the home page. After confirming your email via a link we send you, you will receive a satirical acknowledgment letter from the Council. Your email address is the only piece of data we retain, and it is used solely to detect duplicate submissions. We never share it with anyone.</p>
+        <p>Please enjoy the joke. We hope it makes your morning a little stranger.</p>
+      </section>
+
+      <section class="lang-section" id="fr" lang="fr">
+        <div class="lang-meta">
+          <span class="lang-flag">🇫🇷</span>
+          <span class="lang-name">Français</span>
+          <span class="lang-code">FR</span>
+        </div>
+        <p>Le <i>Conseil International pour l'Éradication du Natto (ICEN)</i> est un site web satirique. Ce conseil n'existe pas — il s'agit d'une œuvre de fiction conçue à des fins humoristiques. Le natto est un plat traditionnel japonais à base de soja fermenté, savoureux et sain, profondément respecté dans la cuisine japonaise et tout particulièrement dans la préfecture d'Ibaraki, sa terre d'origine spirituelle.</p>
+        <p>Les visiteurs sont invités à soumettre une « candidature » fictive via le formulaire de la page d'accueil. Après avoir confirmé votre adresse électronique via un lien que nous vous envoyons, vous recevrez une lettre d'accusé de réception satirique de la part du Conseil. Votre adresse e-mail est la seule donnée que nous conservons, et elle est utilisée uniquement pour détecter les doublons. Elle n'est jamais partagée.</p>
+        <p>Veuillez agréer, Madame, Monsieur, l'expression de notre plus sincère absurdité.</p>
+      </section>
+
+      <section class="lang-section" id="de" lang="de">
+        <div class="lang-meta">
+          <span class="lang-flag">🇩🇪</span>
+          <span class="lang-name">Deutsch</span>
+          <span class="lang-code">DE</span>
+        </div>
+        <p>Der <i>Internationale Rat zur Ausrottung des Natto (ICEN)</i> ist eine satirische Website. Dieser Rat existiert nicht — es handelt sich um ein humoristisch gemeintes Fiktionswerk. Natto ist ein köstliches und gesundes traditionelles japanisches Gericht aus fermentierten Sojabohnen, das in der japanischen Küche und insbesondere in der Präfektur Ibaraki, seiner geistigen Heimat, hoch geschätzt wird.</p>
+        <p>Besucher sind eingeladen, über das Formular auf der Startseite eine fiktive „Mitgliedschaftsbewerbung" einzureichen. Nach der Bestätigung Ihrer E-Mail-Adresse über einen von uns versendeten Link erhalten Sie ein satirisches Anerkennungsschreiben des Rates. Ihre E-Mail-Adresse ist die einzige Information, die wir speichern, und sie dient ausschließlich der Erkennung doppelter Einsendungen. Wir geben sie niemals weiter.</p>
+        <p>Wir wünschen Ihnen einen angenehmen Aufenthalt — und einen leicht eigenwilligen Morgen.</p>
+      </section>
+
+      <section class="lang-section" id="zh-cn" lang="zh-CN">
+        <div class="lang-meta">
+          <span class="lang-flag">🇨🇳</span>
+          <span class="lang-name">简体中文</span>
+          <span class="lang-code">ZH-CN</span>
+        </div>
+        <p>《国际灭绝纳豆协议会（ICEN）》是一个戏仿网站。该协议会并不存在，本站为出于幽默目的的虚构作品。纳豆是日本一道美味且健康的传统发酵大豆食品，在日本饮食文化中广受敬重，尤以茨城县——其精神发源地——为代表。</p>
+        <p>欢迎访客通过首页的表单提交虚构的"入会申请"。在通过我们发送的链接确认您的电子邮件后，您将收到一封来自协议会的戏仿性受理通知。我们仅保留您的电子邮箱地址，且其用途仅限于检测重复申请，绝不外泄给任何第三方。</p>
+        <p>愿您莞尔一笑，并享受一段略带异色的清晨。</p>
+      </section>
+
+      <section class="lang-section" id="zh-tw" lang="zh-TW">
+        <div class="lang-meta">
+          <span class="lang-flag">🇹🇼</span>
+          <span class="lang-name">繁體中文</span>
+          <span class="lang-code">ZH-TW</span>
+        </div>
+        <p>《國際納豆撲滅協議會（ICEN）》是一個惡搞網站。該協議會並不存在，本站為出於幽默目的之虛構作品。納豆是日本一道美味且健康的傳統發酵大豆食品，於日本飲食文化中備受敬重，尤其以茨城縣——其精神發源地——為代表。</p>
+        <p>歡迎訪客透過首頁的表單提交虛構之「入會申請」。在透過我們寄送的連結確認您的電子郵件後，您將收到一封來自協議會的惡搞性受理通知。我們僅保留您的電子郵件地址，且其用途僅限於偵測重複申請，絕不外洩予任何第三方。</p>
+        <p>願您莞爾一笑，並享受一段略帶異色的清晨時光。</p>
+      </section>
+
+      <section class="lang-section" id="ru" lang="ru">
+        <div class="lang-meta">
+          <span class="lang-flag">🇷🇺</span>
+          <span class="lang-name">Русский</span>
+          <span class="lang-code">RU</span>
+        </div>
+        <p><i>Международный совет по искоренению натто (ICEN)</i> — это сатирический веб-сайт. Этот совет не существует — это художественное произведение, созданное в юмористических целях. Натто — это вкусное и полезное традиционное японское блюдо из ферментированных соевых бобов, глубоко уважаемое в японской кухне и особенно в префектуре Ибараки, его духовной родине.</p>
+        <p>Посетители могут отправить вымышленную «заявку на вступление» через форму на главной странице. После подтверждения вашего электронного адреса по ссылке, которую мы вам отправим, вы получите сатирическое уведомление о принятии заявки от Совета. Ваш email — единственное, что мы сохраняем, и используется он исключительно для обнаружения повторных заявок. Мы никогда не передаём его третьим лицам.</p>
+        <p>Желаем вам приятного и слегка необычного утра.</p>
+      </section>
+
+      <section class="lang-section" id="ko" lang="ko">
+        <div class="lang-meta">
+          <span class="lang-flag">🇰🇷</span>
+          <span class="lang-name">한국어</span>
+          <span class="lang-code">KO</span>
+        </div>
+        <p>《국제낫토박멸협의회(ICEN)》는 풍자 웹사이트입니다. 본 협의회는 실재하지 않으며, 본 사이트는 유머를 목적으로 제작된 허구의 작품입니다. 낫토는 일본의 맛있고 건강에 좋은 전통 발효 콩 요리로, 일본 식문화에서, 특히 그 정신적 고향인 이바라키현(茨城県)에서 깊이 존중받고 있습니다.</p>
+        <p>방문자께서는 메인 페이지의 양식을 통해 가상의 「입회 신청」을 제출하실 수 있습니다. 저희가 발송하는 링크로 이메일을 확인하시면, 협의회로부터 풍자적인 수리 통지를 받으시게 됩니다. 저희가 보관하는 데이터는 귀하의 이메일 주소뿐이며, 그 용도는 중복 신청 감지에 한정됩니다. 어떠한 제3자에게도 공유하지 않습니다.</p>
+        <p>잠깐의 미소와, 약간 색다른 아침을 즐기시기 바랍니다.</p>
+      </section>
+
+      <section class="lang-section" id="tl" lang="tl">
+        <div class="lang-meta">
+          <span class="lang-flag">🇵🇭</span>
+          <span class="lang-name">Tagalog / Filipino</span>
+          <span class="lang-code">TL</span>
+        </div>
+        <p>Ang <i>International Council for the Eradication of Natto (ICEN)</i> ay isang satirikal na website. Hindi umiiral ang Konseho na ito — ito ay isang likhang-isip na nilikha para sa katatawanan. Ang natto ay isang masarap at malusog na tradisyonal na pagkaing Hapon mula sa pinabuong toyo (soybeans), labis na iginagalang sa kulturang kulinarya ng Japan at lalo na sa Lalawigan ng Ibaraki, ang ispirituwal na pinagmulan nito.</p>
+        <p>Maaaring magsumite ang mga bisita ng kathang-isip na "aplikasyon sa pagiging miyembro" sa pamamagitan ng form sa pangunahing pahina. Pagkatapos ninyong kumpirmahin ang inyong email sa pamamagitan ng link na ipapadala namin, makakatanggap kayo ng satirikal na liham ng pagkilala mula sa Konseho. Ang inyong email lamang ang aming itinatago, at ginagamit lamang ito upang matukoy ang mga dobleng pagsusumite. Hindi namin ito ibinabahagi kanino man.</p>
+        <p>Sana ay magdulot ito ng maliit na ngiti, at isang bahagyang kakaibang umaga.</p>
+      </section>
+
+      <section class="lang-section" id="es" lang="es">
+        <div class="lang-meta">
+          <span class="lang-flag">🇪🇸</span>
+          <span class="lang-name">Español</span>
+          <span class="lang-code">ES</span>
+        </div>
+        <p>El <i>Consejo Internacional para la Erradicación del Natto (ICEN)</i> es un sitio web satírico. Este consejo no existe — es una obra de ficción creada con fines humorísticos. El natto es un delicioso y saludable plato tradicional japonés a base de soja fermentada, profundamente respetado en la cocina japonesa y especialmente en la Prefectura de Ibaraki, su hogar espiritual.</p>
+        <p>Los visitantes están invitados a enviar una «solicitud de membresía» ficticia a través del formulario de la página de inicio. Tras confirmar su correo electrónico mediante el enlace que le enviaremos, recibirá una carta satírica de acuse de recibo del Consejo. Su dirección de correo electrónico es el único dato que conservamos, y se utiliza exclusivamente para detectar envíos duplicados. Nunca la compartimos con terceros.</p>
+        <p>Esperamos que disfrute de la broma y de una mañana ligeramente más extraña.</p>
+      </section>
+
+      <section class="lang-section" id="pau" lang="pau">
+        <div class="lang-meta">
+          <span class="lang-flag">🇵🇼</span>
+          <span class="lang-name">Tekoi er a Belau · Palauan</span>
+          <span class="lang-code">PAU</span>
+        </div>
+        <p>Tia el "International Council for the Eradication of Natto" (ICEN) a tang el satirikal el website el ngii a diak el medengelii. Ngdi tekoi el omeruul el omekedereder a klechad. A natto a kmal ungil e dirrek el omekreos el odoim er a Japan, el dirrek el oltirakl er a chelid er a chad er a Japan, e dirrek el ungil el chelid er a Ibaraki Prefecture el chelsel a tedi le omeruul er ngii.</p>
+        <p>A re mei el omes er a website a sebechir el oba a "aplikasyon" el ngii a kuk a kingall el ngii. A uchei el bo dolab a chimam el oba a email link el bo doruul er kemiu, e ngmla bek omeruul a satirikal el omekreos el chelsel a Council. A email er kemiu a tang el klalo el dolab, e dirrek el ngii a uchei el bo doruul er a tekoi el medengelii a re berraod el chad. Diak doruul er ngii er a re berraod el chad.</p>
+        <p class="draft">⚠ This Palauan translation is a best-effort draft and may contain errors.
+        If you are a Palauan speaker willing to improve it, please get in touch via the
+        <a href="delete-request.html">privacy contact</a>. The site author would be most grateful.</p>
+      </section>
+    </main>
+
+    <div class="cta-box">
+      <h3>Try the Council yourself</h3>
+      <p>Submit a fictional application, receive a satirical reply.<br>
+      Available only in Japanese, but the application form takes only a name, region, breakfast preference, and email — fillable by anyone.</p>
+      <a href="index.html">→ Go to the form (Japanese)</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="row">
+      <span>© 1972–<span data-year>2026</span> INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
+      <span><a href="privacy.html">Privacy</a> · <a href="index.html">JP top</a></span>
+    </div>
+    <script>document.querySelectorAll('[data-year]').forEach(el => el.textContent = String(new Date().getUTCFullYear()));</script>
+  </footer>
+</body>
+</html>

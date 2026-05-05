@@ -17,6 +17,7 @@ import {
   sendEmail,
   fillTemplate,
   refVars,
+  maybeAlert,
 } from "./_lib";
 import { DELETE_CONFIRM } from "./_templates";
 
@@ -41,6 +42,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Rate limit (per-IP, separate bucket from /api/apply).
   const rl = await checkRateLimit(env.ICEN_KV, ip, { limit: 5, windowSec: 3600, bucket: "rl-del" });
   if (!rl.ok) {
+    await maybeAlert(env, "rate-limit-del", 10, `IP ${ip} hit /api/delete-request rate limit (>5/h).`);
     return jsonResponse(
       { ok: false, detail: "rate limit exceeded — try again in an hour" },
       429,
@@ -58,7 +60,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Optional Turnstile verification.
   const tsToken = String(body["cf-turnstile-response"] ?? "");
   const tsOk = await verifyTurnstile(tsToken, env.TURNSTILE_SECRET_KEY ?? "", ip);
-  if (!tsOk) return jsonResponse({ ok: false, detail: "captcha failed" }, 403, origin);
+  if (!tsOk) {
+    await maybeAlert(env, "captcha-fail-del", 30, `CAPTCHA failed for /api/delete-request from IP ${ip}.`);
+    return jsonResponse({ ok: false, detail: "captcha failed" }, 403, origin);
+  }
 
   const email = String(body.email ?? "").trim().toLowerCase();
   if (!email || email.length > 200 || !EMAIL_RE.test(email)) {

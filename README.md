@@ -223,6 +223,7 @@ agent-team prod への影響を避けるため CF Pages 版に切り替えたの
 | `ICEN_SENDER_EMAIL` | Plaintext | 送信元アドレス (default: ly.renum@gmail.com) | △ |
 | `ICEN_SENDER_NAME` | Plaintext | 送信元表示名 | △ |
 | `ICEN_PUBLIC_BASE_URL` | Plaintext | 確認リンクの host (default: https://natto-5hv.pages.dev) | △ |
+| `ICEN_ALERT_EMAIL` | Plaintext | abuse 通知の宛先 (default: ly.renum@gmail.com) | △ |
 
 ### double opt-in フロー
 
