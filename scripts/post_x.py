@@ -18,9 +18,39 @@ import argparse, json, os, sys, urllib.request, urllib.error, hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-ENDPOINT = os.environ.get("ICEN_AUTO_POST_URL", "https://natto-5hv.pages.dev/api/auto-post")
 HASHTAG = "#粘り断つべし"
 SITE_URL = "https://natto-5hv.pages.dev"
+USER_AGENT = "ICEN-bot/1.0 (+https://natto-5hv.pages.dev)"
+
+
+def load_dotenv_if_missing(*keys: str) -> None:
+    """If any of the given keys is missing in os.environ, try to load it from
+    a few well-known .env files (without overwriting existing values)."""
+    if all(os.environ.get(k) for k in keys):
+        return
+    candidates = [
+        Path("/home/tama/ai-agent-team/.env"),
+        ROOT / ".env",
+    ]
+    for path in candidates:
+        if not path.is_file():
+            continue
+        try:
+            for line in path.read_text(encoding="utf-8").splitlines():
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, _, v = line.partition("=")
+                k = k.strip()
+                v = v.strip().strip('"').strip("'")
+                if k and k not in os.environ:
+                    os.environ[k] = v
+        except Exception as e:
+            print(f"warn: could not read {path}: {e}", file=sys.stderr)
+
+
+load_dotenv_if_missing("ICEN_ADMIN_KEY")
+ENDPOINT = os.environ.get("ICEN_AUTO_POST_URL", "https://natto-5hv.pages.dev/api/auto-post")
 
 
 def weighted_len(s: str) -> int:
@@ -87,6 +117,8 @@ def post(text: str, idempotency_key: str | None = None) -> dict:
         headers={
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": USER_AGENT,
         },
         method="POST",
     )
@@ -94,8 +126,17 @@ def post(text: str, idempotency_key: str | None = None) -> dict:
         with urllib.request.urlopen(req, timeout=30) as r:
             return json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
-        msg = e.read().decode("utf-8", errors="replace")[:300]
-        raise SystemExit(f"auto-post HTTP {e.code}: {msg}")
+        try:
+            msg = e.read().decode("utf-8", errors="replace")[:600]
+        except Exception:
+            msg = "(no body)"
+        raise SystemExit(
+            f"auto-post HTTP {e.code} {e.reason}\n"
+            f"  endpoint: {ENDPOINT}\n"
+            f"  response body (first 600 chars):\n    {msg}"
+        )
+    except urllib.error.URLError as e:
+        raise SystemExit(f"network error: {e}")
 
 
 def main() -> None:
