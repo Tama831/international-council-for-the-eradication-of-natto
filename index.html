@@ -665,7 +665,7 @@
         <aside class="mission-aside">
           <h3>BY THE NUMBERS</h3>
           <div class="stat-row"><div class="stat-num">54</div><div class="stat-label">回 — 京都密会開催回数 (年次総会)</div></div>
-          <div class="stat-row"><div class="stat-num">317</div><div class="stat-label">名 — 2026年度新規入会者数 (5月時点)</div></div>
+          <div class="stat-row"><div class="stat-num" data-member-count>317</div><div class="stat-label">名 — <span data-year>2026</span>年度新規入会者数 (<span data-month-num>5</span>月時点)</div></div>
           <div class="stat-row"><div class="stat-num">¥330</div><div class="stat-label">月会費 — 納豆1パック相当・象徴的金額</div></div>
           <div class="stat-row"><div class="stat-num">0</div><div class="stat-label">回 — 過去54年の朝食における納豆採用回数</div></div>
         </aside>
@@ -945,6 +945,40 @@
     document.querySelectorAll('[data-year]').forEach(el => {
       el.textContent = String(new Date().getUTCFullYear());
     });
+    // Dynamic-month-number: 1..12 in current locale month
+    document.querySelectorAll('[data-month-num]').forEach(el => {
+      el.textContent = String(new Date().getMonth() + 1);
+    });
+    // Member count: deterministic 2..7/month growth, resets each year ("本年度" label)
+    // Anchor: May 2026 (monthIdx=4) = 317 (preserves the existing visible value).
+    (function() {
+      function inc(y, m) {
+        const seed = (y * 12 + m) >>> 0;
+        const h = (Math.imul(seed, 2654435761)) >>> 0;
+        return 2 + (h % 6); // 2..7
+      }
+      function memberCount(now) {
+        const year = now.getFullYear();
+        const monthIdx = now.getMonth();
+        let janBase;
+        if (year === 2026) {
+          // Back-solve so May 2026 hits 317 exactly.
+          let sum = 0;
+          for (let m = 1; m <= 4; m++) sum += inc(year, m);
+          janBase = 317 - sum;
+        } else {
+          // Other years: small pseudo-random Jan baseline (8..19).
+          janBase = 8 + ((Math.imul(year, 7919)) >>> 0) % 12;
+        }
+        let cnt = janBase;
+        for (let m = 1; m <= monthIdx; m++) cnt += inc(year, m);
+        return cnt;
+      }
+      const value = memberCount(new Date());
+      document.querySelectorAll('[data-member-count]').forEach(el => {
+        el.textContent = String(value);
+      });
+    })();
   </script>
   <script>
     (function(){
