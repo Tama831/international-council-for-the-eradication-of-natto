@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+<meta charset="UTF-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@700&family=Shippori+Mincho+B1:wght@800&display=swap" rel="stylesheet" />
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1500px;height:500px;overflow:hidden;background:#F2EAD8}
+  body{
+    position:relative;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 96px;
+  }
+  body::before{
+    content:""; position:absolute; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+    mix-blend-mode:multiply; opacity:.45;
+    pointer-events:none; z-index:1;
+  }
+  .left{position:relative;z-index:2}
+  .label{
+    font-family:'JetBrains Mono',monospace;font-weight:700;
+    font-size:14px;letter-spacing:.32em;color:#8B1A1A;
+    text-transform:uppercase;margin-bottom:18px;
+  }
+  .label::before{content:"";display:inline-block;width:50px;height:1px;background:#8B1A1A;vertical-align:middle;margin-right:18px}
+  .name{
+    font-family:'Shippori Mincho B1',serif;font-weight:800;
+    font-size:74px;line-height:1.05;color:#1F1813;letter-spacing:-.005em;
+    margin-bottom:18px;
+  }
+  .name-en{
+    font-family:'DM Serif Display',serif;font-style:italic;
+    font-size:24px;color:#3A2E25;
+  }
+  .right{position:relative;z-index:2}
+  .stamp{
+    width:330px;height:330px;border-radius:50%;
+    border:8px solid #8B1A1A;
+    display:grid;place-items:center;
+    transform:rotate(-10deg);background:rgba(242,234,216,.5);
+  }
+  .stamp::before{
+    content:"";position:absolute;width:300px;height:300px;
+    border:2.5px solid #8B1A1A;border-radius:50%;
+  }
+  .stamp .inner{
+    writing-mode:vertical-rl;text-orientation:upright;
+    font-family:'Shippori Mincho B1',serif;font-weight:800;
+    font-size:48px;color:#8B1A1A;letter-spacing:.34em;
+  }
+  .footer-strip{
+    position:absolute;bottom:0;left:0;right:0;
+    background:#1F1813;color:#F2EAD8;
+    padding:14px 96px;z-index:3;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    letter-spacing:.2em;text-transform:uppercase;
+  }
+  .footer-strip .y{color:#C4A02C;font-weight:700}
+</style></head><body>
+  <div class="left">
+    <div class="label">A Half-Century of Quiet Resistance</div>
+    <div class="name">国際納豆撲滅<br>協議会</div>
+    <div class="name-en"><i>International Council for the Eradication of Natto</i></div>
+  </div>
+  <div class="right">
+    <div class="stamp"><span class="inner">機密</span></div>
+  </div>
+  <div class="footer-strip">
+    <span><span class="y">粘り、断つべし。</span></span>
+    <span>natto-5hv.pages.dev · @no_natto_icen</span>
+  </div>
+</body></html>
