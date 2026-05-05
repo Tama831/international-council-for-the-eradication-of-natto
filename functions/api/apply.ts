@@ -20,6 +20,8 @@ import {
   isDisposableEmail,
   checkDomainCanReceive,
   checkRecipientThrottle,
+  fillTemplate,
+  refVars,
 } from "./_lib";
 
 interface Env {
@@ -128,7 +130,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       await sendEmail(env.BREVO_API_KEY, {
         to: email,
         subject: `【${appNo}】重複申請に関する通知 / Notice on Duplicate Application`,
-        text: REPLY_REPEAT.replace(/\{\{app_no\}\}/g, appNo),
+        text: fillTemplate(REPLY_REPEAT, refVars({ app_no: appNo })),
         senderEmail, senderName, replyTo,
       });
     } catch (e) {
@@ -162,7 +164,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     await sendEmail(env.BREVO_API_KEY, {
       to: email,
       subject: "【ICEN】入会申請確認のお願い / Please confirm your application",
-      text: REPLY_CONFIRM_APPLY.replace(/\{\{confirm_url\}\}/g, confirmUrl),
+      text: fillTemplate(REPLY_CONFIRM_APPLY, refVars({ confirm_url: confirmUrl })),
       senderEmail, senderName, replyTo,
     });
   } catch (e) {

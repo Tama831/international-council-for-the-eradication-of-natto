@@ -837,7 +837,7 @@
 
         <form class="join-card" id="icen-form" novalidate>
           <div class="stamp-card">入会<br>申請</div>
-          <h4>入会申請書 №ICEN-A-2026</h4>
+          <h4>入会申請書 №ICEN-A-<span data-year>2026</span></h4>
           <label class="form-row"><span>氏名</span><input type="text" name="name" maxlength="120" required placeholder="姓 名"></label>
           <label class="form-row"><span>居住国 / 都道府県</span><input type="text" name="region" maxlength="120" required placeholder="例: 京都府"></label>
           <label class="form-row"><span>朝食における主食</span>
@@ -899,12 +899,18 @@
         </div>
       </div>
       <div class="copyright">
-        <span>© 2026 INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
+        <span>© 1972–<span data-year>2026</span> INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
         <span>FILE: ICEN-2026-Q2-007 · REV.05</span>
       </div>
     </div>
   </footer>
 
+  <script>
+    // Dynamic-year placeholders: <span data-year>FALLBACK</span> → current UTC year
+    document.querySelectorAll('[data-year]').forEach(el => {
+      el.textContent = String(new Date().getUTCFullYear());
+    });
+  </script>
   <script>
     (function(){
       // API endpoint resolution:

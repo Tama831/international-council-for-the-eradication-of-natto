@@ -11,6 +11,8 @@ import {
   corsHeaders,
   checkRateLimit,
   sendEmail,
+  fillTemplate,
+  refVars,
 } from "./_lib";
 import { DELETE_DONE } from "./_templates";
 
@@ -77,9 +79,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     await sendEmail(env.BREVO_API_KEY, {
       to: email,
       subject: `【削除完了】${appNo} / Deletion Completed`,
-      text: DELETE_DONE
-        .replace(/\{\{app_no\}\}/g, appNo)
-        .replace(/\{\{deleted_at\}\}/g, deletedAt),
+      text: fillTemplate(DELETE_DONE, refVars({ app_no: appNo, deleted_at: deletedAt })),
       senderEmail: env.ICEN_SENDER_EMAIL,
       senderName: env.ICEN_SENDER_NAME,
       replyTo: env.REPLY_TO_EMAIL,

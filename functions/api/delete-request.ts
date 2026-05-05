@@ -15,6 +15,8 @@ import {
   checkRateLimit,
   verifyTurnstile,
   sendEmail,
+  fillTemplate,
+  refVars,
 } from "./_lib";
 import { DELETE_CONFIRM } from "./_templates";
 
@@ -85,7 +87,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     await sendEmail(env.BREVO_API_KEY, {
       to: email,
       subject: "【ICEN削除請求】確認のお願い / Confirm your deletion request",
-      text: DELETE_CONFIRM.replace(/\{\{confirm_url\}\}/g, confirmUrl),
+      text: fillTemplate(DELETE_CONFIRM, refVars({ confirm_url: confirmUrl })),
       senderEmail: env.ICEN_SENDER_EMAIL,
       senderName: env.ICEN_SENDER_NAME,
       replyTo: env.REPLY_TO_EMAIL,

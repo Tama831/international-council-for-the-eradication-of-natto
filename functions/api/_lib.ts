@@ -201,6 +201,30 @@ export async function makeAppNumber(
   return `ICEN-A-${year}-${hex}`;
 }
 
+/** Substitute {{key}} placeholders in a template string. */
+export function fillTemplate(tpl: string, vars: Record<string, string>): string {
+  let out = tpl;
+  for (const [k, v] of Object.entries(vars)) {
+    out = out.replace(new RegExp(`\\{\\{${k}\\}\\}`, "g"), v);
+  }
+  return out;
+}
+
+/** Returns Q1..Q4 for the given date based on UTC month. */
+export function quarterOf(d: Date = new Date()): string {
+  return "Q" + (Math.floor(d.getUTCMonth() / 3) + 1);
+}
+
+/** Build the standard set of dynamic placeholder values for email refs. */
+export function refVars(extra: Record<string, string> = {}): Record<string, string> {
+  const now = new Date();
+  return {
+    year: String(now.getUTCFullYear()),
+    quarter: quarterOf(now),
+    ...extra,
+  };
+}
+
 /** Send a transactional email via Brevo. Throws on non-2xx. */
 export async function sendEmail(
   apiKey: string,

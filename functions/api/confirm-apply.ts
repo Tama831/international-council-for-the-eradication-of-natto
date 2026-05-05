@@ -17,6 +17,8 @@ import {
   sendEmail,
   makeAppNumber,
   checkRecipientThrottle,
+  fillTemplate,
+  refVars,
 } from "./_lib";
 
 interface Env {
@@ -94,7 +96,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       await sendEmail(env.BREVO_API_KEY, {
         to: email,
         subject: `【${appNo}】入会申請受理通知 / Acknowledgment of Application`,
-        text: REPLY_FIRST.replace(/\{\{app_no\}\}/g, appNo),
+        text: fillTemplate(REPLY_FIRST, refVars({ app_no: appNo })),
         senderEmail, senderName, replyTo,
       });
     } catch (e) {

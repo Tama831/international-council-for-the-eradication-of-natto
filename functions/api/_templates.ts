@@ -15,7 +15,7 @@ const FOOT_PARODY = `───────────────────�
 `;
 
 export const REPLY_CONFIRM_APPLY = `${HEAD}
-  REF.   ICEN/CONF/2026/Q2
+  REF.   ICEN/CONF/{{year}}/{{quarter}}
   PROT.  京都密約 第Ⅰ条「filum scindendum」
 ─────────────────────────────────────────
 
@@ -58,7 +58,7 @@ P.S. — リンクをクリックされる前に、もう一度、納豆と静�
 ${FOOT_PARODY}`;
 
 export const REPLY_FIRST = `${HEAD}
-  REF.   ICEN/SECR/2026/Q2/{{app_no}}
+  REF.   ICEN/SECR/{{year}}/{{quarter}}/{{app_no}}
   REV.   Première — 1
   PROT.  京都密約 第Ⅰ条「filum scindendum」
 ─────────────────────────────────────────
@@ -117,7 +117,7 @@ P.S. — お手元に納豆がございましたら、本通知の到達と同�
 ${FOOT_PARODY}`;
 
 export const REPLY_REPEAT = `${HEAD}
-  REF.   ICEN/RPT/2026/Q2/{{app_no}}
+  REF.   ICEN/RPT/{{year}}/{{quarter}}/{{app_no}}
   PROT.  京都密約 第Ⅰ条「filum scindendum」
 ─────────────────────────────────────────
 
@@ -146,7 +146,7 @@ P.S. — 課題提出のご準備にお迷いがございましたら、深呼�
 ${FOOT_PARODY}`;
 
 export const DELETE_CONFIRM = `${HEAD}
-  REF.   ICEN/DEL-RQ/2026/Q2
+  REF.   ICEN/DEL-RQ/{{year}}/{{quarter}}
   PROT.  京都密約 第Ⅴ条「abolitio memoriae」
 ─────────────────────────────────────────
 
@@ -184,7 +184,7 @@ P.S. — お別れの前に、もし機関誌『非粘月報』の最終号(該�
 ${FOOT_PARODY}`;
 
 export const DELETE_DONE = `${HEAD}
-  REF.   ICEN/DEL-OK/2026/Q2/{{app_no}}
+  REF.   ICEN/DEL-OK/{{year}}/{{quarter}}/{{app_no}}
   PROT.  京都密約 第Ⅴ条「abolitio memoriae」 — 完了
 ─────────────────────────────────────────
 
