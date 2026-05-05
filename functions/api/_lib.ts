@@ -85,6 +85,122 @@ export async function verifyTurnstile(
   return !!j.success;
 }
 
+/**
+ * Common disposable / temporary email domains. Conservative list — extend if needed.
+ */
+const DISPOSABLE_DOMAINS: ReadonlySet<string> = new Set([
+  "mailinator.com", "mailinator.net", "mailinator2.com", "mailinator.org",
+  "guerrillamail.com", "guerrillamail.org", "guerrillamail.net", "guerrillamail.biz", "guerrillamail.de",
+  "guerrillamailblock.com", "grr.la", "sharklasers.com", "pokemail.net", "spam4.me",
+  "10minutemail.com", "10minutemail.net", "10minutemail.org",
+  "temp-mail.org", "temp-mail.io", "temp-mail.ru", "tempmail.dev", "tmpmail.org",
+  "yopmail.com", "yopmail.fr", "yopmail.net",
+  "maildrop.cc", "trashmail.com", "throwawaymail.com", "throwam.com",
+  "discard.email", "discardmail.com", "discardmail.de",
+  "mailcatch.com", "maildump.org", "minutemail.com",
+  "mt2014.com", "moakt.com", "emailondeck.com", "emltmp.com",
+  "inboxbear.com", "fakeinbox.com", "tempinbox.com",
+  "spamgourmet.com", "spambox.us", "spamfree24.org",
+  "getairmail.com", "dispostable.com",
+]);
+
+export function isDisposableEmail(email: string): boolean {
+  const at = email.lastIndexOf("@");
+  if (at < 0) return false;
+  return DISPOSABLE_DOMAINS.has(email.slice(at + 1).toLowerCase());
+}
+
+/**
+ * Verify recipient domain has at least one MX record (or A record fallback per RFC 5321).
+ * Uses Cloudflare's DNS-over-HTTPS at 1.1.1.1. Caches positive results for 24h.
+ *
+ * Returns true if mail can probably be delivered to this domain, false otherwise.
+ */
+export async function checkDomainCanReceive(
+  kv: KVNamespace,
+  email: string,
+): Promise<boolean> {
+  const at = email.lastIndexOf("@");
+  if (at < 0) return false;
+  const domain = email.slice(at + 1).toLowerCase();
+  if (!domain || !/^[a-z0-9.-]+$/.test(domain)) return false;
+
+  const cacheKey = `mxok:${domain}`;
+  const cached = await kv.get(cacheKey);
+  if (cached === "1") return true;
+  if (cached === "0") return false;
+
+  async function dohQuery(type: "MX" | "A"): Promise<unknown[]> {
+    const r = await fetch(
+      `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=${type}`,
+      { headers: { Accept: "application/dns-json" } },
+    );
+    if (!r.ok) return [];
+    const j = (await r.json()) as { Answer?: unknown[] };
+    return j.Answer ?? [];
+  }
+
+  let ok = (await dohQuery("MX")).length > 0;
+  if (!ok) ok = (await dohQuery("A")).length > 0; // RFC 5321 fallback
+
+  await kv.put(cacheKey, ok ? "1" : "0", {
+    expirationTtl: ok ? 86400 : 600, // cache positives 24h, negatives 10min
+  });
+  return ok;
+}
+
+/**
+ * Per-recipient daily email cap. Returns true if we can send another email
+ * to this recipient today; false if the daily cap has been hit.
+ *
+ * Uses a UTC-day bucket. Default: 5 emails/recipient/day.
+ */
+export async function checkRecipientThrottle(
+  kv: KVNamespace,
+  email: string,
+  opts: { limit?: number } = {},
+): Promise<boolean> {
+  const limit = opts.limit ?? 5;
+  const day = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const key = `recip:${email}:${day}`;
+  const cur = parseInt((await kv.get(key)) || "0", 10);
+  if (cur >= limit) return false;
+  await kv.put(key, String(cur + 1), { expirationTtl: 172800 }); // 2 days
+  return true;
+}
+
+/**
+ * Generate a satirical-looking but unguessable application number from email.
+ * Format: ICEN-A-YYYY-XXXX  where XXXX is the first 4 hex chars of HMAC-SHA256(salt, email).
+ *
+ * Falls back to sequential numbering if salt is empty (backwards compat).
+ */
+export async function makeAppNumber(
+  email: string,
+  year: number,
+  salt: string,
+  fallbackSeq?: number,
+): Promise<string> {
+  if (!salt) {
+    const seq = fallbackSeq ?? 1;
+    return `ICEN-A-${year}-${String(seq).padStart(4, "0")}`;
+  }
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(salt),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(email));
+  const hex = Array.from(new Uint8Array(sig).slice(0, 2))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
+  return `ICEN-A-${year}-${hex}`;
+}
+
 /** Send a transactional email via Brevo. Throws on non-2xx. */
 export async function sendEmail(
   apiKey: string,

@@ -989,7 +989,13 @@
           if (!res.ok){
             throw new Error(j.detail || `${res.status} ${res.statusText}`);
           }
-          setResult('ok', `${j.message}  申請番号: ${j.application_no}`);
+          if (j.phase === 'confirmation-pending'){
+            setResult('ok', j.message || '確認メールを送付しました。メール内のリンクをクリックして申請を確定してください。');
+          } else if (j.application_no){
+            setResult('ok', `${j.message}  申請番号: ${j.application_no}`);
+          } else {
+            setResult('ok', j.message || '受理しました。');
+          }
           form.querySelectorAll('input, select').forEach(el => el.disabled = true);
         } catch (err){
           submitBtn.disabled = false;

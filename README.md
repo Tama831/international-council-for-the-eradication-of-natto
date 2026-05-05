@@ -191,40 +191,58 @@ agent-team prod への影響を避けるため CF Pages 版に切り替えたの
 
 ユーザ向け文面は [`privacy.html`](privacy.html) を参照。
 
-### 現状の対策
+### 現状の対策 (Tier 0+1+2 全実装 + 強化全7項)
+
 | 対策 | 状態 |
 |---|---|
 | HTTPS | ✅ Cloudflare が自動 |
 | KV 暗号化 (at rest) | ✅ Cloudflare 仕様 |
-| API キー管理 | ✅ `BREVO_API_KEY` を CF Pages Secret として保管 |
-| CORS allowlist | ✅ tama831.github.io と natto-5hv.pages.dev (same-origin) のみ |
-| Honeypot field | ✅ `affiliation` 欄 (人間には見えない、bot がトラップ) |
-| 入力長制限 | ✅ 各フィールド ≤200文字、email 形式バリデーション |
-| 最小データ保存 | ✅ email 以外は破棄 |
-| **Per-IP レート制限** | ✅ KV TTL で 5 req/h/IP (apply / delete-request 別バケツ) |
-| **トークン制 削除請求** | ✅ /delete-request → 確認メール → 24h 有効 token クリック → /confirm-delete |
-| **Turnstile (CAPTCHA)** | ⏸ コード組み込み済 (env vars 未設定 = OFF) |
+| API キー管理 | ✅ Secret として CF Pages 側で保管 |
+| CORS allowlist | ✅ tama831.github.io と natto-5hv.pages.dev のみ |
+| **CSP / セキュリティヘッダー** | ✅ `_headers` で CSP + X-Frame-Options + HSTS + Referrer-Policy + Permissions-Policy |
+| Honeypot field | ✅ `affiliation` 欄 (bot トラップ) |
+| 入力長制限 / email 形式 | ✅ 各フィールド ≤200文字 |
+| 最小データ保存 | ✅ email + 申請番号 + 時刻のみ |
+| Per-IP レート制限 | ✅ apply 5/h, delete-request 5/h, confirm-* 20/h |
+| **per-recipient メール送信制限** | ✅ 同一受信者 5通/日 |
+| **使い捨てメールドメイン拒否** | ✅ 30+ ドメイン (mailinator/yopmail/temp-mail等) を embed |
+| **MX レコード DNS チェック** | ✅ DNS-over-HTTPS で MX/A 確認、24h cache |
+| **double opt-in (申請に確認メール)** | ✅ apply→確認メール→24h 有効 token→confirm-apply→正式受理 |
+| **トークン制 削除請求** | ✅ /delete-request→確認メール→24h token→/confirm-delete |
+| **申請番号 HMAC 化** | ✅ ICEN-A-2026-XXXX (XXXX = HMAC-SHA256(salt, email) 上位2バイト hex) |
+| Turnstile (CAPTCHA) | ✅ 有効 (`TURNSTILE_SECRET_KEY` 設定済) |
+| **secret rotate ドキュメント** | ✅ [docs/secret-rotation.md](docs/secret-rotation.md) |
 
-### Turnstile を有効化する手順 (Tier 1 残り)
+### Cloudflare Pages 側の env vars 一覧
 
-Cloudflare Turnstile は CAPTCHA をフォームに 1 行追加するだけで bot をほぼ全閉鎖できます。
-コード側は実装済 (環境変数が空なら無効化)。
+| 変数 | Type | 用途 | 必須 |
+|---|---|---|---|
+| `BREVO_API_KEY` | Secret | Brevo Transactional API | ✅ |
+| `TURNSTILE_SECRET_KEY` | Secret | Turnstile siteverify | ✅ (有効化後) |
+| `ICEN_NUMBER_SALT` | Secret | 申請番号 HMAC 用 salt (`openssl rand -hex 32`) | △ (未設定なら旧seq fallback) |
+| `ICEN_SENDER_EMAIL` | Plaintext | 送信元アドレス (default: ly.renum@gmail.com) | △ |
+| `ICEN_SENDER_NAME` | Plaintext | 送信元表示名 | △ |
+| `ICEN_PUBLIC_BASE_URL` | Plaintext | 確認リンクの host (default: https://natto-5hv.pages.dev) | △ |
 
-1. Cloudflare ダッシュボード → 左メニュー「**Turnstile**」 → 「**Add site**」
-2. Domain には `natto-5hv.pages.dev` と `tama831.github.io` を追加
-3. Widget mode は「**Managed**」を選択
-4. Save → **Site Key** と **Secret Key** をコピー
-5. Pages Project の Settings → Variables:
-   - 普通の Plaintext として `TURNSTILE_SITE_KEY` ← Site Key (公開可)
-   - Secret として `TURNSTILE_SECRET_KEY` ← Secret Key
-6. `index.html` と `delete-request.html` の `<meta name="turnstile-site-key" content="">` の content にも Site Key を入れて push
-7. CF Pages が自動再デプロイ → CAPTCHA が表示されるようになる
+### double opt-in フロー
 
-### まだ未実装の選択肢
+```
+1. ユーザがフォーム送信 → POST /api/apply
+   ├─ 既に確定済 → REPLY_REPEAT 即送信 (phase=repeat)
+   └─ 未登録 → 24h 有効 token 発行 → REPLY_CONFIRM_APPLY 送信 (phase=confirmation-pending)
+                                                                ↓
+                       ユーザがメール内のリンクをクリック
+                                                                ↓
+2. /confirm-apply.html?t=TOKEN → POST /api/confirm-apply
+   ├─ 有効 → 申請番号 (HMAC) 発番 → KV 書込 → REPLY_FIRST 送信 (phase=first)
+   └─ 期限切れ/不正 → 404
+```
 
-1. **Cloudflare Bot Fight Mode** — Custom Domain 必須なので保留
-2. **使い捨てメールドメイン拒否** — `disposable-email-domains` リスト導入で30分
-3. **Application Number HMAC 化** — 列挙対策。現状ほぼ不要
+### まだ未実装の選択肢 (low priority)
+
+- **Cloudflare Bot Fight Mode** — Custom Domain 必須なので保留
+- **CF Workers Logpush** — abuse forensics 用の構造化ログ
+- **インラインスタイル/スクリプトを外部化して CSP 厳格化** — 現状 `'unsafe-inline'` 許可中
 
 ## 公開フロー
 
