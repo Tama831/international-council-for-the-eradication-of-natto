@@ -201,19 +201,30 @@ agent-team prod への影響を避けるため CF Pages 版に切り替えたの
 | Honeypot field | ✅ `affiliation` 欄 (人間には見えない、bot がトラップ) |
 | 入力長制限 | ✅ 各フィールド ≤200文字、email 形式バリデーション |
 | 最小データ保存 | ✅ email 以外は破棄 |
+| **Per-IP レート制限** | ✅ KV TTL で 5 req/h/IP (apply / delete-request 別バケツ) |
+| **トークン制 削除請求** | ✅ /delete-request → 確認メール → 24h 有効 token クリック → /confirm-delete |
+| **Turnstile (CAPTCHA)** | ⏸ コード組み込み済 (env vars 未設定 = OFF) |
 
-### 強化の選択肢 (未実装、必要に応じて段階的に)
+### Turnstile を有効化する手順 (Tier 1 残り)
 
-1. **Cloudflare Turnstile** (CAPTCHA) — 30分・無料
-   - 2025年的な Web 標準。フォームに <div class="cf-turnstile"> を貼って apply.ts で siteverify 呼ぶ
-   - ボット完全シャットアウトに最効
-2. **Per-IP レート制限** — 1時間・無料
-   - KV TTL を使って「1IP / 5分 / 1回まで」等を実装
-   - Brevo の300通/日制限を守るのに有効
-3. **Cloudflare Bot Fight Mode** — クリック1つ・無料 (要 Custom Domain)
-4. **メールアドレス使い捨て検出** — 任意。disposable-email-domains リストで弾く
-5. **Application Number 不可逆化** — 連番 → secret + email の HMAC へ
-   - 現状ほぼ不要 (列挙されても大した情報じゃない)
+Cloudflare Turnstile は CAPTCHA をフォームに 1 行追加するだけで bot をほぼ全閉鎖できます。
+コード側は実装済 (環境変数が空なら無効化)。
+
+1. Cloudflare ダッシュボード → 左メニュー「**Turnstile**」 → 「**Add site**」
+2. Domain には `natto-5hv.pages.dev` と `tama831.github.io` を追加
+3. Widget mode は「**Managed**」を選択
+4. Save → **Site Key** と **Secret Key** をコピー
+5. Pages Project の Settings → Variables:
+   - 普通の Plaintext として `TURNSTILE_SITE_KEY` ← Site Key (公開可)
+   - Secret として `TURNSTILE_SECRET_KEY` ← Secret Key
+6. `index.html` と `delete-request.html` の `<meta name="turnstile-site-key" content="">` の content にも Site Key を入れて push
+7. CF Pages が自動再デプロイ → CAPTCHA が表示されるようになる
+
+### まだ未実装の選択肢
+
+1. **Cloudflare Bot Fight Mode** — Custom Domain 必須なので保留
+2. **使い捨てメールドメイン拒否** — `disposable-email-domains` リスト導入で30分
+3. **Application Number HMAC 化** — 列挙対策。現状ほぼ不要
 
 ## 公開フロー
 

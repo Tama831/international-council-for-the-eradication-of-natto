@@ -31,7 +31,7 @@
       pointer-events:none; z-index:1000;
     }
 
-    .wrap{max-width:780px; margin:0 auto; padding:0 28px; position:relative; z-index:1}
+    .wrap{max-width:820px; margin:0 auto; padding:0 28px; position:relative; z-index:1}
 
     .topbar{
       border-bottom:1px solid var(--rule);
@@ -60,9 +60,11 @@
     header.doc h1{
       font-family:'Shippori Mincho B1', serif;
       font-weight:800;
-      font-size:clamp(40px, 6vw, 64px);
-      line-height:1.05; margin-bottom:18px;
+      font-size:clamp(36px, 5vw, 52px);
+      line-height:1.25; margin-bottom:18px;
+      letter-spacing:.01em;
     }
+    .topbar .row{max-width:820px}
     header.doc .en{
       font-family:'DM Serif Display', serif; font-style:italic;
       font-size:20px; color:var(--ink-2); margin-bottom:24px;
@@ -234,9 +236,10 @@
         <div class="num">§ Ⅵ — Deletion</div>
         <h2>削除のご請求</h2>
         <p>ご自身のメールアドレス・申請番号を本協議会の記録から削除されたい場合は、
-        <a href="mailto:ly.renum@gmail.com?subject=ICEN%20%E5%89%8A%E9%99%A4%E5%B8%8C%E6%9C%9B">ly.renum@gmail.com</a>
-        まで「削除希望」とご連絡ください。
-        確認次第、Workers KV 上の該当レコードを永久に削除いたします。</p>
+        <a href="delete-request.html">削除請求フォーム</a> をご利用ください。</p>
+        <p>本人確認のため、フォームに入力いただいたメールアドレス宛に確認リンクを送付いたします。
+        メール内のリンクをクリックされた時点で、Workers KV 上の該当レコードは
+        <b>永久に削除</b>されます。確認リンクの有効期限は 24 時間です。</p>
       </section>
 
       <div class="reveal">

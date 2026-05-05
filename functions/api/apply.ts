@@ -4,13 +4,22 @@
 //
 // Required env / bindings:
 //   ICEN_KV          — KV namespace binding
-//   BREVO_API_KEY    — Brevo (Sendinblue) Transactional Email API key
+//   BREVO_API_KEY    — Brevo Transactional Email API key
 // Optional:
-//   ICEN_SENDER_EMAIL  (default: ly.renum@gmail.com — must be a Brevo-verified sender)
-//   ICEN_SENDER_NAME   (default: 国際納豆撲滅協議会 事務局 / ICEN Secretariat)
-//   REPLY_TO_EMAIL     (default: same as sender)
+//   ICEN_SENDER_EMAIL    (default: ly.renum@gmail.com — must be Brevo-verified)
+//   ICEN_SENDER_NAME     (default: 国際納豆撲滅協議会 事務局 / ICEN Secretariat)
+//   REPLY_TO_EMAIL       (default: same as sender)
+//   TURNSTILE_SECRET_KEY (if set, server validates 'cf-turnstile-response' field)
 
 import { REPLY_FIRST, REPLY_REPEAT } from "./_templates";
+import {
+  jsonResponse,
+  corsHeaders,
+  EMAIL_RE,
+  checkRateLimit,
+  verifyTurnstile,
+  sendEmail,
+} from "./_lib";
 
 interface Env {
   ICEN_KV: KVNamespace;
@@ -18,47 +27,28 @@ interface Env {
   ICEN_SENDER_EMAIL?: string;
   ICEN_SENDER_NAME?: string;
   REPLY_TO_EMAIL?: string;
+  TURNSTILE_SECRET_KEY?: string;
 }
 
-const ALLOWED_ORIGINS = new Set([
-  "https://tama831.github.io",
-]);
-
-function corsHeaders(originHeader: string | null): Record<string, string> {
-  const allowed = originHeader && ALLOWED_ORIGINS.has(originHeader)
-    ? originHeader
-    : "*";
-  return {
-    "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Max-Age": "86400",
-    "Vary": "Origin",
-  };
-}
-
-function jsonResponse(body: unknown, status: number, origin: string | null): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      ...corsHeaders(origin),
-    },
-  });
-}
-
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const REQUIRED_FIELDS = ["name", "region", "breakfast_main", "hate_reason", "signature"] as const;
 
 export const onRequestOptions: PagesFunction<Env> = async ({ request }) => {
-  return new Response(null, {
-    status: 204,
-    headers: corsHeaders(request.headers.get("Origin")),
-  });
+  return new Response(null, { status: 204, headers: corsHeaders(request.headers.get("Origin")) });
 };
 
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const origin = request.headers.get("Origin");
+  const ip = request.headers.get("CF-Connecting-IP") || "";
+
+  // Per-IP rate limit (5/hour). Returns 429 if exceeded.
+  const rl = await checkRateLimit(env.ICEN_KV, ip, { limit: 5, windowSec: 3600, bucket: "rl-apply" });
+  if (!rl.ok) {
+    return jsonResponse(
+      { ok: false, detail: "rate limit exceeded — try again in an hour" },
+      429,
+      origin,
+    );
+  }
 
   let body: Record<string, unknown>;
   try {
@@ -67,15 +57,19 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ ok: false, detail: "invalid JSON" }, 400, origin);
   }
 
-  // Honeypot: humans don't see/fill it. Bots that auto-fill all fields trip this.
+  // Honeypot: humans don't fill it; bots that auto-fill all fields trip this.
   if (typeof body.affiliation === "string" && body.affiliation.trim() !== "") {
-    // Pretend success to avoid teaching bots that the field is a trap.
     return jsonResponse(
       { ok: true, application_no: "ICEN-A-0000-0000", is_first: false, message: "受理いたしました。" },
       200,
       origin,
     );
   }
+
+  // Optional Turnstile verification (no-op if TURNSTILE_SECRET_KEY is unset).
+  const tsToken = String(body["cf-turnstile-response"] ?? "");
+  const tsOk = await verifyTurnstile(tsToken, env.TURNSTILE_SECRET_KEY ?? "", ip);
+  if (!tsOk) return jsonResponse({ ok: false, detail: "captcha failed" }, 403, origin);
 
   const email = String(body.email ?? "").trim().toLowerCase();
   if (!email || email.length > 200 || !EMAIL_RE.test(email)) {
@@ -120,38 +114,19 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     : `【${appNo}】重複申請に関する通知 / Notice on Duplicate Application`;
   const text = (isFirst ? REPLY_FIRST : REPLY_REPEAT).replace(/\{\{app_no\}\}/g, appNo);
 
-  const senderEmail = env.ICEN_SENDER_EMAIL ?? "ly.renum@gmail.com";
-  const senderName = env.ICEN_SENDER_NAME ?? "国際納豆撲滅協議会 事務局 / ICEN Secretariat";
-  const replyTo = env.REPLY_TO_EMAIL ?? senderEmail;
-
-  let brevoStatus = 0;
-  let brevoErr = "";
   try {
-    const r = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "api-key": env.BREVO_API_KEY,
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify({
-        sender: { name: senderName, email: senderEmail },
-        to: [{ email }],
-        replyTo: { email: replyTo },
-        subject,
-        textContent: text,
-      }),
+    await sendEmail(env.BREVO_API_KEY, {
+      to: email,
+      subject,
+      text,
+      senderEmail: env.ICEN_SENDER_EMAIL,
+      senderName: env.ICEN_SENDER_NAME,
+      replyTo: env.REPLY_TO_EMAIL,
     });
-    brevoStatus = r.status;
-    if (!r.ok) brevoErr = (await r.text()).slice(0, 400);
   } catch (e) {
-    brevoErr = e instanceof Error ? e.message : String(e);
-  }
-
-  if (brevoErr) {
-    console.error("brevo error", brevoStatus, brevoErr);
+    console.error("apply mail failed:", e);
     return jsonResponse(
-      { ok: false, detail: `mail send failed (${brevoStatus || "network"})` },
+      { ok: false, detail: "mail send failed" },
       502,
       origin,
     );

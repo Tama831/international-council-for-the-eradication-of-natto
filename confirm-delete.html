@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>削除確認 / Confirm Deletion — 国際納豆撲滅協議会</title>
+  <meta name="robots" content="noindex" />
+  <meta name="icen-api" content="https://natto-5hv.pages.dev/api" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --paper:#F2EAD8; --paper-2:#E8DDC4;
+      --ink:#1F1813; --ink-2:#3A2E25;
+      --blood:#8B1A1A; --enemy:#C4A02C;
+      --rule:rgba(31,24,19,.18);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Noto Serif JP', serif;
+      color:var(--ink); background:var(--paper);
+      line-height:1.85; min-height:100vh;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:48px 24px; position:relative;
+    }
+    body::before{
+      content:""; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+      mix-blend-mode:multiply; opacity:.4;
+      pointer-events:none; z-index:0;
+    }
+    .card{
+      max-width:560px; width:100%;
+      background:var(--paper-2);
+      border:2px solid var(--ink);
+      padding:48px 40px; position:relative; z-index:1;
+    }
+    .kicker{
+      font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.3em;
+      color:var(--blood); text-transform:uppercase; margin-bottom:14px;
+    }
+    h1{
+      font-family:'Shippori Mincho B1', serif; font-weight:800;
+      font-size:34px; line-height:1.25; margin-bottom:18px;
+    }
+    .en{
+      font-family:'DM Serif Display', serif; font-style:italic;
+      font-size:16px; color:var(--ink-2); margin-bottom:28px;
+    }
+    p{font-size:15px; margin-bottom:14px}
+    .meta{
+      margin-top:24px; padding:14px 16px;
+      font-family:'JetBrains Mono', monospace; font-size:12px; line-height:1.85;
+      background:var(--paper); border-left:3px solid var(--blood);
+    }
+    .meta b{color:var(--blood)}
+    .actions{margin-top:28px; display:flex; gap:12px; flex-wrap:wrap}
+    .btn{
+      cursor:pointer; font:inherit;
+      padding:12px 22px;
+      background:var(--ink); color:var(--paper);
+      font-family:'Shippori Mincho B1', serif; font-weight:700; font-size:14px; letter-spacing:.14em;
+      border:2px solid var(--ink); text-decoration:none; transition:.2s;
+    }
+    .btn:hover{background:transparent; color:var(--ink)}
+    .btn.primary{background:var(--blood); border-color:var(--blood); color:var(--paper)}
+    .btn.primary:hover{background:transparent; color:var(--blood)}
+    .state-ok h1, .state-ok .kicker{color:var(--blood)}
+    .state-err{opacity:.95}
+    .spinner{
+      display:inline-block; width:14px; height:14px; vertical-align:-2px;
+      border:2px solid currentColor; border-right-color:transparent;
+      border-radius:50%; animation:sp .8s linear infinite; margin-right:8px;
+    }
+    @keyframes sp{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="kicker">Deletion Confirmation</div>
+    <h1 id="title">削除確認中…</h1>
+    <p class="en" id="title-en"><i>Verifying your deletion request.</i></p>
+    <p id="msg"><span class="spinner"></span>確認リンクを照合しています。少々お待ちください。</p>
+    <div class="meta" id="meta" hidden></div>
+    <div class="actions" id="actions" hidden>
+      <a href="index.html" class="btn">トップへ戻る</a>
+      <a href="privacy.html" class="btn">プライバシー告知</a>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const apiBase = (document.querySelector('meta[name="icen-api"]')?.content || '').trim().replace(/\/$/, '');
+      const params = new URLSearchParams(location.search);
+      const token = (params.get('t') || '').trim();
+      const card = document.getElementById('card');
+      const title = document.getElementById('title');
+      const titleEn = document.getElementById('title-en');
+      const msg = document.getElementById('msg');
+      const meta = document.getElementById('meta');
+      const actions = document.getElementById('actions');
+
+      function setState(state, opts){
+        card.classList.remove('state-ok','state-err');
+        card.classList.add('state-' + state);
+        if (opts.title) title.textContent = opts.title;
+        if (opts.titleEn) titleEn.innerHTML = '<i>' + opts.titleEn + '</i>';
+        if (opts.msg) msg.innerHTML = opts.msg;
+        if (opts.meta){ meta.hidden = false; meta.innerHTML = opts.meta; } else { meta.hidden = true; }
+        actions.hidden = false;
+      }
+
+      if (!token || !/^[a-f0-9]{64}$/.test(token)){
+        setState('err', {
+          title: 'リンクが無効です',
+          titleEn: 'Invalid or malformed link.',
+          msg: 'お送りしたリンクのトークンが正しくありません。<br>メール内のリンクを再度ご確認ください。',
+        });
+        return;
+      }
+
+      fetch(apiBase + '/confirm-delete', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ token: token }),
+      }).then(async (res) => {
+        const j = await res.json().catch(() => ({}));
+        if (res.ok && j.ok){
+          setState('ok', {
+            title: '削除を完了しました',
+            titleEn: 'Your record has been erased.',
+            msg: j.message || '当該メールアドレスに関する記録は永久に失われました。長らくありがとうございました。',
+            meta: '<b>FORMER №:</b> ' + (j.app_no || '(unknown)') + '<br><b>DELETED AT:</b> ' + (j.deleted_at || ''),
+          });
+        } else if (res.status === 404){
+          setState('err', {
+            title: 'リンクが期限切れです',
+            titleEn: 'This link has expired or already been used.',
+            msg: '削除確認リンクは24時間で失効いたします。<br>再度の削除請求は、トップページの<a href="delete-request.html">削除請求フォーム</a>から承ります。',
+          });
+        } else if (res.status === 429){
+          setState('err', {
+            title: 'アクセス制限',
+            titleEn: 'Too many requests.',
+            msg: '短時間に多数のリクエストを受け取りました。1時間ほど時間をおいて再度お試しください。',
+          });
+        } else {
+          setState('err', {
+            title: '処理に失敗しました',
+            titleEn: 'An error occurred.',
+            msg: '申し訳ございません。' + (j.detail ? '(' + j.detail + ')' : '') + '<br>しばらく後に再度お試しください。',
+          });
+        }
+      }).catch((err) => {
+        setState('err', {
+          title: '通信エラー',
+          titleEn: 'Network error.',
+          msg: '通信に失敗しました: ' + (err.message || err),
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
