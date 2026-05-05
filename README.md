@@ -182,9 +182,42 @@ git add index.html && git commit -m "Wire form to CF Pages API" && git push
 agent-team prod への影響を避けるため CF Pages 版に切り替えたので、現在は **未使用**。
 将来 Hetzner で動かしたくなった場合の参考として残置 (削除しても構わない)。
 
+## プライバシー / セキュリティ
+
+### 保存しているデータ
+- Workers KV (`ICEN_KV`) に **email + 申請番号 + first_at + count + last_seen** のみ
+- 氏名・居住地・嫌悪歴等の他のフォーム項目は**返信メール送信後すぐに破棄** (永続化しない)
+- 削除請求があれば手動で KV から該当 key を削除
+
+ユーザ向け文面は [`privacy.html`](privacy.html) を参照。
+
+### 現状の対策
+| 対策 | 状態 |
+|---|---|
+| HTTPS | ✅ Cloudflare が自動 |
+| KV 暗号化 (at rest) | ✅ Cloudflare 仕様 |
+| API キー管理 | ✅ `BREVO_API_KEY` を CF Pages Secret として保管 |
+| CORS allowlist | ✅ tama831.github.io と natto-5hv.pages.dev (same-origin) のみ |
+| Honeypot field | ✅ `affiliation` 欄 (人間には見えない、bot がトラップ) |
+| 入力長制限 | ✅ 各フィールド ≤200文字、email 形式バリデーション |
+| 最小データ保存 | ✅ email 以外は破棄 |
+
+### 強化の選択肢 (未実装、必要に応じて段階的に)
+
+1. **Cloudflare Turnstile** (CAPTCHA) — 30分・無料
+   - 2025年的な Web 標準。フォームに <div class="cf-turnstile"> を貼って apply.ts で siteverify 呼ぶ
+   - ボット完全シャットアウトに最効
+2. **Per-IP レート制限** — 1時間・無料
+   - KV TTL を使って「1IP / 5分 / 1回まで」等を実装
+   - Brevo の300通/日制限を守るのに有効
+3. **Cloudflare Bot Fight Mode** — クリック1つ・無料 (要 Custom Domain)
+4. **メールアドレス使い捨て検出** — 任意。disposable-email-domains リストで弾く
+5. **Application Number 不可逆化** — 連番 → secret + email の HMAC へ
+   - 現状ほぼ不要 (列挙されても大した情報じゃない)
+
 ## 公開フロー
 
-`master` への push で GitHub Pages が自動再ビルド。手動デプロイ不要。
+`master` への push で Cloudflare Pages が自動再デプロイ (Production)、GitHub Pages もミラー再ビルド。手動デプロイ不要。
 
 ## ライセンス・免責 (詳細)
 

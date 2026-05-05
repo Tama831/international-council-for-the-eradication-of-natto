@@ -460,6 +460,17 @@
     .form-result.ok{border-color:var(--enemy);color:var(--enemy);background:rgba(196,160,44,.1)}
     .form-result.err{border-color:var(--blood);color:#ff9a9a;background:rgba(139,26,26,.25)}
     .form-result.pending{opacity:.7}
+    /* honeypot — invisible to humans, visible to dumb bots */
+    .join-card label.hp{
+      position:absolute !important; left:-10000px; top:auto;
+      width:1px; height:1px; overflow:hidden;
+    }
+    .form-note{
+      margin-top:14px;font-size:11.5px;line-height:1.7;color:var(--paper-3);
+      letter-spacing:.02em;
+    }
+    .form-note a{color:var(--enemy);text-decoration:underline;text-decoration-style:dotted}
+    .form-note b{color:var(--paper)}
 
     /* ───────── FOOTER ───────── */
     footer{
@@ -845,6 +856,12 @@
           </label>
           <label class="form-row"><span>署名</span><input type="text" name="signature" maxlength="120" required placeholder="自筆署名"></label>
           <label class="form-row"><span>連絡先 (電子郵便)</span><input type="email" name="email" maxlength="200" required placeholder="you@example.com"></label>
+          <!-- honeypot: humans don't see this; bots fill all fields. Server rejects if non-empty. -->
+          <label class="hp" aria-hidden="true" tabindex="-1"><span>所属</span><input type="text" name="affiliation" tabindex="-1" autocomplete="off"></label>
+          <p class="form-note">
+            ※ メールアドレスは<b>多重申請防止のためだけ</b>に保存します。氏名・居住地・嫌悪歴等は自動返信完了後すぐに破棄します。
+            詳細は <a href="privacy.html">プライバシーに関する告知</a> をご確認ください。
+          </p>
           <button type="submit" class="cta">申請書を送付する</button>
           <p id="icen-form-result" class="form-result" hidden></p>
         </form>
@@ -871,8 +888,11 @@
           </ul>
         </div>
         <div>
-          <h5>Contact</h5>
-          <p>secretariat@example.invalid<br>Geneva HQ · Kyoto Office<br>機関誌『非粘月報』ISSN 0000-0000</p>
+          <h5>Notices</h5>
+          <ul>
+            <li><a href="privacy.html" style="color:inherit">プライバシーに関する告知</a></li>
+          </ul>
+          <p style="margin-top:12px">secretariat@example.invalid<br>Geneva HQ · Kyoto Office<br>機関誌『非粘月報』ISSN 0000-0000</p>
         </div>
       </div>
       <div class="copyright">

@@ -67,6 +67,16 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ ok: false, detail: "invalid JSON" }, 400, origin);
   }
 
+  // Honeypot: humans don't see/fill it. Bots that auto-fill all fields trip this.
+  if (typeof body.affiliation === "string" && body.affiliation.trim() !== "") {
+    // Pretend success to avoid teaching bots that the field is a trap.
+    return jsonResponse(
+      { ok: true, application_no: "ICEN-A-0000-0000", is_first: false, message: "受理いたしました。" },
+      200,
+      origin,
+    );
+  }
+
   const email = String(body.email ?? "").trim().toLowerCase();
   if (!email || email.length > 200 || !EMAIL_RE.test(email)) {
     return jsonResponse({ ok: false, detail: "invalid email" }, 400, origin);

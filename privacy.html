@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プライバシーに関する告知 / Privacy Notice — 国際納豆撲滅協議会</title>
+  <meta name="description" content="入会申請フォームでお預かりする情報の取り扱いについて、誠実に明記しています。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --paper:#F2EAD8; --paper-2:#E8DDC4; --paper-3:#D9C9A6;
+      --ink:#1F1813; --ink-2:#3A2E25;
+      --blood:#8B1A1A; --enemy:#C4A02C;
+      --rule:rgba(31,24,19,.18);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Serif JP', serif;
+      color:var(--ink); background:var(--paper);
+      font-feature-settings:"palt";
+      line-height:1.85;
+      position:relative;
+    }
+    body::before{
+      content:""; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+      mix-blend-mode:multiply; opacity:.4;
+      pointer-events:none; z-index:1000;
+    }
+
+    .wrap{max-width:780px; margin:0 auto; padding:0 28px; position:relative; z-index:1}
+
+    .topbar{
+      border-bottom:1px solid var(--rule);
+      background:var(--paper-2); font-size:11px; letter-spacing:.18em;
+    }
+    .topbar .row{
+      display:flex; justify-content:space-between; align-items:center;
+      max-width:780px; margin:0 auto; padding:8px 28px;
+      text-transform:uppercase; color:var(--ink-2);
+    }
+    .topbar a{color:var(--blood); text-decoration:none; font-weight:700}
+    .topbar a:hover{text-decoration:underline}
+
+    header.doc{
+      padding:80px 0 56px;
+      border-bottom:1px solid var(--rule);
+    }
+    header.doc .kicker{
+      display:flex; align-items:center; gap:14px;
+      font-size:12px; letter-spacing:.32em; color:var(--blood);
+      text-transform:uppercase; font-weight:700; margin-bottom:28px;
+    }
+    header.doc .kicker::before{
+      content:""; display:inline-block; width:48px; height:1px; background:var(--blood);
+    }
+    header.doc h1{
+      font-family:'Shippori Mincho B1', serif;
+      font-weight:800;
+      font-size:clamp(40px, 6vw, 64px);
+      line-height:1.05; margin-bottom:18px;
+    }
+    header.doc .en{
+      font-family:'DM Serif Display', serif; font-style:italic;
+      font-size:20px; color:var(--ink-2); margin-bottom:24px;
+    }
+    header.doc .meta{
+      font-family:'JetBrains Mono', monospace;
+      font-size:11px; letter-spacing:.16em; color:var(--ink-2);
+      padding-top:20px; border-top:1px dashed var(--rule);
+      display:flex; gap:24px; flex-wrap:wrap;
+    }
+    header.doc .meta b{color:var(--blood)}
+
+    main{padding:56px 0 80px}
+    section{margin-bottom:48px}
+    section .num{
+      font-family:'JetBrains Mono', monospace;
+      font-size:11px; letter-spacing:.3em; color:var(--blood);
+      text-transform:uppercase; margin-bottom:6px;
+    }
+    section h2{
+      font-family:'Shippori Mincho B1', serif;
+      font-weight:700; font-size:24px; line-height:1.3;
+      margin-bottom:16px; padding-bottom:10px;
+      border-bottom:1px solid var(--rule);
+    }
+    section p{font-size:15.5px; margin-bottom:14px}
+    section ul, section ol{padding-left:1.5em; margin-bottom:14px}
+    section li{font-size:15.5px; margin-bottom:6px}
+    section li::marker{color:var(--blood)}
+    section .pill{
+      display:block;
+      background:var(--paper-2);
+      border-left:4px solid var(--blood);
+      padding:14px 18px;
+      margin:14px 0;
+      font-size:15px;
+    }
+    section .pill b{color:var(--blood)}
+    section a{color:var(--blood); text-decoration:underline; text-decoration-style:dotted}
+
+    .reveal{
+      background:var(--ink); color:var(--paper);
+      padding:32px 28px;
+      margin:48px 0;
+      position:relative;
+    }
+    .reveal::before{
+      content:""; position:absolute; inset:6px;
+      border:1px solid rgba(242,234,216,.25);
+      pointer-events:none;
+    }
+    .reveal h3{
+      font-family:'Shippori Mincho B1', serif;
+      font-size:18px; color:var(--enemy); letter-spacing:.04em;
+      margin-bottom:14px;
+    }
+    .reveal p{font-size:14.5px; color:var(--paper-3); margin:0}
+
+    footer{
+      border-top:3px double var(--ink);
+      background:var(--paper-2);
+      padding:40px 0 32px;
+    }
+    footer .row{
+      display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:16px;
+      font-family:'JetBrains Mono', monospace;
+      font-size:11px; letter-spacing:.12em; color:var(--ink-2);
+    }
+    footer a{color:var(--blood); text-decoration:none}
+    footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="row">
+      <span>Document №ICEN-PRIV-2026-001</span>
+      <span><a href="index.html">← トップへ戻る</a></span>
+    </div>
+  </div>
+
+  <header class="doc">
+    <div class="wrap">
+      <div class="kicker">Privacy Notice</div>
+      <h1>プライバシーに関する告知</h1>
+      <div class="en">On the handling of personal information.</div>
+      <div class="meta">
+        <span><b>FILE</b> ICEN-PRIV-2026-001</span>
+        <span><b>EFFECTIVE</b> 2026.05.05</span>
+        <span><b>REV.</b> 1</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section>
+        <div class="num">§ 0 — Preamble</div>
+        <h2>はじめに</h2>
+        <p>本ページは「国際納豆撲滅協議会(ICEN)」という<b>架空団体のパロディサイト</b>です。
+        本協議会は実在せず、本サイトはユーモアを目的としたフィクション作品です。</p>
+        <p>そのうえで、もし入会申請フォームに本物の個人情報を入力された方がいらしても
+        ご安心いただけるよう、お預かりする情報の取り扱いについて誠実に明記いたします。</p>
+      </section>
+
+      <section>
+        <div class="num">§ Ⅰ — Collected</div>
+        <h2>入力していただく情報</h2>
+        <p>入会申請フォームでは、ジョーク演出のために以下の情報を入力していただきます:</p>
+        <ul>
+          <li>氏名</li>
+          <li>居住国 / 都道府県</li>
+          <li>朝食における主食</li>
+          <li>納豆嫌悪歴(年数)</li>
+          <li>嫌悪の主因</li>
+          <li>署名</li>
+          <li>連絡先メールアドレス</li>
+        </ul>
+      </section>
+
+      <section>
+        <div class="num">§ Ⅱ — Stored</div>
+        <h2>サーバに保存する情報</h2>
+        <p>上記§Ⅰ のうち、本協議会のサーバ(Cloudflare Workers KV)に
+        <b>保存するのは以下のみ</b>です:</p>
+        <ul>
+          <li>メールアドレス</li>
+          <li>自動付番された申請番号(例: ICEN-A-2026-0042)</li>
+          <li>初回受理日時 / 重複申請回数 / 最終アクセス日時</li>
+        </ul>
+        <span class="pill">
+          <b>メールアドレスを保存する唯一の理由は、イタズラ防止</b>(同一メールアドレスからの多重申請を検出し、2通目以降には「既に受理済み」と返すため)です。
+          営業・マーケティング・第三者提供等、その他の目的には<b>一切使用しません</b>。
+        </span>
+      </section>
+
+      <section>
+        <div class="num">§ Ⅲ — Discarded</div>
+        <h2>破棄する情報</h2>
+        <p>§Ⅰ で入力いただいた <b>氏名・居住地・主食・嫌悪歴・嫌悪主因・署名</b> は、
+        自動返信メールの送信処理が完了した時点でメモリ上から破棄され、
+        本協議会のいかなるデータベース・ログ・バックアップにも一切残りません。</p>
+        <p>処理の流れ: フォーム送信 → サーバが受信 → メール文面を組み立て → 送信 → 即破棄。</p>
+      </section>
+
+      <section>
+        <div class="num">§ Ⅳ — Third Parties</div>
+        <h2>第三者サービス</h2>
+        <p>本サイトの運営には以下の第三者サービスを使用しています。
+        これらは独自のプライバシーポリシーに従って情報を取り扱います:</p>
+        <ul>
+          <li><b>Cloudflare Pages</b> — 静的サイト配信、サーバレス関数実行、データ保管(Workers KV)
+            <br /><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a></li>
+          <li><b>Brevo</b> — 自動返信メールの送信代行(送信先メールアドレスのみ受け渡し)
+            <br /><a href="https://www.brevo.com/legal/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a></li>
+          <li><b>GitHub Pages</b> — 同サイトのミラー配信
+            <br /><a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">プライバシーステートメント</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <div class="num">§ Ⅴ — Cookies</div>
+        <h2>Cookie / トラッキング</h2>
+        <p>本サイトは独自の Cookie・アクセス解析・広告ツールを<b>一切使用しません</b>。
+        上記第三者サービスが技術的に必要な範囲で Cookie を設定する場合があります。</p>
+      </section>
+
+      <section>
+        <div class="num">§ Ⅵ — Deletion</div>
+        <h2>削除のご請求</h2>
+        <p>ご自身のメールアドレス・申請番号を本協議会の記録から削除されたい場合は、
+        <a href="mailto:ly.renum@gmail.com?subject=ICEN%20%E5%89%8A%E9%99%A4%E5%B8%8C%E6%9C%9B">ly.renum@gmail.com</a>
+        まで「削除希望」とご連絡ください。
+        確認次第、Workers KV 上の該当レコードを永久に削除いたします。</p>
+      </section>
+
+      <div class="reveal">
+        <h3>FICTIONAL DISCLAIMER</h3>
+        <p>本サイトに登場する団体・人物・国家代表・条約・出来事は<b>すべて架空</b>のものです。
+        実在の人物・団体・地域・自治体とは一切関係ありません。納豆は日本が誇る伝統的な
+        発酵食品で、健康に資する素晴らしい食品です。茨城県の皆様には心からの敬意を捧げます。</p>
+      </div>
+
+      <section>
+        <div class="num">§ Ⅶ — Revisions</div>
+        <h2>本告知の改訂</h2>
+        <p>本告知は、運用の変更等により予告なく改訂されることがあります。
+        ご訪問の度に最新の文面をご確認ください。重要な変更がある場合は本ページ冒頭の
+        REV. 番号と更新日付が変わります。</p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap row">
+      <span>© 2026 INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
+      <span><a href="index.html">← トップへ戻る</a></span>
+    </div>
+  </footer>
+</body>
+</html>
