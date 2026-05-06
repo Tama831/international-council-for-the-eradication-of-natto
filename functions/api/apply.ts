@@ -23,6 +23,9 @@ import {
   fillTemplate,
   refVars,
   maybeAlert,
+  hashEmail,
+  emailKey,
+  EMAIL_RECORD_TTL_SEC,
 } from "./_lib";
 
 interface Env {
@@ -33,6 +36,7 @@ interface Env {
   REPLY_TO_EMAIL?: string;
   TURNSTILE_SECRET_KEY?: string;
   ICEN_PUBLIC_BASE_URL?: string;
+  ICEN_HMAC_SALT?: string;
 }
 
 const REQUIRED_FIELDS = ["name", "region", "breakfast_main", "hate_reason", "signature"] as const;
@@ -111,8 +115,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const senderName = env.ICEN_SENDER_NAME;
   const replyTo = env.REPLY_TO_EMAIL;
 
-  // Already-confirmed?
-  const existingRaw = await env.ICEN_KV.get(`email:${email}`);
+  // Already-confirmed? Lookup by HMAC hash of email (plaintext never persisted).
+  const salt = env.ICEN_HMAC_SALT ?? "";
+  const eHash = await hashEmail(email, salt);
+  const eKey = emailKey(eHash, !!salt);
+  const existingRaw = await env.ICEN_KV.get(eKey);
   if (existingRaw) {
     let appNo = "(unknown)";
     try {
@@ -120,7 +127,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       appNo = ex.app_no ?? appNo;
       ex.count = (ex.count || 1) + 1;
       (ex as Record<string, unknown>).last_seen = new Date().toISOString();
-      await env.ICEN_KV.put(`email:${email}`, JSON.stringify(ex));
+      // Refresh 90-day retention on activity. Forgotten records auto-expire.
+      await env.ICEN_KV.put(eKey, JSON.stringify(ex), { expirationTtl: EMAIL_RECORD_TTL_SEC });
     } catch { /* tolerate */ }
 
     if (!(await checkRecipientThrottle(env.ICEN_KV, email))) {

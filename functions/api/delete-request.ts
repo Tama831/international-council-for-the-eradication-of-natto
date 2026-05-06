@@ -18,6 +18,8 @@ import {
   fillTemplate,
   refVars,
   maybeAlert,
+  hashEmail,
+  emailKey,
 } from "./_lib";
 import { DELETE_CONFIRM } from "./_templates";
 
@@ -29,6 +31,7 @@ interface Env {
   REPLY_TO_EMAIL?: string;
   TURNSTILE_SECRET_KEY?: string;
   ICEN_PUBLIC_BASE_URL?: string;
+  ICEN_HMAC_SALT?: string;
 }
 
 export const onRequestOptions: PagesFunction<Env> = async ({ request }) => {
@@ -76,7 +79,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     message: "削除請求を受け付けました。当該メールアドレスが当協議会の記録に存在する場合に限り、確認メールを送付いたします。",
   };
 
-  const existingRaw = await env.ICEN_KV.get(`email:${email}`);
+  const salt = env.ICEN_HMAC_SALT ?? "";
+  const eHash = await hashEmail(email, salt);
+  const existingRaw = await env.ICEN_KV.get(emailKey(eHash, !!salt));
   if (!existingRaw) {
     return jsonResponse(genericOk, 200, origin);
   }

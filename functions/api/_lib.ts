@@ -201,6 +201,37 @@ export async function makeAppNumber(
   return `ICEN-A-${year}-${hex}`;
 }
 
+/**
+ * One-way HMAC-SHA256 hash of an email address using a server-side salt.
+ * Used as the KV storage key so the persistent store NEVER contains the
+ * plaintext email — even the site operator cannot enumerate the member list.
+ *
+ * Returns 64-char hex. Returns the input lowercased+trimmed plaintext as
+ * a fallback if the salt is empty (legacy mode, for backwards compat).
+ */
+export async function hashEmail(email: string, salt: string): Promise<string> {
+  const norm = email.toLowerCase().trim();
+  if (!salt) return norm; // legacy: store plaintext key when salt unset
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw", enc.encode(salt),
+    { name: "HMAC", hash: "SHA-256" },
+    false, ["sign"],
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(norm));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+/** Build the KV key for an email record. Hashed if salt is set. */
+export function emailKey(hashOrEmail: string, salted: boolean): string {
+  return salted ? `emailh:${hashOrEmail}` : `email:${hashOrEmail}`;
+}
+
+/** Default retention: 90 days. Refreshed on every interaction (apply / repeat). */
+export const EMAIL_RECORD_TTL_SEC = 90 * 24 * 3600;
+
 /** Substitute {{key}} placeholders in a template string. */
 export function fillTemplate(tpl: string, vars: Record<string, string>): string {
   let out = tpl;

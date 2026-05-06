@@ -13,6 +13,8 @@ import {
   sendEmail,
   fillTemplate,
   refVars,
+  hashEmail,
+  emailKey as buildEmailKey,
 } from "./_lib";
 import { DELETE_DONE } from "./_templates";
 
@@ -22,6 +24,7 @@ interface Env {
   ICEN_SENDER_EMAIL?: string;
   ICEN_SENDER_NAME?: string;
   REPLY_TO_EMAIL?: string;
+  ICEN_HMAC_SALT?: string;
 }
 
 export const onRequestOptions: PagesFunction<Env> = async ({ request }) => {
@@ -60,8 +63,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
-  const emailKey = `email:${email}`;
-  const existingRaw = await env.ICEN_KV.get(emailKey);
+  // Email main record is keyed by HMAC hash, not plaintext.
+  const salt = env.ICEN_HMAC_SALT ?? "";
+  const eHash = await hashEmail(email, salt);
+  const eKey = buildEmailKey(eHash, !!salt);
+  const existingRaw = await env.ICEN_KV.get(eKey);
   let appNo = "(unknown)";
   if (existingRaw) {
     try {
@@ -71,7 +77,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   // Delete the application record AND consume the token.
-  await env.ICEN_KV.delete(emailKey);
+  await env.ICEN_KV.delete(eKey);
   await env.ICEN_KV.delete(tokenKey);
 
   const deletedAt = new Date().toISOString();

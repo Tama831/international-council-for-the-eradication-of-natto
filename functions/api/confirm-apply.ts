@@ -19,6 +19,9 @@ import {
   checkRecipientThrottle,
   fillTemplate,
   refVars,
+  hashEmail,
+  emailKey,
+  EMAIL_RECORD_TTL_SEC,
 } from "./_lib";
 
 interface Env {
@@ -28,6 +31,7 @@ interface Env {
   ICEN_SENDER_NAME?: string;
   REPLY_TO_EMAIL?: string;
   ICEN_NUMBER_SALT?: string;
+  ICEN_HMAC_SALT?: string;
 }
 
 export const onRequestOptions: PagesFunction<Env> = async ({ request }) => {
@@ -67,7 +71,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   // Race / re-click protection: someone else (or the same user) might have already
   // confirmed this email. Return repeat semantics in that case.
-  const existingRaw = await env.ICEN_KV.get(`email:${email}`);
+  const salt = env.ICEN_HMAC_SALT ?? "";
+  const eHash = await hashEmail(email, salt);
+  const eKey = emailKey(eHash, !!salt);
+  const existingRaw = await env.ICEN_KV.get(eKey);
   if (existingRaw) {
     await env.ICEN_KV.delete(tokenKey);
     let appNo = "(unknown)";
@@ -85,9 +92,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const year = new Date().getUTCFullYear();
   const appNo = await makeAppNumber(email, year, env.ICEN_NUMBER_SALT ?? "", undefined);
 
-  await env.ICEN_KV.put(`email:${email}`, JSON.stringify({
+  // Persist with 90-day TTL. Plaintext email is NEVER stored; only its HMAC hash.
+  await env.ICEN_KV.put(eKey, JSON.stringify({
     app_no: appNo, first_at: now, count: 1, last_seen: now,
-  }));
+  }), { expirationTtl: EMAIL_RECORD_TTL_SEC });
   await env.ICEN_KV.delete(tokenKey);
 
   // Send the formal first-time receipt (per-recipient throttle: cap silently if hit).

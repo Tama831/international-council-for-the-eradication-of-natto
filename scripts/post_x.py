@@ -51,6 +51,7 @@ def load_dotenv_if_missing(*keys: str) -> None:
 
 load_dotenv_if_missing("ICEN_ADMIN_KEY")
 ENDPOINT = os.environ.get("ICEN_AUTO_POST_URL", "https://natto-5hv.pages.dev/api/auto-post")
+BSKY_ENDPOINT = os.environ.get("ICEN_AUTO_POST_BSKY_URL", "https://natto-5hv.pages.dev/api/auto-post-bsky")
 
 
 def weighted_len(s: str) -> int:
@@ -104,7 +105,7 @@ def build_bulletin_tweet() -> tuple[str, str]:
     return text, idem
 
 
-def post(text: str, idempotency_key: str | None = None) -> dict:
+def _post_to(endpoint: str, text: str, idempotency_key: str | None = None) -> dict:
     key = os.environ.get("ICEN_ADMIN_KEY")
     if not key:
         raise SystemExit("ICEN_ADMIN_KEY not set in environment")
@@ -112,7 +113,7 @@ def post(text: str, idempotency_key: str | None = None) -> dict:
     if idempotency_key:
         body["idempotency_key"] = idempotency_key
     req = urllib.request.Request(
-        ENDPOINT,
+        endpoint,
         data=json.dumps(body).encode("utf-8"),
         headers={
             "Authorization": f"Bearer {key}",
@@ -132,11 +133,27 @@ def post(text: str, idempotency_key: str | None = None) -> dict:
             msg = "(no body)"
         raise SystemExit(
             f"auto-post HTTP {e.code} {e.reason}\n"
-            f"  endpoint: {ENDPOINT}\n"
+            f"  endpoint: {endpoint}\n"
             f"  response body (first 600 chars):\n    {msg}"
         )
     except urllib.error.URLError as e:
         raise SystemExit(f"network error: {e}")
+
+
+def post(text: str, idempotency_key: str | None = None) -> dict:
+    """Post to X. Also mirrors to Bluesky if BSKY_HANDLE is configured server-side
+    (the bsky endpoint silently 503s when not configured, which we tolerate)."""
+    res_x = _post_to(ENDPOINT, text, idempotency_key)
+    # Best-effort cross-post; ignore Bluesky errors so X side stays the source of truth.
+    try:
+        _post_to(BSKY_ENDPOINT, text, ("bsky:" + idempotency_key) if idempotency_key else None)
+    except SystemExit as e:
+        msg = str(e)
+        if "503" in msg or "BSKY_HANDLE" in msg:
+            pass  # Bluesky not configured; expected.
+        else:
+            print(f"warn: bsky cross-post failed (continuing): {msg}", file=sys.stderr)
+    return res_x
 
 
 def main() -> None:
