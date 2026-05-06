@@ -194,15 +194,37 @@
       margin-bottom:32px;
       position:relative;
     }
-    h2.hero-title .red{color:var(--blood)}
+    h2.hero-title .red{
+      color:var(--blood);display:inline-block;
+      animation:red-punch .6s 1.9s cubic-bezier(.4,1.7,.4,1) both;
+    }
     h2.hero-title .strike{
       position:relative;display:inline-block;
     }
     h2.hero-title .strike::after{
       content:"";position:absolute;
       left:-6%;right:-6%;top:54%;height:10px;
-      background:var(--blood);transform:rotate(-3deg);
-      box-shadow:0 0 0 2px var(--blood-2) inset;
+      background:var(--blood);
+      box-shadow:0 0 0 2px var(--blood-2) inset, 0 4px 10px -2px rgba(139,26,26,.45);
+      transform-origin:left center;
+      transform:scaleX(0) rotate(-3deg);
+      animation:strike-draw .75s 1.2s cubic-bezier(.5,1.7,.4,1) both;
+    }
+    @keyframes strike-draw{
+      0%   {transform:scaleX(0) rotate(-3deg);opacity:0}
+      60%  {transform:scaleX(1.08) rotate(-1.5deg);opacity:1}
+      80%  {transform:scaleX(0.98) rotate(-3.5deg);opacity:1}
+      100% {transform:scaleX(1) rotate(-3deg);opacity:1}
+    }
+    @keyframes red-punch{
+      0%   {transform:scale(0.55);opacity:0;color:var(--ink);letter-spacing:.18em}
+      55%  {transform:scale(1.18);opacity:1;color:var(--blood);letter-spacing:-.01em}
+      78%  {transform:scale(0.96);opacity:1;color:var(--blood);letter-spacing:0}
+      100% {transform:scale(1);opacity:1;color:var(--blood);letter-spacing:-.01em}
+    }
+    @media (prefers-reduced-motion: reduce){
+      h2.hero-title .strike::after{animation:none;transform:scaleX(1) rotate(-3deg);opacity:1}
+      h2.hero-title .red{animation:none}
     }
     .hero-en{
       font-family:'DM Serif Display', serif;
