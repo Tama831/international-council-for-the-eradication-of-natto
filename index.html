@@ -241,6 +241,88 @@
     }
     .hero-side .meta b{color:var(--blood)}
 
+    /* OBJECTION BANNER — propaganda photo + animated X strike */
+    .objection{
+      padding:0 0 80px;border-bottom:1px solid var(--rule);
+      background:linear-gradient(180deg, transparent 0%, rgba(31,24,19,.04) 100%);
+    }
+    .objection-banner{
+      position:relative;margin:0 auto;
+      max-width:720px;aspect-ratio:1/1;
+      border:2px solid var(--ink);
+      box-shadow:0 18px 40px -18px rgba(31,24,19,.55), 0 4px 12px -4px rgba(31,24,19,.35);
+      overflow:hidden;background:var(--ink);
+    }
+    .objection-banner img{
+      display:block;width:100%;height:100%;object-fit:cover;
+      filter:contrast(1.04) saturate(0.92);
+      animation:photo-in 1.2s cubic-bezier(.2,.7,.2,1) both;
+    }
+    .objection-banner .ob-x{
+      position:absolute;inset:4%;
+      width:92%;height:92%;
+      pointer-events:none;
+      animation:x-strike 1.6s 0.7s cubic-bezier(.32,1.7,.4,1) both;
+      filter:drop-shadow(0 8px 16px rgba(139,26,26,.6));
+    }
+    .objection-banner .ob-label{
+      position:absolute;top:18px;left:22px;
+      font-family:'JetBrains Mono', monospace;
+      font-size:11px;letter-spacing:.28em;font-weight:800;
+      color:var(--paper);background:rgba(31,24,19,.78);
+      padding:6px 12px;text-transform:uppercase;
+      border-left:3px solid var(--blood);
+      animation:label-in 1s 1.4s both;
+    }
+    .objection-banner .ob-ref{
+      position:absolute;bottom:18px;right:22px;
+      font-family:'JetBrains Mono', monospace;
+      font-size:10px;letter-spacing:.18em;
+      color:var(--paper-3);background:rgba(31,24,19,.72);
+      padding:5px 10px;text-transform:uppercase;
+      animation:label-in 1s 1.6s both;
+    }
+    .objection-banner figcaption{
+      position:absolute;left:0;right:0;bottom:0;
+      padding:14px 22px;
+      font-family:'Shippori Mincho B1', serif;font-weight:700;font-size:14px;
+      color:var(--paper);background:linear-gradient(0deg, rgba(31,24,19,.9) 0%, rgba(31,24,19,0) 100%);
+      transform:translateY(100%);
+      animation:cap-rise 1s 1.9s both;
+    }
+    @keyframes photo-in{
+      from{opacity:0;transform:scale(1.06)}
+      to{opacity:1;transform:scale(1)}
+    }
+    @keyframes x-strike{
+      0%   {opacity:0;transform:scale(2.6) rotate(-22deg)}
+      55%  {opacity:1;transform:scale(0.9) rotate(-2deg)}
+      72%  {opacity:1;transform:scale(1.08) rotate(-3.5deg)}
+      100% {opacity:1;transform:scale(1) rotate(-4deg)}
+    }
+    @keyframes label-in{
+      from{opacity:0;transform:translateY(-6px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    @keyframes cap-rise{
+      from{transform:translateY(100%)}
+      to{transform:translateY(0)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .objection-banner img,
+      .objection-banner .ob-x,
+      .objection-banner .ob-label,
+      .objection-banner .ob-ref,
+      .objection-banner figcaption{animation:none}
+      .objection-banner figcaption{transform:none}
+    }
+    @media (max-width:720px){
+      .objection{padding:0 0 56px}
+      .objection-banner{margin:0 -28px;border-left:none;border-right:none;max-width:none;border-radius:0}
+      .objection-banner figcaption{font-size:12px;padding:10px 18px}
+      .objection-banner .ob-label{font-size:10px;padding:5px 10px;letter-spacing:.18em}
+    }
+
     /* large stamp */
     .stamp{
       position:absolute;
@@ -697,6 +779,24 @@
     </div>
   </section>
 
+  <!-- OBJECTION BANNER — photo of the enemy with the official mark of erasure -->
+  <section class="objection" aria-label="納豆 — 撲滅対象">
+    <div class="wrap">
+      <figure class="objection-banner">
+        <img src="assets/natto-photo.jpg" alt="納豆" width="1024" height="1024" loading="eager" fetchpriority="high" />
+        <span class="ob-label">OBJECTUM ABOLENDUM · 撲滅対象</span>
+        <span class="ob-ref">REF. ICEN/OBJ/<span data-year>2026</span>/Q2/001</span>
+        <svg class="ob-x" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+          <line x1="14" y1="14" x2="86" y2="86" stroke="#8B1A1A" stroke-width="11" stroke-linecap="square" />
+          <line x1="86" y1="14" x2="14" y2="86" stroke="#8B1A1A" stroke-width="11" stroke-linecap="square" />
+          <line x1="14" y1="14" x2="86" y2="86" stroke="#3a0808" stroke-width="1.5" />
+          <line x1="86" y1="14" x2="14" y2="86" stroke="#3a0808" stroke-width="1.5" />
+        </svg>
+        <figcaption class="ob-cap">本協議会は、上掲を撲滅対象第一号として恒久的に指定する。</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <!-- MISSION -->
   <section class="section" id="mission">
     <div class="wrap">
@@ -728,8 +828,6 @@
       <div class="sec-num">§ II — Indictment</div>
       <h3 class="sec-title">五つの罪状</h3>
       <p class="sec-sub">Five Counts Against the Defendant.</p>
-
-      <img src="assets/natto-banned.svg" alt="納豆 — 撲滅対象" class="charges-banner" loading="lazy" width="720" height="480" />
 
       <div class="charges-list">
         <article class="charge">
@@ -945,7 +1043,6 @@
               <option value="他">他</option>
             </select>
           </label>
-          <label class="form-row"><span>署名</span><input type="text" name="signature" maxlength="120" required placeholder="自筆署名"></label>
           <label class="form-row"><span>連絡先 (電子郵便)</span><input type="email" name="email" maxlength="200" required placeholder="you@example.com"></label>
           <!-- honeypot: humans don't see this; bots fill all fields. Server rejects if non-empty. -->
           <label class="hp" aria-hidden="true" tabindex="-1"><span>所属</span><input type="text" name="affiliation" tabindex="-1" autocomplete="off"></label>

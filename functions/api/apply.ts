@@ -39,7 +39,7 @@ interface Env {
   ICEN_HMAC_SALT?: string;
 }
 
-const REQUIRED_FIELDS = ["name", "region", "breakfast_main", "hate_reason", "signature"] as const;
+const REQUIRED_FIELDS = ["name", "region", "breakfast_main", "hate_reason"] as const;
 
 export const onRequestOptions: PagesFunction<Env> = async ({ request }) => {
   return new Response(null, { status: 204, headers: corsHeaders(request.headers.get("Origin")) });
