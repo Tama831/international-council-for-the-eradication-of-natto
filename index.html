@@ -1213,8 +1213,7 @@
             `居住国 / 都道府県: ${data.region}\n` +
             `朝食における主食: ${data.breakfast_main}\n` +
             `納豆嫌悪歴(年): ${data.hate_years}\n` +
-            `嫌悪の主因: ${data.hate_reason}\n` +
-            `署名: ${data.signature}\n\n` +
+            `嫌悪の主因: ${data.hate_reason}\n\n` +
             `※本フォームは現在、自動受理システムを準備中につき、メーラー経由での送信となります。`
           );
           window.location.href = `mailto:${data.email}?subject=${subject}&body=${body}`;
