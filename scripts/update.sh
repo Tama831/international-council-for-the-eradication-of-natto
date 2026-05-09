@@ -69,7 +69,8 @@ print(f'{e["date"]} {e["title"]}')
 PY
 )"
 
-git add data/activities.json data/bulletins.json data/evergreen_state.json index.html feed.xml
+git add data/activities.json data/bulletins.json index.html feed.xml
+[[ -f data/evergreen_state.json ]] && git add data/evergreen_state.json
 git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
   commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
 git push origin HEAD
