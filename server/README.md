@@ -24,7 +24,7 @@
 
 | 変数 | 必須 | 説明 |
 |---|---|---|
-| `GMAIL_USER` | △ | 送信元 Gmail アドレス (default: `ly.renum@gmail.com`) |
+| `GMAIL_USER` | **必須** | 送信元 Gmail アドレス |
 | `GMAIL_APP_PASSWORD` | **必須** | Gmail App Password ([作成方法](https://myaccount.google.com/apppasswords)) |
 | `ICEN_FROM_NAME` | △ | 表示名 (default: `国際納豆撲滅協議会 事務局 / ICEN Secretariat`) |
 | `ICEN_FROM_ADDR` | △ | From メールアドレス (default: `GMAIL_USER`) |
@@ -33,10 +33,11 @@
 ## ローカルテスト
 
 ```bash
-cd /home/tama/projects/natto-eradication/server
+cd <repo>/server
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 
+export GMAIL_USER="you@example.com"
 export GMAIL_APP_PASSWORD="xxxx-xxxx-xxxx-xxxx"  # 16桁
 .venv/bin/uvicorn app:app --host 127.0.0.1 --port 8731
 
@@ -52,26 +53,30 @@ curl -s -X POST http://127.0.0.1:8731/apply \
   }'
 ```
 
-## 本番デプロイ (Hetzner)
+## 本番デプロイ (任意の Linux サーバ)
 
-`infra/systemd/icen-api.service` と `infra/nginx/icen-api.conf` を参照。
+`infra/systemd/icen-api.service` と `infra/nginx/icen-api.conf` を参照
+(両ファイル内のパス・User/Group は環境に合わせて編集)。
 
 ```bash
 # 1. venv 作成 + deps
-cd /home/tama/projects/natto-eradication/server
+cd <repo>/server
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
-# 2. App Password を /home/tama/ai-agent-team/.env に追記
-echo 'GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx' >> /home/tama/ai-agent-team/.env
+# 2. credentials を ${ICEN_ENV_FILE:-~/.icen.env} に追記
+cat >> "${ICEN_ENV_FILE:-$HOME/.icen.env}" <<'EOF'
+GMAIL_USER=you@example.com
+GMAIL_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
+EOF
 
-# 3. systemd 登録
-sudo cp /home/tama/projects/natto-eradication/infra/systemd/icen-api.service /etc/systemd/system/
+# 3. systemd 登録 (unit ファイル内の path / User / Group を環境に合わせて編集)
+sudo cp infra/systemd/icen-api.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now icen-api
 sudo systemctl status icen-api
 
 # 4. nginx (既存サイトに /icen/ ロケーション追加)
-sudo cp /home/tama/projects/natto-eradication/infra/nginx/icen-api.conf /etc/nginx/snippets/
+sudo cp infra/nginx/icen-api.conf /etc/nginx/snippets/
 # 既存 server ブロックに  include snippets/icen-api.conf;  を追加
 sudo nginx -t && sudo systemctl reload nginx
 

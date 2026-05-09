@@ -36,12 +36,10 @@
 ## ローカル確認
 
 ```bash
-cd /home/tama/projects/natto-eradication
+cd <repo>
 python3 -m http.server 8000
 # → http://localhost:8000 で確認
 ```
-
-Mac から見る場合は git pull して同様に。
 
 ## 自動更新パイプライン
 
@@ -75,27 +73,28 @@ Mac から見る場合は git pull して同様に。
 export GEMINI_API_KEY="..."        # 必須 (Gemini 2.5 Flash 使用)
 ```
 
-`/home/tama/ai-agent-team/.env` に既存のキーがあるので、`update.sh` 冒頭で source 済み。
+`update.sh` は冒頭で `${ICEN_ENV_FILE:-$HOME/.icen.env}` を source する。
+このファイルに `GEMINI_API_KEY=...` を 1 行書いておけば OK。
 
-### Cron 例 (Hetzner)
+### Cron 例
 
 scheduler.py が今日 generate するか判定するので、**毎日1回叩いてOK**。
 
 ```cron
-# 毎朝 9:00 JST に scheduler を回す。今日が23日サイクル日 or 3月第3日曜+3日後の水曜なら発火、
-# それ以外は中で skip 判定 (たまに ticker だけローテ)。
-0 9 * * * cd /home/tama/projects/natto-eradication && bash scripts/update.sh >> /var/log/icen.log 2>&1
+# 毎朝 9:00 (server local time) に scheduler を回す。今日が23日サイクル日
+# or 3月第3日曜+3日後の水曜なら発火、それ以外は skip 判定 (たまに ticker だけローテ)。
+0 9 * * * cd ~/icen && bash scripts/update.sh >> /var/log/icen.log 2>&1
 ```
 
 ワンライナー登録:
 ```bash
-(crontab -l 2>/dev/null; echo "0 9 * * * cd /home/tama/projects/natto-eradication && bash scripts/update.sh >> /var/log/icen.log 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "0 9 * * * cd ~/icen && bash scripts/update.sh >> /var/log/icen.log 2>&1") | crontab -
 ```
 
 ### 手動実行
 
 ```bash
-cd /home/tama/projects/natto-eradication
+cd <repo>
 bash scripts/update.sh
 ```
 
@@ -131,7 +130,8 @@ python3 scripts/render.py              # index.html を data から再描画
 #### A. Brevo (メール送信業者) を準備
 1. <https://www.brevo.com/> に sign up (無料、メール認証)
 2. ダッシュボード右上の「**SMTP & API**」→「**API キー**」→ 新規作成 → コピー
-3. 「**Senders & IP**」→「**Senders**」→ ly.renum@gmail.com を追加 → 受信した認証メールのリンクをクリック
+3. 「**Senders & IP**」→「**Senders**」→ 自分の送信元アドレス (ICEN 事務局として使う Gmail 等) を追加
+   → 受信した認証メールのリンクをクリック
    - これをやらないと「送信元未承認」エラーで届かない
 
 #### B. Cloudflare Pages にデプロイ
@@ -220,10 +220,10 @@ agent-team prod への影響を避けるため CF Pages 版に切り替えたの
 | `BREVO_API_KEY` | Secret | Brevo Transactional API | ✅ |
 | `TURNSTILE_SECRET_KEY` | Secret | Turnstile siteverify | ✅ (有効化後) |
 | `ICEN_NUMBER_SALT` | Secret | 申請番号 HMAC 用 salt (`openssl rand -hex 32`) | △ (未設定なら旧seq fallback) |
-| `ICEN_SENDER_EMAIL` | Plaintext | 送信元アドレス (default: ly.renum@gmail.com) | △ |
+| `ICEN_SENDER_EMAIL` | Plaintext | 送信元アドレス | ✅ |
 | `ICEN_SENDER_NAME` | Plaintext | 送信元表示名 | △ |
 | `ICEN_PUBLIC_BASE_URL` | Plaintext | 確認リンクの host (default: https://natto-5hv.pages.dev) | △ |
-| `ICEN_ALERT_EMAIL` | Plaintext | abuse 通知の宛先 (default: ly.renum@gmail.com) | △ |
+| `ICEN_ALERT_EMAIL` | Plaintext | abuse 通知の宛先 (未設定なら通知 skip) | △ |
 | `ICEN_ADMIN_KEY` | Secret | X 自動投稿エンドポイントの shared secret。Hetzner cron 側 `.env` にも同値を設定 | △ (X 自動投稿時) |
 | `X_API_KEY` | Secret | X Developer Portal の API Key (Consumer Key) | △ (X 自動投稿時) |
 | `X_API_KEY_SECRET` | Secret | X API Key Secret (Consumer Secret) | △ (X 自動投稿時) |

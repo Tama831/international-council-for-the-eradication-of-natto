@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ICEN auto-update: generate activity (always) + maybe rotate bulletin → render → commit & push.
-# Use from cron: 0 9 */4 * * cd /home/tama/projects/natto-eradication && bash scripts/update.sh >> /var/log/icen.log 2>&1
+# Use from cron: 0 9 */4 * * cd ~/icen && bash scripts/update.sh >> /var/log/icen.log 2>&1
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -8,14 +8,15 @@ ROOT="$(pwd)"
 TS="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 echo "─── ICEN update @ ${TS} ───"
 
-# Load GEMINI_API_KEY from agent-team .env if present
-if [[ -z "${GEMINI_API_KEY:-}" && -f /home/tama/ai-agent-team/.env ]]; then
+# Load secrets from ICEN_ENV_FILE (default: ~/.icen.env) if present
+ICEN_ENV_FILE="${ICEN_ENV_FILE:-$HOME/.icen.env}"
+if [[ -z "${GEMINI_API_KEY:-}" && -f "${ICEN_ENV_FILE}" ]]; then
   set -a
   # shellcheck disable=SC1091
-  source /home/tama/ai-agent-team/.env
+  source "${ICEN_ENV_FILE}"
   set +a
 fi
-: "${GEMINI_API_KEY:?GEMINI_API_KEY is required (export it or set in /home/tama/ai-agent-team/.env)}"
+: "${GEMINI_API_KEY:?GEMINI_API_KEY is required (export it or set in \${ICEN_ENV_FILE})}"
 
 DECISION="$(python3 scripts/scheduler.py)"
 echo "scheduler decision: ${DECISION}"
@@ -69,7 +70,7 @@ PY
 )"
 
 git add data/activities.json data/bulletins.json data/evergreen_state.json index.html feed.xml
-git -c user.name="ICEN Secretariat" -c user.email="ly.renum@gmail.com" \
+git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
   commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
 git push origin HEAD
 

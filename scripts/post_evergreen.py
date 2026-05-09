@@ -10,7 +10,7 @@ Usage:
     python3 scripts/post_evergreen.py --dry-run   # just print which one would be picked
 
 Env required:
-    ICEN_ADMIN_KEY  (auto-loaded from /home/tama/ai-agent-team/.env if missing)
+    ICEN_ADMIN_KEY  (auto-loaded from $ICEN_ENV_FILE if missing)
 """
 from __future__ import annotations
 import argparse, json, os, sys

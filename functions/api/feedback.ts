@@ -1,5 +1,5 @@
 // POST /api/feedback — generic feedback intake (translation fixes, bugs, suggestions).
-// No data persistence; just relays to ly.renum@gmail.com via Brevo.
+// No data persistence; just relays to ICEN_ALERT_EMAIL via Brevo.
 
 import {
   jsonResponse,
@@ -102,8 +102,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   ].filter(Boolean).join("\n");
 
   try {
+    if (!env.ICEN_ALERT_EMAIL) {
+      console.error("feedback received but ICEN_ALERT_EMAIL not set — dropping");
+      return jsonResponse({ ok: false, detail: "feedback channel not configured" }, 503, origin);
+    }
     await sendEmail(env.BREVO_API_KEY, {
-      to: env.ICEN_ALERT_EMAIL || "ly.renum@gmail.com",
+      to: env.ICEN_ALERT_EMAIL,
       subject: `[ICEN feedback] ${CATEGORY_LABEL[category]}${lang ? ` (${lang})` : ""}`,
       text,
       senderEmail: env.ICEN_SENDER_EMAIL,

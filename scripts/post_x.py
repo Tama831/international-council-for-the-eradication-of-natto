@@ -6,7 +6,7 @@ Usage:
     python3 scripts/post_x.py --kind=bulletin
     python3 scripts/post_x.py --kind=raw --text="custom text..."
 
-Env required (sourced from /home/tama/ai-agent-team/.env via update.sh):
+Env required (sourced from $ICEN_ENV_FILE via update.sh):
     ICEN_ADMIN_KEY     — must match the value set as a Secret in CF Pages
 
 The tweet text is composed from the latest activity / latest bulletin
@@ -29,7 +29,7 @@ def load_dotenv_if_missing(*keys: str) -> None:
     if all(os.environ.get(k) for k in keys):
         return
     candidates = [
-        Path("/home/tama/ai-agent-team/.env"),
+        Path(os.environ.get("ICEN_ENV_FILE") or (Path.home() / ".icen.env")),
         ROOT / ".env",
     ]
     for path in candidates:

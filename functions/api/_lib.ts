@@ -276,7 +276,8 @@ export async function maybeAlert(
   threshold: number,
   detail: string,
 ): Promise<void> {
-  const alertEmail = env.ICEN_ALERT_EMAIL || "ly.renum@gmail.com";
+  const alertEmail = env.ICEN_ALERT_EMAIL;
+  if (!alertEmail) return; // no alert recipient configured — skip
   const hour = Math.floor(Date.now() / 1000 / 3600);
   const counterKey = `alert-cnt:${topic}:${hour}`;
   const sentKey = `alert-sent:${topic}:${hour}`;
@@ -331,7 +332,10 @@ export async function sendEmail(
     replyTo?: string;
   },
 ): Promise<void> {
-  const senderEmail = opts.senderEmail ?? "ly.renum@gmail.com";
+  const senderEmail = opts.senderEmail;
+  if (!senderEmail) {
+    throw new Error("sendEmail: senderEmail is required (set ICEN_SENDER_EMAIL env var)");
+  }
   const senderName = opts.senderName ?? "国際納豆撲滅協議会 事務局 / ICEN Secretariat";
   const replyTo = opts.replyTo ?? senderEmail;
   const r = await fetch("https://api.brevo.com/v3/smtp/email", {

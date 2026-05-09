@@ -10,7 +10,7 @@
 | `BREVO_API_KEY` | Cloudflare Pages > Settings > Variables (Secret) | Brevo > SMTP & API > API Keys | 全自動返信メール送信 |
 | `TURNSTILE_SECRET_KEY` | 同上 | Cloudflare > Turnstile > Site detail | フォーム CAPTCHA verify |
 | `ICEN_NUMBER_SALT` (任意) | 同上 | 自分で生成 (`openssl rand -hex 32`) | 申請番号の HMAC 化 |
-| `GEMINI_API_KEY` | Hetzner `/home/tama/ai-agent-team/.env` | Google AI Studio > API Keys | 活動報告/緊急声明の自動生成 |
+| `GEMINI_API_KEY` | サーバ `${ICEN_ENV_FILE:-~/.icen.env}` | Google AI Studio > API Keys | 活動報告/緊急声明の自動生成 |
 
 ## 手順
 
@@ -40,14 +40,14 @@ salt を変える場合は事前に KV の `email:*` を全件 export → 新 sa
 ### Gemini API Key
 
 1. <https://aistudio.google.com/apikey> で旧キー削除 → 新規発行
-2. Hetzner: `nano /home/tama/ai-agent-team/.env` で `GEMINI_API_KEY=...` を更新
-3. cron が次に走る時 (or `bash /home/tama/projects/natto-eradication/scripts/update.sh` で手動) 検証
+2. サーバ: `nano "${ICEN_ENV_FILE:-$HOME/.icen.env}"` で `GEMINI_API_KEY=...` を更新
+3. cron が次に走る時 (or `bash <repo>/scripts/update.sh` で手動) 検証
 
 ## チェック表 (毎回これを埋めてコミット)
 
 ```
 date:        2026-MM-DD
-who:         tama
+who:         (operator handle)
 brevo:       rotated [Y/N]
 turnstile:   rotated [Y/N]
 gemini:      rotated [Y/N]

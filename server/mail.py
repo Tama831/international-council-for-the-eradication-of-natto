@@ -1,7 +1,7 @@
 """Gmail SMTP sender for ICEN auto-replies.
 
 Requires env vars:
-  GMAIL_USER          (default: ly.renum@gmail.com)
+  GMAIL_USER          (sender Gmail address — required)
   GMAIL_APP_PASSWORD  (Gmail App Password — required)
   ICEN_FROM_NAME      (display name, default: 国際納豆撲滅協議会 事務局 / ICEN Secretariat)
 """
@@ -12,7 +12,7 @@ from pathlib import Path
 
 SMTP_HOST = os.environ.get("ICEN_SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.environ.get("ICEN_SMTP_PORT", "587"))
-SMTP_USER = os.environ.get("GMAIL_USER", "ly.renum@gmail.com")
+SMTP_USER = os.environ.get("GMAIL_USER", "")
 SMTP_PASS = os.environ.get("GMAIL_APP_PASSWORD", "")
 FROM_NAME = os.environ.get("ICEN_FROM_NAME", "国際納豆撲滅協議会 事務局 / ICEN Secretariat")
 FROM_ADDR = os.environ.get("ICEN_FROM_ADDR", SMTP_USER)
@@ -28,6 +28,8 @@ def _render(name: str, **vars) -> str:
 
 
 def _send(to: str, subject: str, body: str) -> None:
+    if not SMTP_USER:
+        raise RuntimeError("GMAIL_USER not configured")
     if not SMTP_PASS:
         raise RuntimeError("GMAIL_APP_PASSWORD not configured")
     msg = EmailMessage()

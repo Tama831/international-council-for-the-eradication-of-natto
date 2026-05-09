@@ -4,11 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
-User=tama
-Group=tama
-WorkingDirectory=/home/tama/projects/natto-eradication/server
-EnvironmentFile=/home/tama/ai-agent-team/.env
-ExecStart=/home/tama/projects/natto-eradication/server/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8731
+User=icen
+Group=icen
+WorkingDirectory=/srv/icen/server
+EnvironmentFile=/etc/icen.env
+ExecStart=/srv/icen/server/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8731
 Restart=on-failure
 RestartSec=3
 
@@ -17,7 +17,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/tama/projects/natto-eradication/data
+ReadWritePaths=/srv/icen/data
 
 [Install]
 WantedBy=multi-user.target
