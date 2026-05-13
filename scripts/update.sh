@@ -58,6 +58,7 @@ esac
 if (( GENERATED_ACTIVITY || GENERATED_BULLETIN )); then
   python3 scripts/render.py
   python3 scripts/render_feed.py
+  python3 scripts/render_sitemap.py
 
   if [[ -n "$(git status --porcelain)" ]]; then
     LATEST="$(python3 - <<'PY'
@@ -68,7 +69,7 @@ print(f'{e["date"]} {e["title"]}')
 PY
     )"
 
-    git add data/activities.json data/bulletins.json index.html feed.xml
+    git add data/activities.json data/bulletins.json index.html feed.xml sitemap.xml
     [[ -f data/evergreen_state.json ]] && git add data/evergreen_state.json
     git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
       commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"

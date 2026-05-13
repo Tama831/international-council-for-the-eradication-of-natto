@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>納豆耐性チェック ─ あなたは観察国候補か、それとも正式加盟候補か｜国際納豆撲滅協議会</title>
+  <meta name="description" content="5つの問いで判定する、納豆に対する貴殿の耐性スコア。あなたは観察国候補？それとも正式加盟候補？納豆嫌い・苦手な方の連帯感を可視化する非公式診断 (架空団体・風刺)。" />
+  <link rel="canonical" href="https://natto-5hv.pages.dev/quiz.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="納豆耐性チェック ─ あなたは観察国候補？正式加盟候補？" />
+  <meta property="og:description" content="5問で判定する、納豆に対する貴殿の耐性スコア。風刺診断・架空団体ICEN。" />
+  <meta property="og:url" content="https://natto-5hv.pages.dev/quiz.html" />
+  <meta property="og:image" content="https://natto-5hv.pages.dev/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://natto-5hv.pages.dev/assets/og.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" />
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700;900&family=Shippori+Mincho+B1:wght@500;700;800&display=swap" /></noscript>
+  <style>
+    :root{--paper:#F2EAD8;--paper-2:#E8DDC4;--paper-3:#D9C9A6;--ink:#1F1813;--ink-2:#3A2E25;--blood:#8B1A1A;--enemy:#C4A02C;--rule:rgba(31,24,19,.18)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Noto Serif JP',serif;color:var(--ink);background:var(--paper);font-feature-settings:"palt";line-height:1.7;min-height:100vh;display:flex;flex-direction:column;position:relative}
+    body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0 0.07  0 0 0 0.32 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");mix-blend-mode:multiply;opacity:.4;pointer-events:none;z-index:1000}
+    .wrap{max-width:680px;margin:0 auto;padding:0 28px;flex:1;position:relative;z-index:1}
+    .topbar{border-bottom:1px solid var(--rule);background:var(--paper-2);font-size:11px;letter-spacing:.18em}
+    .topbar .row{display:flex;justify-content:space-between;align-items:center;max-width:680px;margin:0 auto;padding:8px 28px;text-transform:uppercase;color:var(--ink-2)}
+    .topbar a{color:var(--blood);text-decoration:none;font-weight:700}
+    header.doc{padding:56px 0 28px;border-bottom:1px solid var(--rule)}
+    .kicker{display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.3em;color:var(--blood);text-transform:uppercase;font-weight:700;margin-bottom:18px}
+    .kicker::before{content:"";display:inline-block;width:44px;height:1px;background:var(--blood)}
+    h1{font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:clamp(30px,4.4vw,42px);line-height:1.25;margin-bottom:12px}
+    .en{font-family:'DM Serif Display',serif;font-style:italic;font-size:18px;color:var(--ink-2)}
+    main{padding:32px 0 56px}
+    .lead{font-size:15px;margin-bottom:24px;color:var(--ink-2)}
+
+    /* progress bar */
+    .progress{margin-bottom:32px}
+    .progress .bar{height:4px;background:var(--paper-3);overflow:hidden}
+    .progress .bar > div{height:100%;background:var(--blood);transition:width .4s cubic-bezier(.2,.7,.2,1);width:0}
+    .progress .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--ink-2);margin-top:8px;text-transform:uppercase}
+
+    /* question card */
+    .q-card{background:var(--paper-2);border:1.5px solid var(--ink);padding:32px 28px;margin-bottom:24px;position:relative}
+    .q-card::before{content:"";position:absolute;inset:5px;border:1px solid rgba(31,24,19,.12);pointer-events:none}
+    .q-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--blood);margin-bottom:12px;text-transform:uppercase}
+    .q-text{font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:22px;line-height:1.5;margin-bottom:24px}
+    .q-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .q-btn{
+      flex:1;min-width:120px;cursor:pointer;font:inherit;
+      padding:16px 22px;background:transparent;color:var(--ink);
+      border:2px solid var(--ink);
+      font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:16px;letter-spacing:.06em;
+      transition:.15s;
+    }
+    .q-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-1px)}
+    .q-btn.yes:hover{background:var(--blood);border-color:var(--blood);color:var(--paper)}
+
+    /* result card */
+    #result{display:none}
+    #result.show{display:block;animation:result-in .8s cubic-bezier(.2,.7,.2,1) both}
+    @keyframes result-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .r-card{background:var(--ink);color:var(--paper);padding:40px 32px;position:relative}
+    .r-card::before{content:"";position:absolute;inset:6px;border:1px solid rgba(242,234,216,.25);pointer-events:none}
+    .r-rank{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.32em;color:var(--enemy);text-transform:uppercase;margin-bottom:14px}
+    .r-title{font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:clamp(28px,4.4vw,40px);line-height:1.2;color:var(--paper);margin-bottom:8px}
+    .r-en{font-family:'DM Serif Display',serif;font-style:italic;font-size:18px;color:var(--paper-3);margin-bottom:24px}
+    .r-score{font-family:'DM Serif Display',serif;font-size:80px;line-height:1;color:var(--blood);margin:14px 0 6px}
+    .r-score::after{content:"/ 5";font-size:.35em;color:var(--paper-3);font-style:italic;margin-left:8px}
+    .r-body{font-size:15px;line-height:1.85;color:var(--paper);margin-bottom:24px}
+    .r-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .r-actions a{
+      padding:10px 16px;background:var(--enemy);color:var(--ink);
+      font-family:'Shippori Mincho B1',serif;font-weight:800;font-size:13px;letter-spacing:.14em;
+      text-decoration:none;border:2px solid var(--enemy);transition:.15s;
+    }
+    .r-actions a:hover{background:transparent;color:var(--enemy)}
+    .r-restart{
+      margin-top:16px;background:transparent !important;color:var(--paper-3) !important;border:1px dashed rgba(242,234,216,.4) !important;cursor:pointer;font:inherit;
+    }
+    .r-restart:hover{color:var(--paper) !important;border-color:var(--paper) !important}
+
+    /* hidden when answered */
+    .hidden{display:none !important}
+
+    footer{margin-top:auto;border-top:3px double var(--ink);background:var(--paper-2);padding:32px 0;position:relative;z-index:1}
+    footer .row{max-width:680px;margin:0 auto;padding:0 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--ink-2)}
+    footer a{color:var(--blood);text-decoration:none}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Quiz",
+    "name": "納豆耐性チェック",
+    "about": {"@type": "Thing", "name": "Natto tolerance assessment"},
+    "educationalUse": "self-assessment",
+    "url": "https://natto-5hv.pages.dev/quiz.html"
+  }
+  </script>
+</head>
+<body>
+  <div class="topbar">
+    <div class="row">
+      <span>REF. ICEN/QUIZ/<span data-year>2026</span></span>
+      <span><a href="index.html">← トップへ戻る</a></span>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header class="doc">
+      <div class="kicker">Tolerance Assessment · 自己診断</div>
+      <h1>納豆耐性チェック</h1>
+      <p class="en"><i>5 questions to assess your natto tolerance.</i></p>
+    </header>
+
+    <main>
+      <p class="lead">国際納豆撲滅協議会 (架空) が定める非公式の自己診断です。5 つの問いに答えると、貴殿の納豆耐性スコア (0〜5) と該当する協議会内ステータスが判定されます。</p>
+
+      <div class="progress" id="progress">
+        <div class="bar"><div id="bar-fill"></div></div>
+        <div class="label" id="bar-label">第 1 問 / 5</div>
+      </div>
+
+      <div id="quiz">
+        <!-- questions injected via JS -->
+      </div>
+
+      <div id="result">
+        <div class="r-card">
+          <div class="r-rank" id="r-rank">SCORE</div>
+          <div class="r-title" id="r-title">—</div>
+          <p class="r-en" id="r-en"><i>—</i></p>
+          <div class="r-score" id="r-score">0</div>
+          <p class="r-body" id="r-body">—</p>
+          <div class="r-actions">
+            <a id="share-x" href="#" target="_blank" rel="noopener">X (Twitter) でシェア</a>
+            <a id="share-bsky" href="#" target="_blank" rel="noopener">Bluesky でシェア</a>
+            <a href="index.html">トップへ</a>
+          </div>
+          <button class="r-restart" onclick="restart()" style="margin-top:18px;padding:10px 16px;font-family:'Shippori Mincho B1',serif;font-weight:700;font-size:13px;letter-spacing:.14em">もう一度受診する</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="row">
+      <span>© 1972–<span data-year>2026</span> INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
+      <span><a href="faq.html">FAQ</a> · <a href="privacy.html">Privacy</a> · <a href="index.html">JP top</a></span>
+    </div>
+    <script>document.querySelectorAll('[data-year]').forEach(el => el.textContent = String(new Date().getUTCFullYear()));</script>
+  </footer>
+
+  <script>
+  // ─── Quiz data ───
+  // Each question: yes = +1 point toward "anti-natto" / membership. Higher = more natto-averse.
+  const QUESTIONS = [
+    { num: 1, text: "朝食の食卓に納豆があると、まず視線をそらしたくなる。" },
+    { num: 2, text: "納豆の匂いが部屋に残ると、その日の気分が少し沈む。" },
+    { num: 3, text: "糸が皿や箸につくのが、許容できないレベルで嫌だ。" },
+    { num: 4, text: "「日本人なんだから納豆食べるよね？」と聞かれてうんざりしたことがある。" },
+    { num: 5, text: "周囲が納豆を食べていても、自分は食べない選択を堂々と守りたい。" },
+  ];
+
+  // ─── Result tiers ───
+  const TIERS = [
+    {
+      min: 0,
+      rank: "RANK · ⅰ 観察国候補",
+      title: "観察国候補",
+      en: "Candidate Observer State",
+      body: "貴殿は納豆に対して比較的寛容な立場にあります。本協議会の門は重く、貴殿のような穏健派の方には少々狭いかもしれません。ご友人で苦手な方がいたら、無理に勧めない優しさをお持ちいただければ、それで十分でございます。",
+    },
+    {
+      min: 1,
+      rank: "RANK · ⅱ 観察国",
+      title: "観察国",
+      en: "Observer State",
+      body: "貴殿は納豆と一定の距離を保つ姿勢を備えております。本協議会では正式加盟ではなく観察国として、貴殿の慎重な姿勢を歓迎いたします。朝食の自由は守られねばなりません。",
+    },
+    {
+      min: 2,
+      rank: "RANK · ⅲ 準加盟員",
+      title: "準加盟員",
+      en: "Associate Member",
+      body: "貴殿は明確に納豆との戦線に立っておられます。本協議会は貴殿を準加盟員として認定し、いずれ正式加盟へお進みいただくことを期待しております。30秒沈黙課題のご準備を。",
+    },
+    {
+      min: 3,
+      rank: "RANK · ⅳ 正式加盟員候補",
+      title: "正式加盟員候補",
+      en: "Full Membership Candidate",
+      body: "貴殿は本協議会の理念にきわめて深く共鳴されておられます。京都密約第三条の規定により、貴殿を正式加盟員候補に推挙いたします。粘り、断つべし。",
+    },
+    {
+      min: 5,
+      rank: "RANK · ⅴ 常任理事候補",
+      title: "常任理事候補",
+      en: "Standing Council Candidate",
+      body: "貴殿は本協議会創設の理念そのものを体現しておられます。第54回京都密会への招待状を、来年3月の第3日曜にお送りする可能性が、極めて高うございます。粘り、断つべし。",
+    },
+  ];
+
+  // ─── State ───
+  let answers = [];
+  let cur = 0;
+
+  function renderQuestion() {
+    const q = QUESTIONS[cur];
+    const root = document.getElementById('quiz');
+    root.innerHTML = `
+      <div class="q-card">
+        <div class="q-num">第 ${q.num} 問 / 5</div>
+        <div class="q-text">${q.text}</div>
+        <div class="q-actions">
+          <button class="q-btn yes" onclick="answer(1)">はい</button>
+          <button class="q-btn"     onclick="answer(0)">いいえ</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('bar-fill').style.width = ((cur) / QUESTIONS.length * 100) + '%';
+    document.getElementById('bar-label').textContent = `第 ${q.num} 問 / 5`;
+  }
+
+  function answer(v) {
+    answers.push(v);
+    cur += 1;
+    if (cur < QUESTIONS.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function tierFor(score) {
+    // Highest matching min wins
+    let pick = TIERS[0];
+    for (const t of TIERS) {
+      if (score >= t.min) pick = t;
+    }
+    return pick;
+  }
+
+  function showResult() {
+    const score = answers.reduce((a, b) => a + b, 0);
+    const tier = tierFor(score);
+    document.getElementById('progress').classList.add('hidden');
+    document.getElementById('quiz').classList.add('hidden');
+    const r = document.getElementById('result');
+    r.classList.add('show');
+    document.getElementById('r-rank').textContent = tier.rank;
+    document.getElementById('r-title').textContent = tier.title;
+    document.getElementById('r-en').innerHTML = '<i>' + tier.en + '</i>';
+    document.getElementById('r-score').textContent = String(score);
+    document.getElementById('r-body').textContent = tier.body;
+
+    const url = 'https://natto-5hv.pages.dev/quiz.html';
+    const xText = `納豆耐性チェックの結果: ${tier.title} (${score}/5)\n\n国際納豆撲滅協議会の非公式自己診断より\n#粘り断つべし\n`;
+    document.getElementById('share-x').href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(xText) + '&url=' + encodeURIComponent(url);
+    document.getElementById('share-bsky').href = 'https://bsky.app/intent/compose?text=' + encodeURIComponent(xText + '\n' + url);
+
+    // store result in URL hash for re-share without retake
+    history.replaceState(null, '', '#score=' + score);
+  }
+
+  function restart() {
+    answers = [];
+    cur = 0;
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('progress').classList.remove('hidden');
+    document.getElementById('quiz').classList.remove('hidden');
+    history.replaceState(null, '', '#');
+    renderQuestion();
+  }
+
+  renderQuestion();
+  </script>
+</body>
+</html>

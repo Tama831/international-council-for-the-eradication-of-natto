@@ -3,6 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://natto-5hv.pages.dev/</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ja" href="https://natto-5hv.pages.dev/" />
@@ -10,51 +11,67 @@
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/welcome.html</loc>
+    <lastmod>2026-05-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://natto-5hv.pages.dev/faq.html</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://natto-5hv.pages.dev/privacy</loc>
+    <lastmod>2026-05-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/delete-request.html</loc>
+    <lastmod>2026-05-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/feedback.html</loc>
+    <lastmod>2026-05-05</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://natto-5hv.pages.dev/faq.html</loc>
+    <loc>https://natto-5hv.pages.dev/quiz.html</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/charges/visual.html</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/charges/smell.html</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/charges/touch.html</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/charges/ethics.html</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://natto-5hv.pages.dev/charges/social.html</loc>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
