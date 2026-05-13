@@ -39,12 +39,13 @@ case "$DECISION" in
     fi
     ;;
   skip)
-    # 7% chance to refresh just the ticker even on quiet days
+    # 7% chance to refresh just the ticker even on quiet days.
+    # On the other 93%, no content is generated — but we still fall through
+    # to the X auto-post block below so the evergreen pool can fire.
     if (( RANDOM % 100 < 7 )); then
       python3 scripts/generate_bulletin.py && GENERATED_BULLETIN=1
     else
-      echo "nothing to do today"
-      exit 0
+      echo "no content generation today (will check evergreen X post below)"
     fi
     ;;
   *)
@@ -53,27 +54,29 @@ case "$DECISION" in
     ;;
 esac
 
-python3 scripts/render.py
-python3 scripts/render_feed.py
+# Render + commit only if something was actually generated this run.
+if (( GENERATED_ACTIVITY || GENERATED_BULLETIN )); then
+  python3 scripts/render.py
+  python3 scripts/render_feed.py
 
-if [[ -z "$(git status --porcelain)" ]]; then
-  echo "no changes — skipping commit"
-  exit 0
-fi
-
-LATEST="$(python3 - <<'PY'
+  if [[ -n "$(git status --porcelain)" ]]; then
+    LATEST="$(python3 - <<'PY'
 import json, pathlib
 data = json.loads(pathlib.Path("data/activities.json").read_text(encoding="utf-8"))
 e = data["events"][-1]
 print(f'{e["date"]} {e["title"]}')
 PY
-)"
+    )"
 
-git add data/activities.json data/bulletins.json index.html feed.xml
-[[ -f data/evergreen_state.json ]] && git add data/evergreen_state.json
-git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
-  commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
-git push origin HEAD
+    git add data/activities.json data/bulletins.json index.html feed.xml
+    [[ -f data/evergreen_state.json ]] && git add data/evergreen_state.json
+    git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
+      commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
+    git push origin HEAD
+  else
+    echo "no file changes — skipping commit"
+  fi
+fi
 
 # Auto-post to X (best-effort; failures don't break the pipeline).
 # Requires ICEN_ADMIN_KEY in env; idempotency keys prevent double-posts.
@@ -95,6 +98,13 @@ if [[ -n "${ICEN_ADMIN_KEY:-}" ]]; then
     if (( RANDOM % 100 < 40 )); then
       echo "─ posting evergreen to X ─"
       python3 scripts/post_evergreen.py || echo "X evergreen post failed (continuing)"
+      # Commit + push the evergreen rotation state if it changed
+      if [[ -n "$(git status --porcelain data/evergreen_state.json 2>/dev/null)" ]]; then
+        git add data/evergreen_state.json
+        git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
+          commit -m "chore: evergreen rotation state update" -m "Automated via scripts/update.sh"
+        git push origin HEAD || echo "evergreen state push failed (continuing)"
+      fi
     else
       echo "no X post today (quiet day)"
     fi
