@@ -114,4 +114,11 @@ else
   echo "ICEN_ADMIN_KEY not set — skipping X auto-post"
 fi
 
+# IndexNow: notify Bing / Yandex / DuckDuckGo / Seznam of fresh content.
+# Best-effort, failures don't break the pipeline.
+if (( GENERATED_ACTIVITY || GENERATED_BULLETIN )); then
+  echo "─ pinging IndexNow ─"
+  python3 scripts/indexnow_ping.py / /sitemap.xml /feed.xml || echo "IndexNow ping failed (continuing)"
+fi
+
 echo "─── done ───"
