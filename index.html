@@ -458,16 +458,22 @@
     .charge:hover h4 a{color:var(--blood)}
     .charge:hover .charge-more{color:var(--blood);letter-spacing:.22em}
     .charge h4 a{
-      position:relative;
+      /* No position:relative here — we want ::after to anchor to .charge
+         (which already has position:relative), so it can stretch the whole card. */
       transition:color .2s;
     }
-    /* Whole-card click target via stretched pseudo-element on the heading link */
+    /* Whole-card click target: stretched ::after anchored to .charge */
     .charge h4 a::after{
       content:"";
       position:absolute;
-      inset:-24px -32px;
-      /* offsets match .charge padding so the entire card surface is clickable */
+      inset:0;
+      z-index:1;
     }
+    /* Keep real content above the click overlay for visual layering, but text
+       selections still work. The ::after has no background so clicks pass
+       through to it across the whole card surface. */
+    .charge > *{position:relative}
+    .charge .x{z-index:0}
     .charge-more{
       display:block;
       margin-top:14px;
