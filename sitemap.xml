@@ -29,6 +29,11 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://natto-5hv.pages.dev/faq.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://natto-5hv.pages.dev/charges/visual.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
