@@ -457,23 +457,14 @@
     .charge:hover{background:var(--paper);transform:translateY(-3px);box-shadow:0 14px 32px -16px rgba(31,24,19,.5);cursor:pointer}
     .charge:hover h4 a{color:var(--blood)}
     .charge:hover .charge-more{color:var(--blood);letter-spacing:.22em}
-    .charge h4 a{
-      /* No position:relative here — we want ::after to anchor to .charge
-         (which already has position:relative), so it can stretch the whole card. */
-      transition:color .2s;
+    /* The entire card is a single <a> — most reliable pattern for whole-card
+       click targets across browsers. HTML5 allows block-level content in <a>. */
+    a.charge-link{
+      display:block; color:inherit; text-decoration:none;
+      height:100%;
     }
-    /* Whole-card click target: stretched ::after anchored to .charge */
-    .charge h4 a::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      z-index:1;
-    }
-    /* Keep real content above the click overlay for visual layering, but text
-       selections still work. The ::after has no background so clicks pass
-       through to it across the whole card surface. */
-    .charge > *{position:relative}
-    .charge .x{z-index:0}
+    a.charge-link:focus-visible{outline:3px solid var(--enemy); outline-offset:2px}
+    .charge h4{transition:color .2s}
     .charge-more{
       display:block;
       margin-top:14px;
@@ -908,44 +899,54 @@
 
       <div class="charges-list">
         <article class="charge">
-          <span class="x">✕</span>
-          <img class="charge-icon" src="assets/charges/visual.svg" alt="" loading="lazy" width="88" height="88" />
-          <div class="roman">I.</div>
-          <h4><a href="charges/visual.html" style="color:inherit;text-decoration:none">視覚的暴力</a></h4>
-          <p>茶色く粘る塊は、食欲という概念に対する露骨な反逆である。透明なパックを通じて、被害者は朝の心の準備なく直視を強いられる。</p>
-          <span class="charge-more">詳細を読む</span>
+          <a class="charge-link" href="charges/visual.html">
+            <span class="x">✕</span>
+            <img class="charge-icon" src="assets/charges/visual.svg" alt="" loading="lazy" width="88" height="88" />
+            <div class="roman">I.</div>
+            <h4>視覚的暴力</h4>
+            <p>茶色く粘る塊は、食欲という概念に対する露骨な反逆である。透明なパックを通じて、被害者は朝の心の準備なく直視を強いられる。</p>
+            <span class="charge-more">詳細を読む</span>
+          </a>
         </article>
         <article class="charge">
-          <span class="x">✕</span>
-          <img class="charge-icon" src="assets/charges/smell.svg" alt="" loading="lazy" width="88" height="88" />
-          <div class="roman">II.</div>
-          <h4><a href="charges/smell.html" style="color:inherit;text-decoration:none">嗅覚的侵略</a></h4>
-          <p>半径3メートル以内の鼻腔を制圧する。換気では追いつかない。これは食品の匂いではなく、領空侵犯である。</p>
-          <span class="charge-more">詳細を読む</span>
+          <a class="charge-link" href="charges/smell.html">
+            <span class="x">✕</span>
+            <img class="charge-icon" src="assets/charges/smell.svg" alt="" loading="lazy" width="88" height="88" />
+            <div class="roman">II.</div>
+            <h4>嗅覚的侵略</h4>
+            <p>半径3メートル以内の鼻腔を制圧する。換気では追いつかない。これは食品の匂いではなく、領空侵犯である。</p>
+            <span class="charge-more">詳細を読む</span>
+          </a>
         </article>
         <article class="charge">
-          <span class="x">✕</span>
-          <img class="charge-icon" src="assets/charges/touch.svg" alt="" loading="lazy" width="88" height="88" />
-          <div class="roman">III.</div>
-          <h4><a href="charges/touch.html" style="color:inherit;text-decoration:none">触覚的拘束</a></h4>
-          <p>一度箸についた糸は、食卓の物理法則を超越する。皿、口、頬、髪、机、リモコン — あらゆる物体が連鎖的に汚染される。</p>
-          <span class="charge-more">詳細を読む</span>
+          <a class="charge-link" href="charges/touch.html">
+            <span class="x">✕</span>
+            <img class="charge-icon" src="assets/charges/touch.svg" alt="" loading="lazy" width="88" height="88" />
+            <div class="roman">III.</div>
+            <h4>触覚的拘束</h4>
+            <p>一度箸についた糸は、食卓の物理法則を超越する。皿、口、頬、髪、机、リモコン — あらゆる物体が連鎖的に汚染される。</p>
+            <span class="charge-more">詳細を読む</span>
+          </a>
         </article>
         <article class="charge">
-          <span class="x">✕</span>
-          <img class="charge-icon" src="assets/charges/ethics.svg" alt="" loading="lazy" width="88" height="88" />
-          <div class="roman">IV.</div>
-          <h4><a href="charges/ethics.html" style="color:inherit;text-decoration:none">倫理的混乱</a></h4>
-          <p>「腐ってないけど発酵」という詭弁。発酵と腐敗の境界線を曖昧にする本食品は、食の倫理的座標系を根本から揺るがす。</p>
-          <span class="charge-more">詳細を読む</span>
+          <a class="charge-link" href="charges/ethics.html">
+            <span class="x">✕</span>
+            <img class="charge-icon" src="assets/charges/ethics.svg" alt="" loading="lazy" width="88" height="88" />
+            <div class="roman">IV.</div>
+            <h4>倫理的混乱</h4>
+            <p>「腐ってないけど発酵」という詭弁。発酵と腐敗の境界線を曖昧にする本食品は、食の倫理的座標系を根本から揺るがす。</p>
+            <span class="charge-more">詳細を読む</span>
+          </a>
         </article>
         <article class="charge">
-          <span class="x">✕</span>
-          <img class="charge-icon" src="assets/charges/social.svg" alt="" loading="lazy" width="88" height="88" />
-          <div class="roman">V.</div>
-          <h4><a href="charges/social.html" style="color:inherit;text-decoration:none">社会的分断</a></h4>
-          <p>食卓を二分し、家族関係に静かな亀裂を生む。朝の食卓における賛成派と反対派の対立は、しばしば離婚理由欄の余白に滲む。本協議会は、この見えざる断層を可視化する。</p>
-          <span class="charge-more">詳細を読む</span>
+          <a class="charge-link" href="charges/social.html">
+            <span class="x">✕</span>
+            <img class="charge-icon" src="assets/charges/social.svg" alt="" loading="lazy" width="88" height="88" />
+            <div class="roman">V.</div>
+            <h4>社会的分断</h4>
+            <p>食卓を二分し、家族関係に静かな亀裂を生む。朝の食卓における賛成派と反対派の対立は、しばしば離婚理由欄の余白に滲む。本協議会は、この見えざる断層を可視化する。</p>
+            <span class="charge-more">詳細を読む</span>
+          </a>
         </article>
       </div>
     </div>
