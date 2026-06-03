@@ -19,13 +19,22 @@ def render_timeline(events: list[dict]) -> str:
     last = events[-MAX_TIMELINE:]
     out = []
     for e in last:
+        # Optional "link" field: when present the title links to a full
+        # communiqué page and a "全文 →" affordance is appended after the tag.
+        link = e.get("link")
+        if link:
+            title = f'<a class="ev-link" href="{esc(link)}">{esc(e["title"])}</a>'
+            more = f'\n            <a class="ev-full" href="{esc(link)}">緊急通牒 全文 →</a>'
+        else:
+            title = esc(e["title"])
+            more = ""
         out.append(
             f'        <div class="ev">\n'
             f'          <div class="date">{esc(e["date"])}</div>\n'
             f'          <div>\n'
-            f'            <h4>{esc(e["title"])}</h4>\n'
+            f'            <h4>{title}</h4>\n'
             f'            <p>{esc(e["body"])}</p>\n'
-            f'            <span class="tag">{esc(e["tag"])}</span>\n'
+            f'            <span class="tag">{esc(e["tag"])}</span>{more}\n'
             f'          </div>\n'
             f'        </div>'
         )
