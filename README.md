@@ -176,11 +176,11 @@ git add index.html && git commit -m "Wire form to CF Pages API" && git push
 `functions/api/_templates.ts` の `REPLY_FIRST` / `REPLY_REPEAT` 文字列を直接編集 → push
 → CF Pages が自動再デプロイ → 即反映。プレースホルダ: `{{app_no}}` のみ。
 
-### Legacy (Hetzner FastAPI 版)
+### Legacy (Hetzner FastAPI 版) — 削除済み
 
-`server/` と `infra/` には Phase 3 検討初期に作った FastAPI + nginx 版が残っている。
-agent-team prod への影響を避けるため CF Pages 版に切り替えたので、現在は **未使用**。
-将来 Hetzner で動かしたくなった場合の参考として残置 (削除しても構わない)。
+Phase 3 検討初期に作った FastAPI + nginx 版 (`server/` + `infra/nginx,systemd`) は
+CF Pages 版への切り替え後も未使用のまま残置していたが、2026-09-01 のリポ整理で削除した。
+必要になれば git 履歴 (この commit の親) から復元できる。
 
 ## プライバシー / セキュリティ
 
