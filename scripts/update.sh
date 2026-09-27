@@ -18,6 +18,15 @@ if [[ -z "${GEMINI_API_KEY:-}" && -f "${ICEN_ENV_FILE}" ]]; then
 fi
 : "${GEMINI_API_KEY:?GEMINI_API_KEY is required (export it or set in \${ICEN_ENV_FILE})}"
 
+# Commits made elsewhere (Mac edits, repo cleanups) land on origin too. Rebase onto
+# them before every push, or the push is rejected and the live site silently freezes
+# (2026-09-01 → 09-27: 12 communiqués stuck on this box after a cleanup commit).
+sync_push() {
+  # A conflicted rebase must not linger, or every later run would fail too.
+  git pull --rebase --quiet origin master || { git rebase --abort 2>/dev/null; return 1; }
+  git push origin HEAD
+}
+
 DECISION="$(python3 scripts/scheduler.py)"
 echo "scheduler decision: ${DECISION}"
 
@@ -73,7 +82,7 @@ PY
     [[ -f data/evergreen_state.json ]] && git add data/evergreen_state.json
     git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
       commit -m "communiqué: ${LATEST}" -m "Automated update via scripts/update.sh"
-    git push origin HEAD
+    sync_push
   else
     echo "no file changes — skipping commit"
   fi
@@ -104,7 +113,7 @@ if [[ -n "${ICEN_ADMIN_KEY:-}" ]]; then
         git add data/evergreen_state.json
         git -c user.name="ICEN Secretariat" -c user.email="tama831@users.noreply.github.com" \
           commit -m "chore: evergreen rotation state update" -m "Automated via scripts/update.sh"
-        git push origin HEAD || echo "evergreen state push failed (continuing)"
+        sync_push || echo "evergreen state push failed (continuing)"
       fi
     else
       echo "no X post today (quiet day)"

@@ -140,6 +140,13 @@
       padding:2px 0;border-bottom:1px dashed transparent;transition:.2s;
     }
     .topbar a.lang-link:hover{border-bottom-color:var(--blood);color:var(--ink)}
+    @media (max-width:1000px){
+      .topbar .row > span:first-child{display:none}
+    }
+    @media (max-width:720px){
+      .topbar .row{justify-content:center;padding:8px 16px}
+      .topbar .row > span:last-child{display:none}
+    }
 
     /* emergency ticker */
     .ticker{
@@ -178,7 +185,7 @@
       font-weight:800;font-size:18px;letter-spacing:.04em;line-height:1.1;
     }
     .brand h1 small{display:block;font-size:10px;letter-spacing:.22em;color:var(--ink-2);font-weight:500;margin-top:4px}
-    nav ul{display:flex;gap:28px;list-style:none;justify-content:center;font-size:13px;letter-spacing:.14em}
+    nav ul{display:flex;gap:clamp(14px, 2vw, 28px);list-style:none;justify-content:center;font-size:13px;letter-spacing:.14em;white-space:nowrap}
     nav a{color:var(--ink);text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:.2s}
     nav a:hover{border-color:var(--blood);color:var(--blood)}
     .doc-id{font-family:'JetBrains Mono', monospace;font-size:11px;color:var(--ink-2);text-align:right;line-height:1.5}
@@ -314,6 +321,8 @@
       animation:x-strike 1.6s 0.7s cubic-bezier(.32,1.7,.4,1) both;
       filter:drop-shadow(0 8px 16px rgba(139,26,26,.6));
     }
+    .objection-banner .ob-label,
+    .objection-banner .ob-ref{z-index:1} /* paperwork stays legible above the X */
     .objection-banner .ob-label{
       position:absolute;top:18px;left:22px;
       font-family:'JetBrains Mono', monospace;
@@ -367,9 +376,10 @@
     }
     @media (max-width:720px){
       .objection{padding:0 0 56px}
-      .objection-banner{margin:0 -28px;border-left:none;border-right:none;max-width:none;border-radius:0}
+      .objection-banner{margin:0 -22px;border-left:none;border-right:none;max-width:none;border-radius:0}
       .objection-banner figcaption{font-size:12px;padding:10px 18px}
       .objection-banner .ob-label{font-size:10px;padding:5px 10px;letter-spacing:.18em}
+      .objection-banner .ob-ref{top:50px;bottom:auto;left:18px;right:auto;font-size:9px}
     }
 
     /* large stamp */
@@ -744,16 +754,28 @@
     @keyframes rise{to{opacity:1;transform:translateY(0)}}
     .d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}.d5{animation-delay:.7s}
 
+    @media (min-width: 881px) and (max-width: 1100px){
+      header.nav .row{gap:20px}
+      .brand h1 small{letter-spacing:.1em;white-space:nowrap}
+    }
+
     @media (max-width: 880px){
       .wrap{padding:0 22px}
       header.nav .row{grid-template-columns:auto 1fr;gap:16px}
-      header.nav nav, .doc-id{display:none}
+      .doc-id{display:none}
+      header.nav{padding:14px 0 0}
+      header.nav .row > *{min-width:0}
+      header.nav nav{grid-column:1 / -1;margin:0 -22px;border-top:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
+      header.nav nav::-webkit-scrollbar{display:none}
+      header.nav nav ul{justify-content:flex-start;gap:22px;padding:12px 22px}
       .hero{padding:48px 0 64px}
       .hero-grid{grid-template-columns:1fr;gap:32px}
       .stamp-1{display:none}
       h2.hero-title{font-size:56px}
       .motto{font-size:22px;letter-spacing:.3em}
       .mission-grid, .members-wrap, .join-grid{grid-template-columns:1fr;gap:36px}
+      .mission-grid > *, .members-wrap > *, .join-grid > *{min-width:0}
+      .join-card .stamp-card{right:-10px;width:84px;height:84px;font-size:13px}
       .charges-list{grid-template-columns:1fr}
       .charges-list .charge:nth-child(5){grid-column:auto}
       .timeline::before{left:0}
@@ -772,7 +794,7 @@
     <div class="row">
       <span>Established 1972 · Geneva–Kyoto Accord</span>
       <span><a class="lang-link" href="welcome.html">🌐 EN · FR · DE · 中文 · РУС · 한국 · TL · ES · PAU</a></span>
-      <span>Document №ICEN-<span data-year>2026</span>-Q2-007</span>
+      <span>Document №ICEN-<span data-year>2026</span>-Q<span data-quarter>3</span>-007</span>
     </div>
   </div>
 
@@ -816,11 +838,10 @@
           <li><a href="#members">加盟国</a></li>
           <li><a href="#activities">活動報告</a></li>
           <li><a href="#join">入会案内</a></li>
-          <li><a href="welcome.html">🌐 Languages</a></li>
         </ul>
       </nav>
       <div class="doc-id">
-        CLASSIFICATION · OPEN<br>REV. 2026.05<br>
+        CLASSIFICATION · OPEN<br>REV. <span data-rev>2026.09</span><br>
         <a href="https://x.com/no_natto_icen" target="_blank" rel="noopener" class="x-badge">𝕏 @no_natto_icen ↗</a><br>
         <a href="https://bsky.app/profile/no-natto-icen.bsky.social" target="_blank" rel="noopener" class="bsky-badge">🦋 @no-natto-icen ↗</a>
       </div>
@@ -869,7 +890,7 @@
           <img src="assets/natto-photo.jpg" alt="納豆の入った茶碗 — 撲滅対象として朱色の X で打ち消された写真" width="1024" height="1024" loading="eager" fetchpriority="high" decoding="async" />
         </picture>
         <span class="ob-label">OBJECTUM ABOLENDUM · 撲滅対象</span>
-        <span class="ob-ref">REF. ICEN/OBJ/<span data-year>2026</span>/Q2/001</span>
+        <span class="ob-ref">REF. ICEN/OBJ/<span data-year>2026</span>/Q<span data-quarter>3</span>/001</span>
         <svg class="ob-x" viewBox="0 0 100 100" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
           <line x1="14" y1="14" x2="86" y2="86" stroke="#8B1A1A" stroke-width="11" stroke-linecap="square" />
           <line x1="86" y1="14" x2="14" y2="86" stroke="#8B1A1A" stroke-width="11" stroke-linecap="square" />
@@ -1208,7 +1229,7 @@
 
       <div class="copyright">
         <span>© 1972–<span data-year>2026</span> INT'L COUNCIL FOR THE ERADICATION OF NATTO · ALL FICTIONS RESERVED</span>
-        <span>FILE: ICEN-2026-Q2-007 · REV.05</span>
+        <span>FILE: ICEN-<span data-year>2026</span>-Q<span data-quarter>3</span>-007 · REV.<span data-rev-month>09</span></span>
       </div>
     </div>
   </footer>
@@ -1222,6 +1243,19 @@
     document.querySelectorAll('[data-month-num]').forEach(el => {
       el.textContent = String(new Date().getMonth() + 1);
     });
+    // Quarter stamps (Q1..Q4) follow the calendar so the document number never goes stale.
+    document.querySelectorAll('[data-quarter]').forEach(el => {
+      el.textContent = String(Math.floor(new Date().getMonth() / 3) + 1);
+    });
+    // Revision = month of the newest communiqué in the timeline (render.py appends in date order).
+    (function() {
+      const dates = [...document.querySelectorAll('#activities .ev .date')]
+        .map(el => el.textContent.trim()).filter(d => /^\d{4}\.\d{2}\.\d{2}$/.test(d)).sort();
+      if (!dates.length) return;
+      const [y, m] = dates[dates.length - 1].split('.');
+      document.querySelectorAll('[data-rev]').forEach(el => { el.textContent = y + '.' + m; });
+      document.querySelectorAll('[data-rev-month]').forEach(el => { el.textContent = m; });
+    })();
     // Member count: deterministic 2..7/month growth, resets each year ("本年度" label)
     // Anchor: May 2026 (monthIdx=4) = 317 (preserves the existing visible value).
     (function() {
